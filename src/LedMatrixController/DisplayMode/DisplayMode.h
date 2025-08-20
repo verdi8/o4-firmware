@@ -1,0 +1,26 @@
+#ifndef DISPLAYMODE_H
+#define DISPLAYMODE_H
+
+#include <Arduino.h>
+#include "LedMatrixController/LedMatrixControllerTypes.h"
+
+/**
+ * DisplayMode interface for managing different display modes in the LED Matrix Controller.
+ */
+class DisplayMode {
+public:
+
+    /**
+     * Gives the next frame to be displayed.
+     */
+    virtual const Frame* nextFrame(unsigned long currentTime) = 0;
+
+    /**
+     * Tells if the display mode is done (i.e., if it has finished displaying all frames).
+     */
+    virtual bool isDone(unsigned long currentTime) = 0;
+
+};
+
+
+#endif // DISPLAYMODE_H
