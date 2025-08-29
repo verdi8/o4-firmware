@@ -58,6 +58,18 @@ void LedMatrixController::update(unsigned long currentTime)
     }
 };
 
+bool LedMatrixController::isDone(unsigned long currentTime)
+{
+    // If no display mode is set, the controller is considered done
+    if (this->currentDisplayMode == nullptr)
+    {
+        return true;
+    }
+
+    // Check if the current display mode reports that the operation is done
+    return this->currentDisplayMode->isDone(currentTime);
+}
+
 void LedMatrixController::displayFrame(const Frame* frame)
 {
     for (int i = 0; i < 8; i++)

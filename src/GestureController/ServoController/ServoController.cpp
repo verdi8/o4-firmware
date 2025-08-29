@@ -79,6 +79,18 @@ void ServoController::update(unsigned long currentTime)
 
 }
 
+bool ServoController::isDone(unsigned long currentTime)
+{
+    // If no strategy is set, the servo is considered done
+    if (!this->currentAngleStrategy)
+    {
+        return true;
+    }
+
+    // Check if the current strategy reports that the movement is done
+    return this->currentAngleStrategy->isDone(this->currentAngle, currentTime);
+}
+
 void ServoController::initPosition() {
     servo->write(INIT_ANGLE);     // Set the servo to the initial position
     servo->attach(pin);           // Attach the servo to the specified pin

@@ -7,7 +7,7 @@
 #include "DisplayMode/DisplayMode.h"
 #include "DisplayMode/IconDisplayMode.h"
 #include "DisplayMode/AnimationDisplayMode.h"
-
+#include "Controller.h" // Include the Controller interface
 
 /**
  * @class LedMatrixController
@@ -18,7 +18,7 @@
  * 
  * @note The LED matrix index is defined as a `constexpr` variable (`LED_MATRIX_INDEX`).
  */
-class LedMatrixController
+class LedMatrixController : public Controller // Implement the Controller interface
 {
   private:
     // Private member properties
@@ -68,7 +68,15 @@ class LedMatrixController
     /**
      * Update the display
      */
-    void update(unsigned long currentTime);
+    void update(unsigned long currentTime) override; // Override the update method from Controller
+
+    /**
+     * @brief Checks if the current operation is complete.
+     * 
+     * @param currentTime The current time in milliseconds.
+     * @return true if the operation is complete, false otherwise.
+     */
+    bool isDone(unsigned long currentTime) override; // Override the isDone method from Controller
 };
 
 #endif

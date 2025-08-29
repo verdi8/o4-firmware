@@ -3,12 +3,13 @@
 
 #include <Arduino.h>
 #include "ServoController/ServoController.h"
+#include "Controller.h" // Include the Controller interface
 
 /**
  * @class GestureController
  * @brief Controls the gestures of a robot using multiple ServoController instances.
  */
-class GestureController {
+class GestureController : public Controller { // Implement the Controller interface
 private:
     ServoController* frontRightHip; // Servo controller for the front right hip joint.
     ServoController* frontLeftHip;  // Servo controller for the front left hip joint.
@@ -54,7 +55,7 @@ public:
      * 
      * @param currentTime The current time in milliseconds.
      */
-    void update(unsigned long currentTime);
+    void update(unsigned long currentTime) override; // Override the update method from Controller
 
     /**
      * @brief Checks if the current gesture is complete.
@@ -62,7 +63,7 @@ public:
      * @param currentTime The current time in milliseconds.
      * @return true if the gesture is complete, false otherwise.
      */
-    bool isDone(unsigned long currentTime);
+    bool isDone(unsigned long currentTime) override; // Override the isDone method from Controller
 };
 
 #endif // GESTURECONTROLLER_H

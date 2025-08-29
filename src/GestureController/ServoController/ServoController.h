@@ -7,13 +7,14 @@
 #include "AngleStrategy/AngleStrategy.h"
 #include "AngleStrategy/LinearAngleStrategy.h"
 #include "AngleStrategy/OscillatingAngleStrategy.h"
+#include "Controller.h" // Include the Controller interface
 
 /**
  * ServoController class to manage a servo motor.
  * It provides methods to rotate the servo to a specific angle and stop it.
  * The servo is controlled using the Servo library.
  */
-class ServoController
+class ServoController : public Controller // Implement the Controller interface
 {
     private:
         /** 
@@ -77,12 +78,14 @@ class ServoController
          * Update the servo position based on the current time.
          * @param currentTime The current time in milliseconds
          */
-        void update(unsigned long currentTime);
+        void update(unsigned long currentTime) override; // Override the update method from Controller
     
         /**
          * Check if the servo has completed its movement.
+         * @param currentTime The current time in milliseconds
+         * @return true if the movement is complete, false otherwise.
          */
-        void isDone(unsigned long currentTime);
+        bool isDone(unsigned long currentTime) override; // Override the isDone method from Controller
 
         /**
          * Stops the servo moving.
