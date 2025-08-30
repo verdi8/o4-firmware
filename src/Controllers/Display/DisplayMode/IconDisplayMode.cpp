@@ -1,4 +1,4 @@
-#include "Controllers/Display/DisplayControllerTypes.h"
+#include "Controllers/Display/DisplayTypes.h"
 #include "DisplayMode.h"
 #include "IconDisplayMode.h"
 

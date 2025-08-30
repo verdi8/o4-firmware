@@ -1,7 +1,7 @@
 #ifndef ICON_DISPLAY_MODE_H
 #define ICON_DISPLAY_MODE_H
 
-#include "Controllers/Display/DisplayControllerTypes.h"
+#include "Controllers/Display/DisplayTypes.h"
 #include "DisplayMode.h"
 
 

@@ -2,7 +2,7 @@
 #define DISPLAYMODE_H
 
 #include <Arduino.h>
-#include "Controllers/Display/DisplayControllerTypes.h"
+#include "Controllers/Display/DisplayTypes.h"
 
 /**
  * DisplayMode interface for managing different display modes in the LED Matrix Controller.

@@ -1,4 +1,4 @@
-#include "Controllers/Display/DisplayControllerTypes.h"
+#include "Controllers/Display/DisplayTypes.h"
 #include "AnimationDisplayMode.h"
 #include "Logger.h"
 
@@ -70,5 +70,5 @@ inline unsigned int AnimationDisplayMode::computeCurrentFrameIndex(unsigned long
 }
 
 inline unsigned int AnimationDisplayMode::frameCount(FrameSet* PROGMEM frameSetPrgm) {
-    return pgm_read_word(&(frameSetPrgm->count)); // Read the number of frames from the FrameSet in program memory
+    return pgm_read_word(&(frameSetPrgm->frameCount)); // Read the number of frames from the FrameSet in program memory
 }

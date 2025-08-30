@@ -1,7 +1,7 @@
 #ifndef ANIMATION_DISPLAY_MODE_H
 #define ANIMATION_DISPLAY_MODE_H
 
-#include "Controllers/Display/DisplayControllerTypes.h"
+#include "Controllers/Display/DisplayTypes.h"
 #include "DisplayMode.h"
 
 /**

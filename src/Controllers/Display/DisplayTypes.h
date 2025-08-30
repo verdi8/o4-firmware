@@ -1,5 +1,5 @@
-#ifndef DISPLAY_CONTROLLER_TYPES_H
-#define DISPLAY_CONTROLLER_TYPES_H
+#ifndef DISPLAY_TYPES_H
+#define DISPLAY_TYPES_H
 
 #include <Arduino.h>
 
@@ -10,7 +10,7 @@ typedef byte Frame[8];
 struct FrameSet
 {
     /** Number of frames in the frameset */
-    unsigned int count;
+    unsigned int frameCount;
 
     /** Array of 8x8 frames */
     Frame frames[];

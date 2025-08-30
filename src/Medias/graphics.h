@@ -1,7 +1,7 @@
 #ifndef GRAPHICS_H
 #define GRAPHICS_H
 
-#include "Controllers/Display/DisplayControllerTypes.h"
+#include "Controllers/Display/DisplayTypes.h"
 
 // Enum class for icon indexes
 enum IconIndex {
