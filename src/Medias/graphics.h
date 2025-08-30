@@ -1,44 +1,42 @@
-
 #ifndef GRAPHICS_H
 #define GRAPHICS_H
 
-#include "LedMatrixController/LedMatrixControllerTypes.h"
+#include "Controllers/Display/DisplayControllerTypes.h"
 
-
-// Icons indexes in the ICON_FRAMESET
-#define ZERO_ICON_INDEX 0
-#define ONE_ICON_INDEX 1
-#define TWO_ICON_INDEX 2
-#define THREE_ICON_INDEX 3
-#define FOUR_ICON_INDEX 4
-#define FIVE_ICON_INDEX 5
-#define SIX_ICON_INDEX 6
-#define SEVEN_ICON_INDEX 7
-#define EIGHT_ICON_INDEX 8
-#define NINE_ICON_INDEX 9
-#define SMILE_ICON_INDEX 10
-#define HAPPY_OPEN_ICON_INDEX 11
-#define HAPPY_CLOSED_ICON_INDEX 12
-#define HEART_ICON_INDEX 13
-#define BIG_SURPRISE_ICON_INDEX 14
-#define SMALL_SURPRISE_ICON_INDEX 15
-#define TONGUE_OUT_ICON_INDEX 16
-#define VAMP1_ICON_INDEX 17
-#define VAMP2_ICON_INDEX 18
-#define LINE_MOUTH_ICON_INDEX 19
-#define CONFUSED_ICON_INDEX 20
-#define DIAGONAL_ICON_INDEX 21
-#define SAD_ICON_INDEX 22
-#define SAD_OPEN_ICON_INDEX 23
-#define SAD_CLOSED_ICON_INDEX 24
-#define OK_MOUTH_ICON_INDEX 25
-#define X_MOUTH_ICON_INDEX 26
-#define INTERROGATION_ICON_INDEX 27
-#define THUNDER_ICON_INDEX 28
-#define CULITO_ICON_INDEX 29
-#define ANGRY_ICON_INDEX 30
-
-
+// Enum class for icon indexes
+enum IconIndex {
+    ZERO = 0,
+    ONE,
+    TWO,
+    THREE,
+    FOUR,
+    FIVE,
+    SIX,
+    SEVEN,
+    EIGHT,
+    NINE,
+    SMILE,
+    HAPPY_OPEN,
+    HAPPY_CLOSED,
+    HEART,
+    BIG_SURPRISE,
+    SMALL_SURPRISE,
+    TONGUE_OUT,
+    VAMP1,
+    VAMP2,
+    LINE_MOUTH,
+    CONFUSED,
+    DIAGONAL,
+    SAD,
+    SAD_OPEN,
+    SAD_CLOSED,
+    OK_MOUTH,
+    X_MOUTH,
+    INTERROGATION,
+    THUNDER,
+    CULITO,
+    ANGRY
+};
 
 const FrameSet ICON_FRAMESET PROGMEM = {
     31, // Number of frames

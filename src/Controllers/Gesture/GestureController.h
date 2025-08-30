@@ -2,7 +2,7 @@
 #define GESTURECONTROLLER_H
 
 #include <Arduino.h>
-#include "ServoController/ServoController.h"
+#include "Servo/ServoController.h"
 #include "Controller.h" // Include the Controller interface
 
 /**

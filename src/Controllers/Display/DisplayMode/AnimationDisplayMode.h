@@ -1,7 +1,7 @@
 #ifndef ANIMATION_DISPLAY_MODE_H
 #define ANIMATION_DISPLAY_MODE_H
 
-#include "LedMatrixController/LedMatrixControllerTypes.h"
+#include "Controllers/Display/DisplayControllerTypes.h"
 #include "DisplayMode.h"
 
 /**

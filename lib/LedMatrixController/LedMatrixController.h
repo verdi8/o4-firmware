@@ -3,14 +3,14 @@
 
 #include <Arduino.h>
 #include <LedControl.h>
-#include "LedMatrixControllerTypes.h" 
+#include "DisplayControllerTypes.h" 
 #include "DisplayMode/DisplayMode.h"
 #include "DisplayMode/IconDisplayMode.h"
 #include "DisplayMode/AnimationDisplayMode.h"
 
 
 /**
- * @class LedMatrixController
+ * @class DisplayController
  * @brief Manages the LED Matrix display, including icons, animations, and display modes.
  * 
  * This class provides functionality to control an LED Matrix using the LedControl library.
@@ -18,7 +18,7 @@
  * 
  * @note The LED matrix index is defined as a `constexpr` variable (`LED_MATRIX_INDEX`).
  */
-class LedMatrixController
+class DisplayController
 {
   private:
     // Private member properties
@@ -42,7 +42,7 @@ class LedMatrixController
      * @param doFlipX Whether to flip the X axis
      * @param iconFrameset The frameset to use for displaying icons
      */
-    LedMatrixController(int dataPin, int clkPin, int csPin, bool doFlipX, const FrameSet* iconFrameset);
+    DisplayController(int dataPin, int clkPin, int csPin, bool doFlipX, const FrameSet* iconFrameset);
 
     /**
      * Display an icon on the LED Matrix

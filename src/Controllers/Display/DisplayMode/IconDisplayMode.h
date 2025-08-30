@@ -1,7 +1,7 @@
 #ifndef ICON_DISPLAY_MODE_H
 #define ICON_DISPLAY_MODE_H
 
-#include "LedMatrixController/LedMatrixControllerTypes.h"
+#include "Controllers/Display/DisplayControllerTypes.h"
 #include "DisplayMode.h"
 
 

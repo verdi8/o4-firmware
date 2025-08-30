@@ -1,4 +1,4 @@
-#include "LedMatrixController/LedMatrixControllerTypes.h"
+#include "Controllers/Display/DisplayControllerTypes.h"
 #include "AnimationDisplayMode.h"
 #include "Logger.h"
 

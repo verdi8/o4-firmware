@@ -5,8 +5,8 @@
 #include "US.h"
 #include <BatReader.h>
 #include "TimerFreeTone.h"
-#include "LedMatrixController/LedMatrixController.h"
-#include "GestureController/GestureController.h"
+#include "Controllers/Display/DisplayController.h"
+#include "Controllers/Gesture/GestureController.h"
 
 // Servo indexes
 #define FRONT_RIGHT_HIP   0
@@ -65,7 +65,7 @@ class Robot {
     void custom();
 
 
-    LedMatrixController* ledMatrixController;
+    DisplayController* displayController;
 
     // Display
 

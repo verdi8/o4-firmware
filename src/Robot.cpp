@@ -1,6 +1,6 @@
 #include <EEPROM.h>
 #include "Robot.h"
-#include "LedMatrixController/LedMatrixController.h"
+#include "Controllers/Display/DisplayController.h"
 #include "Medias/graphics.h"
 #include "Medias/sounds.h"
 #include "hardware.h"
@@ -26,7 +26,7 @@
 
 
 Robot::Robot():/* reverse{0, 0, 0, 0, 0, 0, 0, 0}, */trim{0, 0, 0, 0, 0, 0, 0, 0} {
-  this->ledMatrixController = new LedMatrixController(LED_MATRIX_DIN, LED_MATRIX_CLK, LED_MATRIX_CS, LED_MATRIX_FLIP_X, &ICON_FRAMESET);
+  this->displayController = new DisplayController(LED_MATRIX_DIN, LED_MATRIX_CLK, LED_MATRIX_CS, LED_MATRIX_FLIP_X, &ICON_FRAMESET);
   this->servoControllers[FRONT_RIGHT_HIP] = new ServoController(FRONT_RIGHT_HIP_SERVO_PIN);
   this->servoControllers[FRONT_LEFT_HIP] = new ServoController(FRONT_LEFT_HIP_SERVO_PIN);
   this->servoControllers[BACK_RIGHT_HIP] = new ServoController(BACK_RIGHT_HIP_SERVO_PIN);
@@ -573,7 +573,7 @@ void Robot::update() {
     servoControllers[i]->update(currentTime);
   }
   // Update LED matrix
-  this->ledMatrixController->update(currentTime);
+  this->displayController->update(currentTime);
 
 }
 
@@ -866,53 +866,53 @@ void Robot::sing(int songName){
 
   //   case OttoHappy: 
   //       //_tone(NOTE_E5,50,30);
-  //       ledMatrixController->displayIcon(SMILE_ICON_INDEX);
+  //       displayController->displayIcon(SMILE_ICON_INDEX);
   //      // sing(S_happy_short);
   //      // swing(1,800,20); 
   //      // sing(S_happy_short);
 
   //       home();
-  //       ledMatrixController->displayIcon(HAPPY_OPEN_ICON_INDEX);
+  //       displayController->displayIcon(HAPPY_OPEN_ICON_INDEX);
   //   break;
 
 
   //   case OttoSuperHappy:
-  //       ledMatrixController->displayIcon(HAPPY_OPEN_ICON_INDEX);
+  //       displayController->displayIcon(HAPPY_OPEN_ICON_INDEX);
   //       //sing(S_happy);
   //       delay(500);
-  //       ledMatrixController->displayIcon(HAPPY_CLOSED_ICON_INDEX);
+  //       displayController->displayIcon(HAPPY_CLOSED_ICON_INDEX);
   //      // tiptoeSwing(1,500,20);
   //      delay(500);
-  //       ledMatrixController->displayIcon(HAPPY_OPEN_ICON_INDEX);
+  //       displayController->displayIcon(HAPPY_OPEN_ICON_INDEX);
   //      // sing(S_superHappy);
   //      delay(500);
-  //       ledMatrixController->displayIcon(HAPPY_CLOSED_ICON_INDEX);
+  //       displayController->displayIcon(HAPPY_CLOSED_ICON_INDEX);
   //      // tiptoeSwing(1,500,20); 
 
   //       home();  
   //       delay(1000);
-  //       ledMatrixController->displayIcon(HAPPY_OPEN_ICON_INDEX);
+  //       displayController->displayIcon(HAPPY_OPEN_ICON_INDEX);
   //   break;
 
 
   //   case OttoSad: 
-  //       ledMatrixController->displayIcon(SAD_ICON_INDEX);
+  //       displayController->displayIcon(SAD_ICON_INDEX);
   //      // _moveServos(700, sadPos);     
   //      // bendTones(880, 830, 1.02, 20, 200);
-  //       ledMatrixController->displayIcon(SAD_CLOSED_ICON_INDEX);
+  //       displayController->displayIcon(SAD_CLOSED_ICON_INDEX);
   //      // bendTones(830, 790, 1.02, 20, 200);  
-  //       ledMatrixController->displayIcon(SAD_OPEN_ICON_INDEX);
+  //       displayController->displayIcon(SAD_OPEN_ICON_INDEX);
   //      // bendTones(790, 740, 1.02, 20, 200);
-  //       ledMatrixController->displayIcon(SAD_CLOSED_ICON_INDEX);
+  //       displayController->displayIcon(SAD_CLOSED_ICON_INDEX);
   //      // bendTones(740, 700, 1.02, 20, 200);
-  //       ledMatrixController->displayIcon(SAD_OPEN_ICON_INDEX);
+  //       displayController->displayIcon(SAD_OPEN_ICON_INDEX);
   //       //bendTones(700, 669, 1.02, 20, 200);
-  //       ledMatrixController->displayIcon(SAD_ICON_INDEX);
+  //       displayController->displayIcon(SAD_ICON_INDEX);
   //       delay(500);
 
   //       home();
   //       delay(1000);
-  //       ledMatrixController->displayIcon(HAPPY_OPEN_ICON_INDEX);
+  //       displayController->displayIcon(HAPPY_OPEN_ICON_INDEX);
   //   break;
 
 
@@ -921,23 +921,23 @@ void Robot::sing(int songName){
 
     
   //   case OttoLove:
-  //       ledMatrixController->displayIcon(HEART_ICON_INDEX);
+  //       displayController->displayIcon(HEART_ICON_INDEX);
   //      // sing(S_cuddly);
   //       //crusaito(2,1500,15,1);
 
   //       home(); 
   //      // sing(S_happy_short);  
   //      delay(500);
-  //      ledMatrixController->displayIcon(HAPPY_OPEN_ICON_INDEX);
+  //      displayController->displayIcon(HAPPY_OPEN_ICON_INDEX);
   //       delay(500);
-  //        ledMatrixController->displayIcon(HEART_ICON_INDEX);
+  //        displayController->displayIcon(HEART_ICON_INDEX);
   //      // sing(S_cuddly);
   //       //crusaito(2,1500,15,1);
   //       home(); 
   //      // sing(S_happy_short);  
   //       delay(1000);
     
-  //       ledMatrixController->displayIcon(HAPPY_OPEN_ICON_INDEX);
+  //       displayController->displayIcon(HAPPY_OPEN_ICON_INDEX);
   //   break;
 
 

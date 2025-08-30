@@ -4,7 +4,7 @@
 #include "Medias/graphics.h"
 #include "Medias/sounds.h"
 #include "hardware.h"
-#include "LedMatrixController/LedMatrixController.h"
+#include "Controllers/Display/DisplayController.h"
 #include "logger.h"
 
 //-- Library to manage serial commands
@@ -209,8 +209,8 @@ void setup() {
 
 
   robot->sing(S_happy);
-  // robot->ledMatrixController->displayIcon(millis(), SMILE_ICON_INDEX, 2000); //Display smile icon for 2 seconds
-  robot->ledMatrixController->playAnimation(millis(), &WAVE_FRAMESET, 300, 0); 
+  // robot->displayController->displayIcon(millis(), SMILE_ICON_INDEX, 2000); //Display smile icon for 2 seconds
+  robot->displayController->playAnimation(millis(), &WAVE_FRAMESET, 300, 0); 
 
   DEBUG("Setting up position...");
   // robot->walk2();
@@ -240,7 +240,7 @@ void loop() {
 //  if (Serial.available()>0 && MODE!=4){
 //     SerialCmd.readSerial();  
 //     //MODE=4;
-//     robot->ledMatrixController->displayIcon(HAPPY_OPEN_ICON_INDEX);
+//     robot->displayController->displayIcon(HAPPY_OPEN_ICON_INDEX);
 //   }
   
 //     switch (MODE) {
@@ -258,7 +258,7 @@ void loop() {
 //       case 1:
 //         randomDance=random(5,15); //5,20
 //        if (randomDance == 5) randomDance = 6;
-//         robot->ledMatrixController->displayIcon(random(10,21));
+//         robot->displayController->displayIcon(random(10,21));
 //         robot->home();//Otto stop
 //         pause(750);
 //         gaits(randomDance);
@@ -272,7 +272,7 @@ void loop() {
 //       case 2:
 //        robot->run(0); //Otto walk straight
 //             //robot->update();
-//             robot->ledMatrixController->displayIcon(SMILE_ICON_INDEX);
+//             robot->displayController->displayIcon(SMILE_ICON_INDEX);
 //             pause(500);
 //             obstacleDetector();
 //             pause(500);
@@ -280,12 +280,12 @@ void loop() {
 //         if(obstacleDetected){
 
 //              robot->home();//Otto stop
-//              robot->ledMatrixController->displayIcon(BIG_SURPRISE_ICON_INDEX);
+//              robot->displayController->displayIcon(BIG_SURPRISE_ICON_INDEX);
 //              pause(3000);
-//              robot->ledMatrixController->displayIcon(X_MOUTH_ICON_INDEX);
+//              robot->displayController->displayIcon(X_MOUTH_ICON_INDEX);
 //              robot->run(1); //Otto walk back
 //              pause(3000);
-//              robot->ledMatrixController->displayIcon(SAD_ICON_INDEX);
+//              robot->displayController->displayIcon(SAD_ICON_INDEX);
 //              robot->home();//Otto stop
 //              pause(3000);
 //              robot->turnL(1, 550);
@@ -464,19 +464,19 @@ void loop() {
 //         robot->setRestState(false);
 //     }
 
-//     robot->ledMatrixController->clear();
+//     robot->displayController->clear();
 //     //Definition of Movement Bluetooth commands
 //     //M  MoveID  T   MoveSize  
 //     char *arg; 
 //     arg = SerialCmd.next(); 
 //     if (arg != NULL) {
 //       moveId=atoi(arg);
-//       robot->ledMatrixController->displayIcon(SMILE_ICON_INDEX);
+//       robot->displayController->displayIcon(SMILE_ICON_INDEX);
 //       }
 //     else{
-//       robot->ledMatrixController->displayIcon(X_MOUTH_ICON_INDEX); // bad command
+//       robot->displayController->displayIcon(X_MOUTH_ICON_INDEX); // bad command
 //       delay(2000);
-//       robot->ledMatrixController->clear();
+//       robot->displayController->clear();
 //       moveId=0; //stop
 //     }
     
@@ -507,19 +507,19 @@ void loop() {
 //     DEBUG(arg);
 //     long iconIndex  = strtol(arg, NULL, 10);
 //     if(iconIndex > ICON_FRAMESET.count){
-//       robot->ledMatrixController->displayIcon(X_MOUTH_ICON_INDEX); // bad command
+//       robot->displayController->displayIcon(X_MOUTH_ICON_INDEX); // bad command
 //       delay(2000);
-//       robot->ledMatrixController->clear();
+//       robot->displayController->clear();
 //     }
 //     if (arg != NULL) {
 //       DEBUG("SAD");
-//       robot->ledMatrixController->displayIcon(SAD_ICON_INDEX); 
+//       robot->displayController->displayIcon(SAD_ICON_INDEX); 
 //       delay(2000);
 //     }else{
 //       DEBUG("X MOUTH");
-//       robot->ledMatrixController->displayIcon(X_MOUTH_ICON_INDEX); // bad command
+//       robot->displayController->displayIcon(X_MOUTH_ICON_INDEX); // bad command
 //       delay(2000);
-//       robot->ledMatrixController->clear();
+//       robot->displayController->clear();
 //     }
 
 //     sendFinalAck();
@@ -540,9 +540,9 @@ void loop() {
 //   arg = SerialCmd.next();
 //   if (arg != NULL) sing = atoi(arg);
 //   else  {
-//   robot->ledMatrixController->displayIcon(X_MOUTH_ICON_INDEX); // bad command   
+//   robot->displayController->displayIcon(X_MOUTH_ICON_INDEX); // bad command   
 //   delay(2000); // 
-//   robot->ledMatrixController->clear();
+//   robot->displayController->clear();
 //   }
   
 
@@ -661,14 +661,14 @@ void loop() {
 //     if (arg != NULL) 
 //     {
 //       modeId=atoi(arg);
-//       robot->ledMatrixController->displayIcon(HEART_ICON_INDEX);
+//       robot->displayController->displayIcon(HEART_ICON_INDEX);
 //       delay(1000);
-//       robot->ledMatrixController->clear();
+//       robot->displayController->clear();
 //       }
 //     else{
-//       robot->ledMatrixController->displayIcon(X_MOUTH_ICON_INDEX); // bad command
+//       robot->displayController->displayIcon(X_MOUTH_ICON_INDEX); // bad command
 //       delay(2000);
-//       robot->ledMatrixController->clear();
+//       robot->displayController->clear();
 //       modeId=0; //stop
 //     }
 // switch (modeId) {
@@ -678,25 +678,25 @@ void loop() {
 //       case 1: //
 //         MODE = 1;
 //         robot->sing(S_mode1);
-//         robot->ledMatrixController->displayIcon(ONE_ICON_INDEX);
+//         robot->displayController->displayIcon(ONE_ICON_INDEX);
 //         delay(1000);
 //     delay(200);
 //         break;
 //         case 2: //
 //         MODE = 2;
 //         robot->sing(S_mode2);
-//         robot->ledMatrixController->displayIcon(TWO_ICON_INDEX);
+//         robot->displayController->displayIcon(TWO_ICON_INDEX);
 //         delay(1000);
 //         break;
 //         case 3: //
 //         MODE = 3;
 //         robot->sing(S_mode3);
-//         robot->ledMatrixController->displayIcon(THREE_ICON_INDEX);
+//         robot->displayController->displayIcon(THREE_ICON_INDEX);
 //         delay(1000);        
 //         break;
 //         case 4: //
 //         robot->sing(S_mode1);
-//         robot->ledMatrixController->displayIcon(FOUR_ICON_INDEX);
+//         robot->displayController->displayIcon(FOUR_ICON_INDEX);
 //         delay(1000);       
 //         MODE = 4;
 //         break;
@@ -705,8 +705,8 @@ void loop() {
 //         break;
 //    }
 // sendFinalAck();
-// robot->ledMatrixController->clear();
-// robot->ledMatrixController->displayIcon(SMILE_ICON_INDEX);
+// robot->displayController->clear();
+// robot->displayController->displayIcon(SMILE_ICON_INDEX);
 
 // }
  
@@ -725,9 +725,9 @@ void loop() {
 //     if (arg != NULL) {gesture=atoi(arg);}
 //     else 
 //     {
-//       robot->ledMatrixController->displayIcon(X_MOUTH_ICON_INDEX);
+//       robot->displayController->displayIcon(X_MOUTH_ICON_INDEX);
 //       delay(2000);
-//       robot->ledMatrixController->clear();
+//       robot->displayController->clear();
 //     }
 
 //     switch (gesture) {
