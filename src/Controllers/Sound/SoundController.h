@@ -2,7 +2,7 @@
 #define SOUND_CONTROLLER_H
 
 #include <Arduino.h>
-#include "hardware.h"
+#include "Hardware.h"
 #include "Controller.h" // Include the Controller interface
 #include "SoundTypes.h" // Include the Melody and MelodyNote structs
 

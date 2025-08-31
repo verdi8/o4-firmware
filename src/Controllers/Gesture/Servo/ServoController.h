@@ -3,7 +3,7 @@
 
 #include <Servo.h>
 #include <Arduino.h>
-#include "hardware.h"
+#include "Hardware.h"
 #include "ServoControllerTypes.h"
 #include "AngleStrategy/AngleStrategy.h"
 #include "AngleStrategy/LinearAngleStrategy.h"

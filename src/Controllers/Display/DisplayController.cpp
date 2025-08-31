@@ -1,6 +1,6 @@
 #include "DisplayController.h"
 #include <LedControl.h>
-#include "hardware.h"
+#include "Hardware.h"
 #include "DisplayTypes.h"
 #include "DisplayMode/DisplayMode.h"
 #include "DisplayMode/IconDisplayMode.h"

@@ -1,9 +1,8 @@
-#include <setjmp.h>
 //#include "US.h"
 #include "Robot.h"
 #include "Medias/graphics.h"
 #include "Medias/sounds.h"
-#include "hardware.h"
+#include "Hardware.h"
 #include "Controllers/Display/DisplayController.h"
 #include "logger.h"
 
@@ -14,7 +13,6 @@ OttoSerialCommand SerialCmd;  //The SerialCommand object
 
 
 #define CAL_TRIGGER_PIN 10 // link this PIN 10 to +5V to enter set up mode
-#define LED_PIN 13
 
 //#define PIN_NoiseSensor A6
 //#define battery A7

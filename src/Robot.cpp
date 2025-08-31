@@ -3,7 +3,7 @@
 #include "Controllers/Display/DisplayController.h"
 #include "Medias/graphics.h"
 #include "Medias/sounds.h"
-#include "hardware.h"
+#include "Hardware.h"
 #include "logger.h"
 
 /*
