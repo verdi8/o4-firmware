@@ -9,12 +9,13 @@
 
 //-- Library to manage serial commands
 #include <OttoSerialCommand.h>
+
 OttoSerialCommand SerialCmd;  //The SerialCommand object
 
 
 #define CAL_TRIGGER_PIN 10 // link this PIN 10 to +5V to enter set up mode
 #define LED_PIN 13
-#define PIN_Buzzer  13
+
 //#define PIN_NoiseSensor A6
 //#define battery A7
 #define TIME_INTERVAL 5000
@@ -37,27 +38,6 @@ int freeMemory() {
   return __brkval ? &top - __brkval : &top - __malloc_heap_start;
 #endif  // __arm__
 }
-
-
-
-
-/*
-   (servo PIN CONNECTIONS)
-   __________ __________ _________________
-  |(pin9)_____)(pin8)  (pin2)(______(pin3)|
-  |__|       |left FRONT right|        |__|
-             |                |
-             |                |
-             |                |
-   _________ |                | __________
-  |(pin7)_____)(pin6)__(pin4)(______(pin5)|
-  |__|                                 |__|
-  
-ULTRASONIC PIN_Trigger 12
-ULTRASONIC PIN_Echo    11
-BUZZER PIN 13
-*/
-
 
 
 Robot* robot;
@@ -102,8 +82,7 @@ volatile int MODE=4; //State of Otto in the principal state machine.
 
 void setup() {
   Serial.begin(9600); 
-  DEBUG("Setup..."); 
-  INFO("Starting...");
+  DEBUG(F("Starting")); 
 
 
   robot = new Robot(); //Create a new Robot object
@@ -141,7 +120,7 @@ void setup() {
 
   randomSeed(analogRead(A6));
   //
-  robot->init(PIN_Buzzer);
+  robot->init(0);
 
 
 
@@ -177,7 +156,6 @@ void setup() {
 
 
   
-  DEBUG("End of calibrating");
   perv_sensor_time = prev_serial_data_time = millis();
   //robot->run();
   //robot->turnL();
@@ -205,15 +183,12 @@ void setup() {
   // }
     //Smile for a happy Otto :)
 
-  DEBUG("Smile for a happy Otto :)");
 
-
-  robot->sing(S_happy);
+  // robot->sing(S_happy);
   // robot->displayController->displayIcon(millis(), SMILE_ICON_INDEX, 2000); //Display smile icon for 2 seconds
   robot->displayController->playAnimation(millis(), &WAVE_FRAMESET, 300, 0); 
 
-  DEBUG("Setting up position...");
-  // robot->walk2();
+  robot->soundController->playMelody(millis(), &HAPPY_BIRTHDAY_MELODY); //Play a melody to indicate that Otto is ready
 
     //Setup callbacks for SerialCommand commands 
   // SerialCmd.addCommand("S", receiveStop);      //  sendAck & sendFinalAck
@@ -226,7 +201,7 @@ void setup() {
   // SerialCmd.addCommand("I", requestProgramId);
   // SerialCmd.addCommand("J", requestMode);
   // SerialCmd.addDefaultHandler(receiveStop);
-  DEBUG("End of setup");
+  DEBUG(F("End of setup"));
 }
 ///////////////////////////////////////////////////////////////////
 //-- Principal Loop ---------------------------------------------//

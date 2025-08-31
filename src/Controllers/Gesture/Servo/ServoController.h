@@ -3,6 +3,7 @@
 
 #include <Servo.h>
 #include <Arduino.h>
+#include "hardware.h"
 #include "ServoControllerTypes.h"
 #include "AngleStrategy/AngleStrategy.h"
 #include "AngleStrategy/LinearAngleStrategy.h"
@@ -21,7 +22,7 @@ class ServoController : public Controller // Implement the Controller interface
          * The pin number to which the servo is connected.
          * This should be set in the constructor.
          */
-        int pin;
+        PIN_NUMBER pin;
 
         /** 
          * The Servo object that controls the servo motor.
@@ -55,7 +56,7 @@ class ServoController : public Controller // Implement the Controller interface
          * Constructor to initialize the pin number
          * @param pin The pin number to which the servo is connected
          */
-        ServoController(int pin);
+        ServoController(PIN_NUMBER pin);
 
         /**
          * Rotate the servo to a specified angle.

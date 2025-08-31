@@ -35,15 +35,20 @@ public:
      * @param backLeftLegPin Pin for the back left leg servo.
      */
     GestureController(
-        int frontRightHipPin,
-        int frontLeftHipPin,
-        int frontRightLegPin,
-        int frontLeftLegPin,
-        int backRightHipPin,
-        int backLeftHipPin,
-        int backRightLegPin,
-        int backLeftLegPin
+        PIN_NUMBER frontRightHipPin,
+        PIN_NUMBER frontLeftHipPin,
+        PIN_NUMBER frontRightLegPin,
+        PIN_NUMBER frontLeftLegPin,
+        PIN_NUMBER backRightHipPin,
+        PIN_NUMBER backLeftHipPin,
+        PIN_NUMBER backRightLegPin,
+        PIN_NUMBER backLeftLegPin
     );
+
+    /**
+     * @brief Moves the robot to its home position.
+     */
+    void home();
 
     /**
      * @brief Makes the robot walk using the configured servo controllers.

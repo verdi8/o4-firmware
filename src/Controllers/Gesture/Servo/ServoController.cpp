@@ -4,7 +4,7 @@
 #define INIT_ANGLE 90    // Initial angle for the servo
 #define INIT_DELAY 300   // Delay to allow the servo to reach the initial position
 
-ServoController::ServoController(int pin)
+ServoController::ServoController(PIN_NUMBER pin)
 {
     this->pin = pin;     // Set the pin number
     servo = new Servo(); // Create a new Servo object

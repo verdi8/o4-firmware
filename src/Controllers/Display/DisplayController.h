@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 #include <LedControl.h>
+#include "hardware.h"
 #include "DisplayTypes.h" 
 #include "DisplayMode/DisplayMode.h"
 #include "DisplayMode/IconDisplayMode.h"
@@ -42,7 +43,7 @@ class DisplayController : public Controller // Implement the Controller interfac
      * @param doFlipX Whether to flip the X axis
      * @param iconFrameset The frameset to use for displaying icons
      */
-    DisplayController(int dataPin, int clkPin, int csPin, bool doFlipX, const FrameSet* iconFrameset);
+    DisplayController(PIN_NUMBER dataPin, PIN_NUMBER clkPin, PIN_NUMBER csPin, bool doFlipX, const FrameSet* iconFrameset);
 
     /**
      * Display an icon on the LED Matrix

@@ -6,8 +6,8 @@
  * Default constructor for IconDisplayMode.
  * Initializes the display mode with default values.
  */
-IconDisplayMode::IconDisplayMode(const FrameSet* iconFrameSet) 
-    : startTime(0), currentIconIndex(-1), iconFrameSet(iconFrameSet) {}
+IconDisplayMode::IconDisplayMode(const FrameSet* PROGMEM iconFrameSetPrgm) 
+    : startTime(0), currentIconIndex(-1), iconFrameSetPrgm(iconFrameSetPrgm) {}
 
 /**
  * Displays the specified icon for a given duration.
@@ -32,7 +32,7 @@ IconDisplayMode* IconDisplayMode::displayIcon(unsigned long currentTime, unsigne
  */
 const Frame* IconDisplayMode::nextFrame(unsigned long currentTime) {
     if (currentTime - this->startTime < this->duration) {
-        return &(iconFrameSet->frames[currentIconIndex]); // Return a pointer to the current frame
+        return &(iconFrameSetPrgm->frames[currentIconIndex]); // Return a pointer to the current frame
     } else {
         return nullptr; // Return nullptr if the duration has elapsed or iconFrameSet is null
     }

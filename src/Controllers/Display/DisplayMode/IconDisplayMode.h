@@ -14,7 +14,7 @@ private:
     unsigned long duration;       // The duration for which the icon should be displayed
     unsigned long startTime;      // The time when the display started
     unsigned int currentIconIndex;         // The index of the current icon being displayed
-    const FrameSet* const iconFrameSet; // A set of frames representing the icon (final and immutable)
+    const FrameSet* PROGMEM iconFrameSetPrgm; // A set of frames representing the icon (final and immutable)
 
 public:
     /**

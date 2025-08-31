@@ -7,6 +7,7 @@
 #include "TimerFreeTone.h"
 #include "Controllers/Display/DisplayController.h"
 #include "Controllers/Gesture/GestureController.h"
+#include "Controllers/Sound/SoundController.h"
 
 // Servo indexes
 #define FRONT_RIGHT_HIP   0
@@ -17,9 +18,6 @@
 #define BACK_LEFT_HIP     5
 #define BACK_RIGHT_LEG    6
 #define BACK_LEFT_LEG     7
-
-// Behaviour parameters
-#define DEFAULT_OSCILLIATION_PERIOD 1000 // in milliseconds
 
 
 //#define PIN_Buzzer  13
@@ -66,6 +64,8 @@ class Robot {
 
 
     DisplayController* displayController;
+    SoundController* soundController;
+    GestureController* gestureController;
 
     // Display
 
@@ -125,7 +125,6 @@ class Robot {
 
 
   private:
-    ServoController* servoControllers[8];
     Oscillator oscillator[8];
     // Servo servo[8];
     int board_pins[8];

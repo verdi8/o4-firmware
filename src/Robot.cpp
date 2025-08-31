@@ -24,17 +24,20 @@
 #define EEPROM_MAGIC  0xabcd
 #define EEPROM_OFFSET 2   //eeprom starting offset to store trim[]
 
-
+;
 Robot::Robot():/* reverse{0, 0, 0, 0, 0, 0, 0, 0}, */trim{0, 0, 0, 0, 0, 0, 0, 0} {
   this->displayController = new DisplayController(LED_MATRIX_DIN, LED_MATRIX_CLK, LED_MATRIX_CS, LED_MATRIX_FLIP_X, &ICON_FRAMESET);
-  this->servoControllers[FRONT_RIGHT_HIP] = new ServoController(FRONT_RIGHT_HIP_SERVO_PIN);
-  this->servoControllers[FRONT_LEFT_HIP] = new ServoController(FRONT_LEFT_HIP_SERVO_PIN);
-  this->servoControllers[BACK_RIGHT_HIP] = new ServoController(BACK_RIGHT_HIP_SERVO_PIN);
-  this->servoControllers[BACK_LEFT_HIP] = new ServoController(BACK_LEFT_HIP_SERVO_PIN);
-  this->servoControllers[FRONT_RIGHT_LEG] = new ServoController(FRONT_RIGHT_LEG_SERVO_PIN);
-  this->servoControllers[FRONT_LEFT_LEG] = new ServoController(FRONT_LEFT_LEG_SERVO_PIN);
-  this->servoControllers[BACK_RIGHT_LEG] = new ServoController(BACK_RIGHT_LEG_SERVO_PIN);
-  this->servoControllers[BACK_LEFT_LEG] = new ServoController(BACK_LEFT_LEG_SERVO_PIN);
+  this->soundController = new SoundController(PIN_BUZZER);
+  this->gestureController = new GestureController(
+    FRONT_RIGHT_HIP_SERVO_PIN,
+    FRONT_LEFT_HIP_SERVO_PIN,
+    FRONT_RIGHT_LEG_SERVO_PIN,
+    FRONT_LEFT_LEG_SERVO_PIN,
+    BACK_RIGHT_HIP_SERVO_PIN,
+    BACK_LEFT_HIP_SERVO_PIN,
+    BACK_RIGHT_LEG_SERVO_PIN,
+    BACK_LEFT_LEG_SERVO_PIN
+  );
  }
 
 void Robot::reverseServo(int id) {
@@ -376,35 +379,6 @@ void Robot::home() {
   }
 }
 
-void Robot::setupPosition() {
-  unsigned long currentTime = millis();
-  int testPosition = 90;
-  this->servoControllers[FRONT_RIGHT_HIP]->rotateTo(currentTime, testPosition);
-  this->servoControllers[FRONT_LEFT_HIP]->rotateTo(currentTime, testPosition);
-  this->servoControllers[FRONT_RIGHT_LEG]->rotateTo(currentTime, testPosition);
-  this->servoControllers[FRONT_LEFT_LEG]->rotateTo(currentTime, testPosition);
-  this->servoControllers[BACK_RIGHT_HIP]->rotateTo(currentTime, testPosition);
-  this->servoControllers[BACK_LEFT_HIP]->rotateTo(currentTime, testPosition);
-  this->servoControllers[BACK_RIGHT_LEG]->rotateTo(currentTime, testPosition);
-  this->servoControllers[BACK_LEFT_LEG]->rotateTo(currentTime, testPosition);
-}
-
-void Robot::walk2() {
- int x_amp = 15;
-  int z_amp = 20;
-  int ap = 20;
-  int hi = -10;
-  unsigned long currentTime = millis();
-  this->servoControllers[FRONT_RIGHT_HIP]->oscillate(currentTime, x_amp, DEFAULT_OSCILLIATION_PERIOD, 90 + ap, 270);
-  this->servoControllers[FRONT_LEFT_HIP]->oscillate(currentTime, x_amp, DEFAULT_OSCILLIATION_PERIOD, 90 - ap, 270);
-  this->servoControllers[FRONT_RIGHT_LEG]->oscillate(currentTime, z_amp, DEFAULT_OSCILLIATION_PERIOD / 2, 90 - hi, 270);
-  this->servoControllers[FRONT_LEFT_LEG]->oscillate(currentTime, z_amp, DEFAULT_OSCILLIATION_PERIOD / 2, 90 + hi, 90);
-  this->servoControllers[BACK_RIGHT_HIP]->oscillate(currentTime, x_amp, DEFAULT_OSCILLIATION_PERIOD, 90 - ap, 90);
-  this->servoControllers[BACK_LEFT_HIP]->oscillate(currentTime, x_amp, DEFAULT_OSCILLIATION_PERIOD, 90 + ap, 90);
-  this->servoControllers[BACK_RIGHT_LEG]->oscillate(currentTime, z_amp, DEFAULT_OSCILLIATION_PERIOD / 2, 90 + hi, 90);
-  this->servoControllers[BACK_LEFT_LEG]->oscillate(currentTime, z_amp, DEFAULT_OSCILLIATION_PERIOD / 2, 90 - hi, 270);
-}
-
 
 
 void Robot::waveHAND(float steps, float T) {
@@ -568,12 +542,15 @@ void Robot::execute(float steps, float period[8], int amplitude[8], int offset[8
 
 void Robot::update() {
   unsigned long currentTime = millis();
+  
   // Update servos states
-  for(int i = 0; i < 8; i++) {
-    servoControllers[i]->update(currentTime);
-  }
+  this->gestureController->update(currentTime);
+  
   // Update LED matrix
   this->displayController->update(currentTime);
+
+  // Update sound controller
+  this->soundController->update(currentTime);
 
 }
 
@@ -732,35 +709,35 @@ void Robot::sing(int songName){
   switch(songName){
 
     case S_connection:
-      _tone(NOTE_E5,50,30);
-      _tone(NOTE_E6,55,25);
-      _tone(NOTE_A6,60,10);
+      _tone(Notes::NOTE_E5,50,30);
+      _tone(Notes::NOTE_E6,55,25);
+      _tone(Notes::NOTE_A6,60,10);
     break;
 
     case S_disconnection:
-      _tone(NOTE_E5,50,30);
-      _tone(NOTE_A6,55,25);
-      _tone(NOTE_E6,50,10);
+      _tone(Notes::NOTE_E5,50,30);
+      _tone(Notes::NOTE_A6,55,25);
+      _tone(Notes::NOTE_E6,50,10);
     break;
 
     case S_buttonPushed:
-      bendTones (NOTE_E6, NOTE_G6, 1.03, 20, 2);
+      bendTones (Notes::NOTE_E6, Notes::NOTE_G6, 1.03, 20, 2);
       delay(30);
-      bendTones (NOTE_E6, NOTE_D7, 1.04, 10, 2);
+      bendTones (Notes::NOTE_E6, Notes::NOTE_D7, 1.04, 10, 2);
     break;
 
     case S_mode1:
-      bendTones (NOTE_E6, NOTE_A6, 1.02, 30, 10);  //1318.51 to 1760
+      bendTones (Notes::NOTE_E6, Notes::NOTE_A6, 1.02, 30, 10);  //1318.51 to 1760
     break;
 
     case S_mode2:
-      bendTones (NOTE_G6, NOTE_D7, 1.03, 30, 10);  //1567.98 to 2349.32
+      bendTones (Notes::NOTE_G6, Notes::NOTE_D7, 1.03, 30, 10);  //1567.98 to 2349.32
     break;
 
     case S_mode3:
-      _tone(NOTE_E6,50,100); //D6
-      _tone(NOTE_G6,50,80);  //E6
-      _tone(NOTE_D7,300,0);  //G6
+      _tone(Notes::NOTE_E6,50,100); //D6
+      _tone(Notes::NOTE_G6,50,80);  //E6
+      _tone(Notes::NOTE_D7,300,0);  //G6
     break;
 
     case S_surprise:
@@ -773,7 +750,7 @@ void Robot::sing(int songName){
       delay(200);
 
       for (int i=880; i<2000; i=i*1.04) {
-           _tone(NOTE_B5,5,10);
+           _tone(Notes::NOTE_B5,5,10);
       }
     break;
 
@@ -782,7 +759,7 @@ void Robot::sing(int songName){
       delay(200);
 
       for (int i=1880; i<3000; i=i*1.03) {
-          _tone(NOTE_C6,10,10);
+          _tone(Notes::NOTE_C6,10,10);
       }
     break;
 

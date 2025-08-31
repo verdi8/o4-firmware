@@ -3,14 +3,23 @@
 #ifndef HARDWARE_H
 #define HARDWARE_H
 
+// Rédefinition of PIN_NUMBER type
+typedef uint8_t PIN_NUMBER;
+
+
 //
 // Led Matrix
 //
 #define LED_MATRIX_DIN          A1
 #define LED_MATRIX_CS           A2
 #define LED_MATRIX_CLK          A3
-#define LED_MATRIX_INTENSITY    8 // 0-15
+#define LED_MATRIX_INTENSITY    15 // 0-15
 #define LED_MATRIX_FLIP_X       true
+
+//
+// Buzzer
+//
+constexpr PIN_NUMBER PIN_BUZZER = 13; // Pin connected to the buzzer
 
 //
 // Servo pins

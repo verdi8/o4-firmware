@@ -1,5 +1,6 @@
 #include "DisplayController.h"
 #include <LedControl.h>
+#include "hardware.h"
 #include "DisplayTypes.h"
 #include "DisplayMode/DisplayMode.h"
 #include "DisplayMode/IconDisplayMode.h"
@@ -8,10 +9,10 @@
 
 constexpr int LED_MATRIX_INDEX = 0; // Define LED_MATRIX_INDEX as constexpr for better optimization and clarity
 
-DisplayController::DisplayController(int dataPin, int clkPin, int csPin, bool doFlipX, const FrameSet* iconFrameset)
+DisplayController::DisplayController(PIN_NUMBER dataPin, PIN_NUMBER clkPin, PIN_NUMBER csPin, bool doFlipX, const FrameSet* PROGMEM iconFrameSetPrgm)
     : ledControl(new LedControl(dataPin, clkPin, csPin, 1)),
       doFlipX(doFlipX),
-      iconDisplayModeInstance(new IconDisplayMode(iconFrameset)),
+      iconDisplayModeInstance(new IconDisplayMode(iconFrameSetPrgm)),
       animationDisplayModeInstance(new AnimationDisplayMode()), 
       currentDisplayMode(nullptr) // Initialize currentDisplayMode to nullptr
 {
