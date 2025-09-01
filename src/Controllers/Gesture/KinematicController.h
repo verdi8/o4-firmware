@@ -1,5 +1,4 @@
-#ifndef GESTURECONTROLLER_H
-#define GESTURECONTROLLER_H
+#pragma once
 
 #include <Arduino.h>
 #include "Servo/ServoController.h"
@@ -7,10 +6,10 @@
 #include "Controllers/TimeProvider.h"
 
 /**
- * @class GestureController
+ * @class KinematicController
  * @brief Controls the gestures of a robot using multiple ServoController instances.
  */
-class GestureController : public Controller { // Implement the Controller interface
+class KinematicController : public Controller { // Implement the Controller interface
 private:
     TimeProvider* timeProvider; // Pointer to the TimeProvider for getting current time
     ServoController* frontRightHip; // Servo controller for the front right hip joint.
@@ -25,7 +24,7 @@ private:
 
 public:
     /**
-     * @brief Constructs a GestureController with the specified servo pins.
+     * @brief Constructs a KinematicController with the specified servo pins.
      * 
      * @param frontRightHipPin Pin for the front right hip servo.
      * @param frontLeftHipPin Pin for the front left hip servo.
@@ -36,7 +35,7 @@ public:
      * @param backRightLegPin Pin for the back right leg servo.
      * @param backLeftLegPin Pin for the back left leg servo.
      */
-    GestureController(
+    KinematicController(
         TimeProvider* timeProvider,
         PinNumber frontRightHipPin,
         PinNumber frontLeftHipPin,
@@ -59,7 +58,7 @@ public:
     void walk();
 
     /**
-     * @brief Updates the state of the GestureController.
+     * @brief Updates the state of the KinematicController.
      * 
      * @param currentTime The current time in milliseconds.
      */
@@ -73,5 +72,3 @@ public:
      */
     bool isDone() override; // Override the isDone method from Controller
 };
-
-#endif // GESTURECONTROLLER_H

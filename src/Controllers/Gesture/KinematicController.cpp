@@ -1,9 +1,9 @@
-#include "GestureController.h"
+#include "KinematicController.h"
 
 // Behaviour parameters
 #define DEFAULT_OSCILLIATION_PERIOD 1000 // in milliseconds
 
-GestureController::GestureController(
+KinematicController::KinematicController(
     TimeProvider *timeProvider,
     PinNumber frontRightHipPin,
     PinNumber frontLeftHipPin,
@@ -32,7 +32,7 @@ GestureController::GestureController(
     all[7] = backLeftLeg;
 }
 
-void GestureController::home()
+void KinematicController::home()
 {
     int testPosition = 90;
     this->frontRightHip->rotateTo(testPosition);
@@ -45,7 +45,7 @@ void GestureController::home()
     this->backLeftLeg->rotateTo(testPosition);
 }
 
-void GestureController::walk()
+void KinematicController::walk()
 {
     int x_amp = 15;
     int z_amp = 20;
@@ -61,7 +61,7 @@ void GestureController::walk()
     this->backLeftLeg->oscillate(z_amp, DEFAULT_OSCILLIATION_PERIOD / 2, 90 - hi, 270);
 }
 
-void GestureController::update()
+void KinematicController::update()
 {
     for (int i = 0; i < 8; i++)
     {
@@ -69,7 +69,7 @@ void GestureController::update()
     }
 }
 
-bool GestureController::isDone()
+bool KinematicController::isDone()
 {
     for (int i = 0; i < 8; i++)
     {

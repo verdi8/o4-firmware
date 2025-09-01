@@ -6,7 +6,7 @@
 #include <BatReader.h>
 #include "TimerFreeTone.h"
 #include "Controllers/Display/DisplayController.h"
-#include "Controllers/Gesture/GestureController.h"
+#include "Controllers/Gesture/KinematicController.h"
 #include "Controllers/Sound/SoundController.h"
 #include "Actions/Display/DisplayActions.h"
 #include "Actions/Sound/SoundActions.h"
@@ -59,7 +59,7 @@ class Robot : public TimeProvider {
     // Controllers of physical parts
     DisplayController* displayController;
     SoundController* soundController;
-    GestureController* gestureController;
+    KinematicController* kinematicController;
 
     // Sets of actions that 
     DisplayActions* displayActions;

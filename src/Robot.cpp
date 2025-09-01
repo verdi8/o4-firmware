@@ -29,7 +29,7 @@ Robot::Robot(unsigned long currentTime) : /* reverse{0, 0, 0, 0, 0, 0, 0, 0}, */
 {
   this->displayController = new DisplayController(this, LED_MATRIX_DIN, LED_MATRIX_CLK, LED_MATRIX_CS, LED_MATRIX_FLIP_X);
   this->soundController = new SoundController(this, PIN_BUZZER);
-  this->gestureController = new GestureController(this,
+  this->kinematicController = new KinematicController(this,
       FRONT_RIGHT_HIP_SERVO_PIN,
       FRONT_LEFT_HIP_SERVO_PIN,
       FRONT_RIGHT_LEG_SERVO_PIN,
@@ -603,7 +603,7 @@ void Robot::update(unsigned long currentTime)
 {
   this->currentTime = currentTime;
   // Update servos states
-  this->gestureController->update();
+  this->kinematicController->update();
 
   // Update LED matrix
   this->displayController->update();
