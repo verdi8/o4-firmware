@@ -24,7 +24,7 @@ class DisplayController
     // Private member properties
     LedControl* ledControl; // The LedControl object from the LedControl library
     bool doFlipX; // Whether to flip the X axis    DisplayMode* iconDisplayModeInstance; // Instance for managing icon display mode
-    IconDisplayMode* iconDisplayModeInstance; // Instance for managing icon display mode
+    IconDisplayMode* stillImageDisplayModeInstance; // Instance for managing icon display mode
     AnimationDisplayMode* animationDisplayModeInstance; // Instance for managing animation display mode
     DisplayMode* currentDisplayMode; // The current display mode of the LED Matrix
 

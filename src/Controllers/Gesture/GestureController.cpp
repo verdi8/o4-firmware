@@ -34,7 +34,6 @@ GestureController::GestureController(
 
 void GestureController::home()
 {
-    unsigned long currentTime = millis();
     int testPosition = 90;
     this->frontRightHip->rotateTo(testPosition);
     this->frontLeftHip->rotateTo(testPosition);
@@ -52,7 +51,6 @@ void GestureController::walk()
     int z_amp = 20;
     int ap = 20;
     int hi = -10;
-    unsigned long currentTime = millis();
     this->frontRightHip->oscillate(x_amp, DEFAULT_OSCILLIATION_PERIOD, 90 + ap, 270);
     this->frontLeftHip->oscillate(x_amp, DEFAULT_OSCILLIATION_PERIOD, 90 - ap, 270);
     this->frontRightLeg->oscillate(z_amp, DEFAULT_OSCILLIATION_PERIOD / 2, 90 - hi, 270);

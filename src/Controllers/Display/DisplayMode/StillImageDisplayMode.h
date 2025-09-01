@@ -5,10 +5,10 @@
 
 
 /**
- * IconDisplayMode class for displaying a single static icon on the LED matrix.
+ * StillImageDisplayMode class for displaying a single static icon on the LED matrix.
  * This mode allows displaying an icon for a specified duration.
  */
-class IconDisplayMode : public DisplayMode {
+class StillImageDisplayMode : public DisplayMode {
 private:
     unsigned long duration;       // The duration for which the icon should be displayed
     unsigned long startTime;      // The time when the display started
@@ -17,10 +17,10 @@ private:
 
 public:
     /**
-     * Default constructor for IconDisplayMode.
+     * Default constructor for StillImageDisplayMode.
      * Initializes the display mode with default values.
      */
-    IconDisplayMode();
+    StillImageDisplayMode();
 
     /**
      * Displays the specified icon for a given duration.
@@ -29,7 +29,7 @@ public:
      * @param iconIndex The index of the icon to be displayed.
      * @param duration The duration for which the icon should be displayed (in milliseconds).
      */
-    IconDisplayMode* displayIcon(unsigned long currentTime, const FrameSet* PROGMEM iconFrameSetPrgm, unsigned int iconIndex, unsigned long duration);
+    StillImageDisplayMode* displayIcon(unsigned long currentTime, const FrameSet* PROGMEM iconFrameSetPrgm, unsigned int iconIndex, unsigned long duration);
 
     /**
      * Provides the next frame to be displayed.

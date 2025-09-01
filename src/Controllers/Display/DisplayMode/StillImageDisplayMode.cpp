@@ -1,12 +1,12 @@
 #include "Controllers/Display/DisplayTypes.h"
 #include "DisplayMode.h"
-#include "IconDisplayMode.h"
+#include "StillImageDisplayMode.h"
 
 /**
- * Default constructor for IconDisplayMode.
+ * Default constructor for StillImageDisplayMode.
  * Initializes the display mode with default values.
  */
-IconDisplayMode::IconDisplayMode() 
+StillImageDisplayMode::StillImageDisplayMode() 
     : startTime(0), currentIconIndex(-1), iconFrameSetPrgm(iconFrameSetPrgm) {}
 
 /**
@@ -16,7 +16,7 @@ IconDisplayMode::IconDisplayMode()
  * @param iconIndex The index of the icon to be displayed.
  * @param duration The duration for which the icon should be displayed (in milliseconds).
  */
-IconDisplayMode* IconDisplayMode::displayIcon(unsigned long currentTime, const FrameSet* PROGMEM iconFrameSetPrgm, unsigned int iconIndex, unsigned long duration) {
+StillImageDisplayMode* StillImageDisplayMode::displayIcon(unsigned long currentTime, const FrameSet* PROGMEM iconFrameSetPrgm, unsigned int iconIndex, unsigned long duration) {
     this->startTime = currentTime;      // Record the start time
     this->iconFrameSetPrgm = iconFrameSetPrgm; // Set the icon frame set
     this->currentIconIndex = iconIndex; // Set the current icon index
@@ -31,7 +31,7 @@ IconDisplayMode* IconDisplayMode::displayIcon(unsigned long currentTime, const F
  * @param currentTime The current time in milliseconds.
  * @return A pointer to the frame to be displayed, or nullptr if the duration has elapsed.
  */
-const Frame* IconDisplayMode::nextFrame(unsigned long currentTime) {
+const Frame* StillImageDisplayMode::nextFrame(unsigned long currentTime) {
     if (currentTime - this->startTime < this->duration) {
         return &(iconFrameSetPrgm->frames[currentIconIndex]); // Return a pointer to the current frame
     } else {
@@ -46,6 +46,6 @@ const Frame* IconDisplayMode::nextFrame(unsigned long currentTime) {
  * @param currentTime The current time in milliseconds.
  * @return True if the mode is done, false otherwise.
  */
-bool IconDisplayMode::isDone(unsigned long currentTime) {
+bool StillImageDisplayMode::isDone(unsigned long currentTime) {
     return (currentTime - this->startTime >= this->duration); // Check if the duration has elapsed
 }

@@ -3,7 +3,7 @@
 #include "Hardware.h"
 #include "DisplayTypes.h"
 #include "DisplayMode/DisplayMode.h"
-#include "DisplayMode/IconDisplayMode.h"
+#include "DisplayMode/StillImageDisplayMode.h"
 #include "DisplayMode/AnimationDisplayMode.h"
 #include "logger.h"
 
@@ -13,7 +13,7 @@ DisplayController::DisplayController(TimeProvider* timeProvider, PinNumber dataP
     : timeProvider(timeProvider),
       ledControl(new LedControl(dataPin, clkPin, csPin, 1)),
       doFlipX(doFlipX),
-      iconDisplayModeInstance(new IconDisplayMode()),
+      stillImageDisplayModeInstance(new StillImageDisplayMode()),
       animationDisplayModeInstance(new AnimationDisplayMode()),
       currentDisplayMode(nullptr) // Initialize currentDisplayMode to nullptr
 {
@@ -22,10 +22,10 @@ DisplayController::DisplayController(TimeProvider* timeProvider, PinNumber dataP
     ledControl->clearDisplay(LED_MATRIX_INDEX);
 };
 
-void DisplayController::displayIcon(const FrameSet *PROGMEM iconFrameSetPrgm, unsigned int iconIndex, unsigned long duration)
+void DisplayController::displayImage(const FrameSet *PROGMEM iconFrameSetPrgm, unsigned int iconIndex, unsigned long duration)
 {
     unsigned long currentTime = timeProvider->getCurrentTime(); // Get the current time from the TimeProvider
-    this->currentDisplayMode = this->iconDisplayModeInstance->displayIcon(currentTime, iconFrameSetPrgm, iconIndex, duration); // Display the icon for 2000 ms
+    this->currentDisplayMode = this->stillImageDisplayModeInstance->displayIcon(currentTime, iconFrameSetPrgm, iconIndex, duration); // Display the icon for 2000 ms
 };
 
 void DisplayController::playAnimation(FrameSet *PROGMEM frameSetPrgm, unsigned long frameDuration, unsigned int repeat)

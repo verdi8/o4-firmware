@@ -5,7 +5,7 @@
 #include "Hardware.h"
 #include "DisplayTypes.h" 
 #include "DisplayMode/DisplayMode.h"
-#include "DisplayMode/IconDisplayMode.h"
+#include "DisplayMode/StillImageDisplayMode.h"
 #include "DisplayMode/AnimationDisplayMode.h"
 #include "Controllers/Controller.h" // Include the Controller interface
 #include "Controllers/TimeProvider.h"
@@ -25,8 +25,8 @@ class DisplayController : public Controller // Implement the Controller interfac
     // Private member properties
     TimeProvider* timeProvider; // Pointer to the TimeProvider for getting current time
     LedControl* ledControl; // The LedControl object from the LedControl library
-    bool doFlipX; // Whether to flip the X axis    DisplayMode* iconDisplayModeInstance; // Instance for managing icon display mode
-    IconDisplayMode* iconDisplayModeInstance; // Instance for managing icon display mode
+    bool doFlipX; // Whether to flip the X axis
+    StillImageDisplayMode* stillImageDisplayModeInstance; // Instance for managing still image display mode
     AnimationDisplayMode* animationDisplayModeInstance; // Instance for managing animation display mode
     DisplayMode* currentDisplayMode; // The current display mode of the LED Matrix
 
@@ -50,7 +50,7 @@ class DisplayController : public Controller // Implement the Controller interfac
      * Display an icon on the LED Matrix
      * @param index The index in the ICON_FRAMESET
      */
-    void displayIcon(const FrameSet* PROGMEM iconFrameSetPrgm, unsigned int iconIndex, unsigned long duration);
+    void displayImage(const FrameSet* PROGMEM iconFrameSetPrgm, unsigned int iconIndex, unsigned long duration);
 
     /**
      * Play an animation on the LED Matrix.
