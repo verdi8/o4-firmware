@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Arduino.h>
-#include "Hardware.h"
+#include "Hardware/Config.h"
 #include "Controllers/Controller.h" // Include the Controller interface
 #include "SoundTypes.h" // Include the Melody and MelodyNote structs
 #include "Controllers/TimeProvider.h"

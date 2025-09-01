@@ -2,7 +2,7 @@
 
 #include <Arduino.h>
 #include <LedControl.h>
-#include "Hardware.h"
+#include "Hardware/Config.h"
 #include "DisplayTypes.h" 
 #include "DisplayMode/DisplayMode.h"
 #include "DisplayMode/StillImageDisplayMode.h"

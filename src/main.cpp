@@ -1,6 +1,6 @@
 //#include "US.h"
 #include "Robot.h"
-#include "Hardware.h"
+#include "Hardware/Config.h"
 #include "Controllers/Display/DisplayController.h"
 #include "logger.h"
 

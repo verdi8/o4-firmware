@@ -1,7 +1,7 @@
 #include <EEPROM.h>
 #include "Robot.h"
 #include "Controllers/Display/DisplayController.h"
-#include "Hardware.h"
+#include "Hardware/Config.h"
 #include "logger.h"
 
 /*

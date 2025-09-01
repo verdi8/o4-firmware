@@ -7,7 +7,7 @@
  * Initializes the display mode with default values.
  */
 StillImageDisplayMode::StillImageDisplayMode() 
-    : startTime(0), currentIconIndex(-1), iconFrameSetPrgm(iconFrameSetPrgm) {}
+    : startTime(0), currentIconIndex(-1), iconFrameSetPrgm(nullptr) {}
 
 /**
  * Displays the specified icon for a given duration.
