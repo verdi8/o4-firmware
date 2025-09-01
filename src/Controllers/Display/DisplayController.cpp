@@ -9,11 +9,12 @@
 
 constexpr int LED_MATRIX_INDEX = 0; // Define LED_MATRIX_INDEX as constexpr for better optimization and clarity
 
-DisplayController::DisplayController(PIN_NUMBER dataPin, PIN_NUMBER clkPin, PIN_NUMBER csPin, bool doFlipX, const FrameSet* PROGMEM iconFrameSetPrgm)
-    : ledControl(new LedControl(dataPin, clkPin, csPin, 1)),
+DisplayController::DisplayController(TimeProvider* timeProvider, PIN_NUMBER dataPin, PIN_NUMBER clkPin, PIN_NUMBER csPin, bool doFlipX)
+    : timeProvider(timeProvider),
+      ledControl(new LedControl(dataPin, clkPin, csPin, 1)),
       doFlipX(doFlipX),
-      iconDisplayModeInstance(new IconDisplayMode(iconFrameSetPrgm)),
-      animationDisplayModeInstance(new AnimationDisplayMode()), 
+      iconDisplayModeInstance(new IconDisplayMode()),
+      animationDisplayModeInstance(new AnimationDisplayMode()),
       currentDisplayMode(nullptr) // Initialize currentDisplayMode to nullptr
 {
     ledControl->shutdown(LED_MATRIX_INDEX, false);
@@ -21,13 +22,15 @@ DisplayController::DisplayController(PIN_NUMBER dataPin, PIN_NUMBER clkPin, PIN_
     ledControl->clearDisplay(LED_MATRIX_INDEX);
 };
 
-void DisplayController::displayIcon(unsigned long currentTime, unsigned int iconIndex, unsigned long duration)
+void DisplayController::displayIcon(const FrameSet *PROGMEM iconFrameSetPrgm, unsigned int iconIndex, unsigned long duration)
 {
-    this->currentDisplayMode = this->iconDisplayModeInstance->displayIcon(currentTime, iconIndex, duration); // Display the icon for 2000 ms
+    unsigned long currentTime = timeProvider->getCurrentTime(); // Get the current time from the TimeProvider
+    this->currentDisplayMode = this->iconDisplayModeInstance->displayIcon(currentTime, iconFrameSetPrgm, iconIndex, duration); // Display the icon for 2000 ms
 };
 
-void DisplayController::playAnimation(unsigned long currentTime, FrameSet* PROGMEM frameSetPrgm, unsigned long frameDuration, unsigned int repeat)
+void DisplayController::playAnimation(FrameSet *PROGMEM frameSetPrgm, unsigned long frameDuration, unsigned int repeat)
 {
+    unsigned long currentTime = timeProvider->getCurrentTime(); // Get the current time from the TimeProvider
     this->currentDisplayMode = this->animationDisplayModeInstance->playAnimation(currentTime, frameSetPrgm, frameDuration, repeat); // Start the animation
 };
 
@@ -36,21 +39,21 @@ void DisplayController::clearDisplay()
     ledControl->clearDisplay(LED_MATRIX_INDEX); // Clear the LED Matrix display
 };
 
-void DisplayController::update(unsigned long currentTime)
+void DisplayController::update()
 {
-    if(this->currentDisplayMode == nullptr)
+    if (this->currentDisplayMode == nullptr)
     {
         return; // If no display mode is set, do nothing
     }
+    unsigned long currentTime = timeProvider->getCurrentTime(); // Get the current time from the TimeProvider
 
-
-    const Frame* frame = this->currentDisplayMode->nextFrame(currentTime); // Get the next frame from the current display mode
+    const Frame *frame = this->currentDisplayMode->nextFrame(currentTime); // Get the next frame from the current display mode
     if (frame != nullptr)
     {
         // If a frame is available, display it
         this->displayFrame(frame);
     }
-    
+
     if (this->currentDisplayMode->isDone(currentTime))
     {
         // If the current display mode is done, clear the display and reset the current display mode
@@ -59,24 +62,24 @@ void DisplayController::update(unsigned long currentTime)
     }
 };
 
-bool DisplayController::isDone(unsigned long currentTime)
+bool DisplayController::isDone()
 {
     // If no display mode is set, the controller is considered done
     if (this->currentDisplayMode == nullptr)
     {
         return true;
     }
-
+    unsigned long currentTime = timeProvider->getCurrentTime(); // Get the current time from the TimeProvider
     // Check if the current display mode reports that the operation is done
     return this->currentDisplayMode->isDone(currentTime);
 }
 
-void DisplayController::displayFrame(const Frame* frame)
+void DisplayController::displayFrame(const Frame *frame)
 {
     for (int i = 0; i < 8; i++)
     {
         // Read the column data correctly
-        byte col = pgm_read_byte(((const byte*) frame) + i);
+        byte col = pgm_read_byte(((const byte *)frame) + i);
         if (this->doFlipX)
         {
             col = flipX(col);
@@ -87,8 +90,8 @@ void DisplayController::displayFrame(const Frame* frame)
 
 byte DisplayController::flipX(byte b)
 {
-   b = (b & 0xF0) >> 4 | (b & 0x0F) << 4;
-   b = (b & 0xCC) >> 2 | (b & 0x33) << 2;
-   b = (b & 0xAA) >> 1 | (b & 0x55) << 1;
-   return b;
+    b = (b & 0xF0) >> 4 | (b & 0x0F) << 4;
+    b = (b & 0xCC) >> 2 | (b & 0x33) << 2;
+    b = (b & 0xAA) >> 1 | (b & 0x55) << 1;
+    return b;
 };

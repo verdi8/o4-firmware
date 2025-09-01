@@ -8,7 +8,8 @@
 #include "AngleStrategy/AngleStrategy.h"
 #include "AngleStrategy/LinearAngleStrategy.h"
 #include "AngleStrategy/OscillatingAngleStrategy.h"
-#include "Controller.h" // Include the Controller interface
+#include "Controllers/Controller.h" // Include the Controller interface
+#include "Controllers/TimeProvider.h"
 
 /**
  * ServoController class to manage a servo motor.
@@ -18,6 +19,8 @@
 class ServoController : public Controller // Implement the Controller interface
 {
     private:
+        TimeProvider* timeProvider; // Pointer to the TimeProvider for getting current time
+
         /** 
          * The pin number to which the servo is connected.
          * This should be set in the constructor.
@@ -56,13 +59,13 @@ class ServoController : public Controller // Implement the Controller interface
          * Constructor to initialize the pin number
          * @param pin The pin number to which the servo is connected
          */
-        ServoController(PIN_NUMBER pin);
+        ServoController(TimeProvider* timeProvider, PIN_NUMBER pin);
 
         /**
          * Rotate the servo to a specified angle.
          * @param targetAngle The angle to rotate the servo to (0 to 180 degrees)
          */
-        void rotateTo(unsigned long currentTime, int targetAngle);
+        void rotateTo(int targetAngle);
 
         /**
          * Set the oscillation parameters for the servo.
@@ -73,20 +76,20 @@ class ServoController : public Controller // Implement the Controller interface
          * @param offset The offset from the center angle
          * @param phase The phase shift of the oscillation
          */
-        void oscillate(unsigned long currentTime, int amplitude, int period, int offset, int phase);
+        void oscillate(int amplitude, int period, int offset, int phase);
 
         /**
          * Update the servo position based on the current time.
          * @param currentTime The current time in milliseconds
          */
-        void update(unsigned long currentTime) override; // Override the update method from Controller
+        void update() override; // Override the update method from Controller
     
         /**
          * Check if the servo has completed its movement.
          * @param currentTime The current time in milliseconds
          * @return true if the movement is complete, false otherwise.
          */
-        bool isDone(unsigned long currentTime) override; // Override the isDone method from Controller
+        bool isDone() override; // Override the isDone method from Controller
 
         /**
          * Stops the servo moving.

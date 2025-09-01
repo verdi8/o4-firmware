@@ -1,5 +1,4 @@
-#ifndef ICON_DISPLAY_MODE_H
-#define ICON_DISPLAY_MODE_H
+#pragma once
 
 #include "Controllers/Display/DisplayTypes.h"
 #include "DisplayMode.h"
@@ -21,7 +20,7 @@ public:
      * Default constructor for IconDisplayMode.
      * Initializes the display mode with default values.
      */
-    IconDisplayMode(const FrameSet* iconFrameSet);
+    IconDisplayMode();
 
     /**
      * Displays the specified icon for a given duration.
@@ -30,7 +29,7 @@ public:
      * @param iconIndex The index of the icon to be displayed.
      * @param duration The duration for which the icon should be displayed (in milliseconds).
      */
-    IconDisplayMode* displayIcon(unsigned long currentTime, unsigned int iconIndex, unsigned long duration);
+    IconDisplayMode* displayIcon(unsigned long currentTime, const FrameSet* PROGMEM iconFrameSetPrgm, unsigned int iconIndex, unsigned long duration);
 
     /**
      * Provides the next frame to be displayed.
@@ -50,5 +49,3 @@ public:
      */
     bool isDone(unsigned long currentTime) override;
 };
-
-#endif // ICON_DISPLAY_MODE_H

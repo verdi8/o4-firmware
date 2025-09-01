@@ -1,7 +1,5 @@
 //#include "US.h"
 #include "Robot.h"
-#include "Medias/graphics.h"
-#include "Medias/sounds.h"
 #include "Hardware.h"
 #include "Controllers/Display/DisplayController.h"
 #include "logger.h"
@@ -52,7 +50,6 @@ unsigned long cur_time, prev_serial_data_time, perv_sensor_time;
 char cmd = 's';
 // static char prev_cmd = '.';
 const char programID[]="Otto_KAME7"; //Each program will have a ID
-jmp_buf jump_env;
 int randomDance=0;
 //---------------------------------------------------------
 //-- Otto has 5 modes:
@@ -83,7 +80,8 @@ void setup() {
   DEBUG(F("Starting")); 
 
 
-  robot = new Robot(); //Create a new Robot object
+  unsigned long currentTime = millis();
+  robot = new Robot(currentTime); //Create a new Robot object
 
 
 
@@ -184,9 +182,10 @@ void setup() {
 
   // robot->sing(S_happy);
   // robot->displayController->displayIcon(millis(), SMILE_ICON_INDEX, 2000); //Display smile icon for 2 seconds
-  robot->displayController->playAnimation(millis(), &WAVE_FRAMESET, 300, 0); 
 
-  robot->soundController->playMelody(millis(), &HAPPY_BIRTHDAY_MELODY); //Play a melody to indicate that Otto is ready
+  robot->getDisplayActions()->playWaveAnimation(currentTime); 
+
+  robot->getSoundActions()->singHappyBirthday(currentTime); //Play a melody to indicate that Otto is ready
 
     //Setup callbacks for SerialCommand commands 
   // SerialCmd.addCommand("S", receiveStop);      //  sendAck & sendFinalAck
@@ -200,15 +199,14 @@ void setup() {
   // SerialCmd.addCommand("J", requestMode);
   // SerialCmd.addDefaultHandler(receiveStop);
   DEBUG(F("End of setup"));
+        delay(500);
 }
 ///////////////////////////////////////////////////////////////////
 //-- Principal Loop ---------------------------------------------//
 ///////////////////////////////////////////////////////////////////
 void loop() {
-  robot->update(); //Refresh the robot state
-
-  return;
-
+  unsigned long currentTime = millis();
+  robot->update(currentTime); //Update the robot (servos, display, sound)
 }
 //  if (Serial.available()>0 && MODE!=4){
 //     SerialCmd.readSerial();  

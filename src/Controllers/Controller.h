@@ -1,5 +1,4 @@
-#ifndef CONTROLLER_H
-#define CONTROLLER_H
+#pragma once
 
 class Controller {
 public:
@@ -9,7 +8,7 @@ public:
      * 
      * @param currentTime The current time in milliseconds.
      */
-    virtual void update(unsigned long currentTime) = 0;
+    virtual void update() = 0;
 
     /**
      * @brief Checks if the current operation is complete.
@@ -17,8 +16,7 @@ public:
      * @param currentTime The current time in milliseconds.
      * @return true if the operation is complete, false otherwise.
      */
-    virtual bool isDone(unsigned long currentTime) = 0;
+    virtual bool isDone() = 0;
 
 };
 
-#endif // CONTROLLER_H

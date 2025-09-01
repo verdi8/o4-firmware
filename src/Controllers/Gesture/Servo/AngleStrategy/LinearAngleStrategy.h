@@ -1,11 +1,9 @@
-#ifndef LINEARANGLESTRATEGY_H
-#define LINEARANGLESTRATEGY_H
+#pragma once
 
 #include "AngleStrategy.h"
 
 class LinearAngleStrategy : public AngleStrategy {
 private:
-
     /**
      * The speed of the servo movement in degrees per second.
      * This is used to calculate the time it takes to reach the target angle.
@@ -50,5 +48,3 @@ public:
     bool isDone(unsigned int currentAngle, unsigned long currentTime) override;
 
 };
-
-#endif // LINEARANGLESTRATEGY_H

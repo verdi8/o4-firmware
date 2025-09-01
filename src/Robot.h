@@ -1,5 +1,5 @@
-#ifndef ROBOT_H
-#define ROBOT_H
+#pragma once
+
 #include <Servo.h>
 #include "Oscillator.h"
 #include "US.h"
@@ -8,6 +8,9 @@
 #include "Controllers/Display/DisplayController.h"
 #include "Controllers/Gesture/GestureController.h"
 #include "Controllers/Sound/SoundController.h"
+#include "Actions/Display/DisplayActions.h"
+#include "Actions/Sound/SoundActions.h"
+#include "Controllers/TimeProvider.h"
 
 // Servo indexes
 #define FRONT_RIGHT_HIP   0
@@ -48,24 +51,52 @@
 #define wave      3
 
 
-
-
-
 //#define PIN_NoiseSensor A6
 extern "C" void pause(int);
 
-class Robot {
+class Robot : public TimeProvider {
+  private:
+    // Controllers of physical parts
+    DisplayController* displayController;
+    SoundController* soundController;
+    GestureController* gestureController;
+
+    // Sets of actions that 
+    DisplayActions* displayActions;
+    SoundActions* soundActions; 
+
+
+    Oscillator oscillator[8];
+    // Servo servo[8];
+    int board_pins[8];
+    int trim[8]; //deviation servo offset
+    //unsigned long _init_time;
+    // unsigned long _final_time;
+    bool isOttoResting;
+    void execute(float steps, float period[8], int amplitude[8], int offset[8], int phase[8]);
+
+    int EEPROMReadWord(int p_address);
+    void EEPROMWriteWord(int p_address, int p_value);
+        //-- Mouth & Animations
+    bool reverse[8];
+    unsigned long int getMouthShape(int number);
+    unsigned long int getAnimShape(int anim, int index);
+    US us;
+    int pinBuzzer;
+    int pinNoiseSensor;
+    BatReader battery;
+    unsigned long currentTime; // Variable to store the current time
 
   public:
-    Robot();
+    Robot(unsigned long currentTime);
+    
+    DisplayActions* getDisplayActions();
+    SoundActions* getSoundActions();
+    
     void init(int Buzzer);
     void home();
     void custom();
 
-
-    DisplayController* displayController;
-    SoundController* soundController;
-    GestureController* gestureController;
 
     // Display
 
@@ -109,7 +140,7 @@ class Robot {
     void setRestState(bool state);
     
 
-    void update();
+    void update(unsigned long currentTime);
     void storeTrim();
     void loadTrim();
     
@@ -123,29 +154,10 @@ class Robot {
     void bendTones (float initFrequency, float finalFrequency, float prop, long noteDuration, int silentDuration);
     void sing(int songName);
 
-
-  private:
-    Oscillator oscillator[8];
-    // Servo servo[8];
-    int board_pins[8];
-    int trim[8]; //deviation servo offset
-    //unsigned long _init_time;
-    // unsigned long _final_time;
-    bool isOttoResting;
-    void execute(float steps, float period[8], int amplitude[8], int offset[8], int phase[8]);
-
-    int EEPROMReadWord(int p_address);
-    void EEPROMWriteWord(int p_address, int p_value);
-        //-- Mouth & Animations
-    bool reverse[8];
-    unsigned long int getMouthShape(int number);
-    unsigned long int getAnimShape(int anim, int index);
-    US us;
-    int pinBuzzer;
-    int pinNoiseSensor;
-    BatReader battery;
-
+    /**
+     * @brief Retrieves the current time.
+     * @return The current time as an unsigned long.
+     */
+    unsigned long getCurrentTime() override;
    
 };
-
-#endif

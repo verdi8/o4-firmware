@@ -1,8 +1,6 @@
 #include <EEPROM.h>
 #include "Robot.h"
 #include "Controllers/Display/DisplayController.h"
-#include "Medias/graphics.h"
-#include "Medias/sounds.h"
 #include "Hardware.h"
 #include "logger.h"
 
@@ -19,40 +17,58 @@
   |__|                                 |__|
 
 */
-//comment below manually setting trim in MiniKame() constructor
+// comment below manually setting trim in MiniKame() constructor
 #define __LOAD_TRIM_FROM_EEPROM__
-#define EEPROM_MAGIC  0xabcd
-#define EEPROM_OFFSET 2   //eeprom starting offset to store trim[]
+#define EEPROM_MAGIC 0xabcd
+#define EEPROM_OFFSET 2 // eeprom starting offset to store trim[]
 
 ;
-Robot::Robot():/* reverse{0, 0, 0, 0, 0, 0, 0, 0}, */trim{0, 0, 0, 0, 0, 0, 0, 0} {
-  this->displayController = new DisplayController(LED_MATRIX_DIN, LED_MATRIX_CLK, LED_MATRIX_CS, LED_MATRIX_FLIP_X, &ICON_FRAMESET);
-  this->soundController = new SoundController(PIN_BUZZER);
-  this->gestureController = new GestureController(
-    FRONT_RIGHT_HIP_SERVO_PIN,
-    FRONT_LEFT_HIP_SERVO_PIN,
-    FRONT_RIGHT_LEG_SERVO_PIN,
-    FRONT_LEFT_LEG_SERVO_PIN,
-    BACK_RIGHT_HIP_SERVO_PIN,
-    BACK_LEFT_HIP_SERVO_PIN,
-    BACK_RIGHT_LEG_SERVO_PIN,
-    BACK_LEFT_LEG_SERVO_PIN
-  );
- }
+Robot::Robot(unsigned long currentTime) : /* reverse{0, 0, 0, 0, 0, 0, 0, 0}, */
+  currentTime(currentTime),
+ trim{0, 0, 0, 0, 0, 0, 0, 0}
+{
+  this->displayController = new DisplayController(this, LED_MATRIX_DIN, LED_MATRIX_CLK, LED_MATRIX_CS, LED_MATRIX_FLIP_X);
+  this->soundController = new SoundController(this, PIN_BUZZER);
+  this->gestureController = new GestureController(this,
+      FRONT_RIGHT_HIP_SERVO_PIN,
+      FRONT_LEFT_HIP_SERVO_PIN,
+      FRONT_RIGHT_LEG_SERVO_PIN,
+      FRONT_LEFT_LEG_SERVO_PIN,
+      BACK_RIGHT_HIP_SERVO_PIN,
+      BACK_LEFT_HIP_SERVO_PIN,
+      BACK_RIGHT_LEG_SERVO_PIN,
+      BACK_LEFT_LEG_SERVO_PIN);
 
-void Robot::reverseServo(int id) {
+  this->displayActions = new DisplayActions(displayController);
+  this->soundActions = new SoundActions(soundController);
+}
+
+DisplayActions *Robot::getDisplayActions()
+{
+  return displayActions;
+}
+
+SoundActions *Robot::getSoundActions()
+{
+  return soundActions;
+}
+
+
+
+void Robot::reverseServo(int id)
+{
   if (reverse[id])
     reverse[id] = 0;
   else
     reverse[id] = 1;
 }
-void Robot::init(int Buzzer) {
-  //Buzzer & noise sensor pins: 
+void Robot::init(int Buzzer)
+{
+  // Buzzer & noise sensor pins:
 
-
-   //Buzzer & noise sensor pins: 
+  // Buzzer & noise sensor pins:
   pinBuzzer = Buzzer;
-  //pinMode(NoiseSensor,INPUT);
+  // pinMode(NoiseSensor,INPUT);
 
   /*
      trim[] for calibrating servo deviation,
@@ -78,18 +94,21 @@ void Robot::init(int Buzzer) {
   */
 #ifdef __LOAD_TRIM_FROM_EEPROM__
   int val = EEPROMReadWord(0);
-  if (val != EEPROM_MAGIC) {
+  if (val != EEPROM_MAGIC)
+  {
     EEPROMWriteWord(0, EEPROM_MAGIC);
     storeTrim();
   }
 #endif
 
-  for (int i = 0; i < 8; i++) {
-  //   servo[i].attach(board_pins[i]);
+  for (int i = 0; i < 8; i++)
+  {
+    //   servo[i].attach(board_pins[i]);
 
 #ifdef __LOAD_TRIM_FROM_EEPROM__
     int val = EEPROMReadWord(i * 2 + EEPROM_OFFSET);
-    if (val >= -90 && val <= 90) {
+    if (val >= -90 && val <= 90)
+    {
       trim[i] = val;
     }
 #endif
@@ -98,25 +117,30 @@ void Robot::init(int Buzzer) {
   home();
   us.init(12, 11);
 }
-void Robot::attachServo(){
+void Robot::attachServo()
+{
   //  for (int i = 0; i < 8; i++) {
   //   servo[i].attach(board_pins[i]);
   // }
 }
-void Robot::detachServo(){
-   for (int i = 0; i < 8; i++) {
+void Robot::detachServo()
+{
+  for (int i = 0; i < 8; i++)
+  {
     // servo[i].detach();
   }
 }
-void Robot::turnL(float steps, float T) {
-  if(getRestState()==true){
-        setRestState(false);
+void Robot::turnL(float steps, float T)
+{
+  if (getRestState() == true)
+  {
+    setRestState(false);
   }
 
   int x_amp = 15;
   int z_amp = 15;
   int ap = 15;
-  //int hi = 23;
+  // int hi = 23;
   int hi = 0;
   float period[] = {T, T, T, T, T, T, T, T};
   int amplitude[] = {x_amp, x_amp, z_amp, z_amp, x_amp, x_amp, z_amp, z_amp};
@@ -126,9 +150,11 @@ void Robot::turnL(float steps, float T) {
   execute(steps, period, amplitude, offset, phase);
 }
 
-void Robot::turnR(float steps, float T) {
-  if(getRestState()==true){
-        setRestState(false);
+void Robot::turnR(float steps, float T)
+{
+  if (getRestState() == true)
+  {
+    setRestState(false);
   }
 
   int x_amp = 15;
@@ -143,9 +169,11 @@ void Robot::turnR(float steps, float T) {
   execute(steps, period, amplitude, offset, phase);
 }
 
-void Robot::dance(float steps, float T) {
-  if(getRestState()==true){
-        setRestState(false);
+void Robot::dance(float steps, float T)
+{
+  if (getRestState() == true)
+  {
+    setRestState(false);
   }
   digitalWrite(13, 0);
   int x_amp = 0;
@@ -160,9 +188,11 @@ void Robot::dance(float steps, float T) {
   execute(steps, period, amplitude, offset, phase);
 }
 
-void Robot::frontBack(float steps, float T) {
-  if(getRestState()==true){
-        setRestState(false);
+void Robot::frontBack(float steps, float T)
+{
+  if (getRestState() == true)
+  {
+    setRestState(false);
   }
 
   int x_amp = 30;
@@ -177,11 +207,12 @@ void Robot::frontBack(float steps, float T) {
   execute(steps, period, amplitude, offset, phase);
 }
 
-void Robot::run(int dir, float steps, float T) {
- 
-        setRestState(true);
+void Robot::run(int dir, float steps, float T)
+{
 
-digitalWrite(13, 0);
+  setRestState(true);
+
+  digitalWrite(13, 0);
   int x_amp = 15;
   int z_amp = 15;
   int ap = 15;
@@ -189,17 +220,17 @@ digitalWrite(13, 0);
   int front_x = 0;
   float period[] = {T, T, T, T, T, T, T, T};
   int amplitude[] = {x_amp, x_amp, z_amp, z_amp, x_amp, x_amp, z_amp, z_amp};
-  int offset[] = {    90 + ap - front_x,
-                      90 - ap + front_x,
-                      90 - hi,
-                      90 + hi,
-                      90 - ap - front_x,
-                      90 + ap + front_x,
-                      90 + hi,
-                      90 - hi
-                 };
+  int offset[] = {90 + ap - front_x,
+                  90 - ap + front_x,
+                  90 - hi,
+                  90 + hi,
+                  90 - ap - front_x,
+                  90 + ap + front_x,
+                  90 + hi,
+                  90 - hi};
   int phase[] = {0, 0, 90, 90, 180, 180, 90, 90};
-  if (dir == 1) {
+  if (dir == 1)
+  {
     phase[0] = phase[1] = 180;
     phase[4] = phase[5] = 0;
   }
@@ -207,9 +238,11 @@ digitalWrite(13, 0);
   setRestState(false);
 }
 
-void Robot::omniWalk(bool side, float T, float turn_factor) {
-  if(getRestState()==true){
-        setRestState(false);
+void Robot::omniWalk(bool side, float T, float turn_factor)
+{
+  if (getRestState() == true)
+  {
+    setRestState(false);
   }
   digitalWrite(13, 0);
   int x_amp = 15;
@@ -219,36 +252,39 @@ void Robot::omniWalk(bool side, float T, float turn_factor) {
   int front_x = 6 * (1 - pow(turn_factor, 2));
   float period[] = {T, T, T, T, T, T, T, T};
   int amplitude[] = {x_amp, x_amp, z_amp, z_amp, x_amp, x_amp, z_amp, z_amp};
-  int offset[] = {    90 + ap - front_x,
-                      90 - ap + front_x,
-                      90 - hi,
-                      90 + hi,
-                      90 - ap - front_x,
-                      90 + ap + front_x,
-                      90 + hi,
-                      90 - hi
-                 };
+  int offset[] = {90 + ap - front_x,
+                  90 - ap + front_x,
+                  90 - hi,
+                  90 + hi,
+                  90 - ap - front_x,
+                  90 + ap + front_x,
+                  90 + hi,
+                  90 - hi};
 
   int phase[8];
-  if (side) {
-    int phase1[] =  {0,   0,   90,  90,  180, 180, 90,  90};
-    int phase2R[] = {0,   180, 90,  90,  180, 0,   90,  90};
+  if (side)
+  {
+    int phase1[] = {0, 0, 90, 90, 180, 180, 90, 90};
+    int phase2R[] = {0, 180, 90, 90, 180, 0, 90, 90};
     for (int i = 0; i < 8; i++)
       phase[i] = phase1[i] * (1 - turn_factor) + phase2R[i] * turn_factor;
   }
-  else {
-    int phase1[] =  {0,   0,   90,  90,  180, 180, 90,  90};
-    int phase2L[] = {180, 0,   90,  90,  0,   180, 90,  90};
+  else
+  {
+    int phase1[] = {0, 0, 90, 90, 180, 180, 90, 90};
+    int phase2L[] = {180, 0, 90, 90, 0, 180, 90, 90};
     for (int i = 0; i < 8; i++)
-      phase[i] = phase1[i] * (1 - turn_factor) + phase2L[i] * turn_factor;// + oscillator[i].getPhaseProgress();
+      phase[i] = phase1[i] * (1 - turn_factor) + phase2L[i] * turn_factor; // + oscillator[i].getPhaseProgress();
   }
 
   execute(1, period, amplitude, offset, phase);
 }
 
-void Robot::moonwalkL(float steps, float T) {
-  if(getRestState()==true){
-        setRestState(false);
+void Robot::moonwalkL(float steps, float T)
+{
+  if (getRestState() == true)
+  {
+    setRestState(false);
   }
 
   int z_amp = 45;
@@ -260,9 +296,11 @@ void Robot::moonwalkL(float steps, float T) {
   execute(steps, period, amplitude, offset, phase);
 }
 
-void Robot::walk(int dir, float steps, float T) {
-  if(getRestState()==true){
-        setRestState(false);
+void Robot::walk(int dir, float steps, float T)
+{
+  if (getRestState() == true)
+  {
+    setRestState(false);
   }
 
   int x_amp = 15;
@@ -271,21 +309,22 @@ void Robot::walk(int dir, float steps, float T) {
   int hi = -10;
   float period[] = {T, T, T / 2, T / 2, T, T, T / 2, T / 2};
   int amplitude[] = {x_amp, x_amp, z_amp, z_amp, x_amp, x_amp, z_amp, z_amp};
-  int offset[] = {   90 + ap,
-                     90 - ap,
-                     90 - hi,
-                     90 + hi,
-                     90 - ap,
-                     90 + ap,
-                     90 + hi,
-                     90 - hi
-                 };
-  int  phase[] = {270, 270, 270, 90, 90, 90, 90, 270};
-  if (dir == 0) { //backward
+  int offset[] = {90 + ap,
+                  90 - ap,
+                  90 - hi,
+                  90 + hi,
+                  90 - ap,
+                  90 + ap,
+                  90 + hi,
+                  90 - hi};
+  int phase[] = {270, 270, 270, 90, 90, 90, 90, 270};
+  if (dir == 0)
+  { // backward
     phase[0] = phase[1] = 90;
     phase[4] = phase[5] = 270;
   }
-  for (int i = 0; i < 8; i++) {
+  for (int i = 0; i < 8; i++)
+  {
     oscillator[i].reset();
     oscillator[i].setPeriod(period[i]);
     oscillator[i].setAmplitude(amplitude[i]);
@@ -298,59 +337,63 @@ void Robot::walk(int dir, float steps, float T) {
   unsigned long _final_time = _init_time + period[0] * steps;
   bool side;
 
-  while (_now_time < _final_time) {
+  while (_now_time < _final_time)
+  {
     side = (int)((_now_time - _init_time) / (period[0] / 2)) % 2;
 
-    setServo(0, oscillator[0].update()); //FRONT_RIGHT_HIP
-    setServo(1, oscillator[1].update()); //FRONT_LEFT_HIP
-    setServo(4, oscillator[4].update()); //BACK_RIGHT_HIP
-    setServo(5, oscillator[5].update()); //BACK_LEFT_HIP
+    setServo(0, oscillator[0].update()); // FRONT_RIGHT_HIP
+    setServo(1, oscillator[1].update()); // FRONT_LEFT_HIP
+    setServo(4, oscillator[4].update()); // BACK_RIGHT_HIP
+    setServo(5, oscillator[5].update()); // BACK_LEFT_HIP
 
-    if (side == 0) {
-      setServo(3, oscillator[3].update()); //FRONT_LEFT_LEG
-      setServo(6, oscillator[6].update()); //BACK_RIGHT_LEG
+    if (side == 0)
+    {
+      setServo(3, oscillator[3].update()); // FRONT_LEFT_LEG
+      setServo(6, oscillator[6].update()); // BACK_RIGHT_LEG
     }
-    else {
-      setServo(2, oscillator[2].update()); //FRONT_RIGHT_LEG
-      setServo(7, oscillator[7].update()); //BACK_LEFT_LEG
+    else
+    {
+      setServo(2, oscillator[2].update()); // FRONT_RIGHT_LEG
+      setServo(7, oscillator[7].update()); // BACK_LEFT_LEG
     }
     pause(1);
     _now_time = millis();
   }
-
 }
 
-void Robot::upDown(float steps, float T) {
-  if(getRestState()==true){
-        setRestState(false);
+void Robot::upDown(float steps, float T)
+{
+  if (getRestState() == true)
+  {
+    setRestState(false);
   }
 
   int x_amp = 0;
   int z_amp = 35;
   int ap = 20;
-  //int hi = 25;
+  // int hi = 25;
   int hi = 0;
   int front_x = 0;
   float period[] = {T, T, T, T, T, T, T, T};
   int amplitude[] = {x_amp, x_amp, z_amp, z_amp, x_amp, x_amp, z_amp, z_amp};
-  int offset[] = {    90 + ap - front_x,
-                      90 - ap + front_x,
-                      90 - hi,
-                      90 + hi,
-                      90 - ap - front_x,
-                      90 + ap + front_x,
-                      90 + hi,
-                      90 - hi
-                 };
+  int offset[] = {90 + ap - front_x,
+                  90 - ap + front_x,
+                  90 - hi,
+                  90 + hi,
+                  90 - ap - front_x,
+                  90 + ap + front_x,
+                  90 + hi,
+                  90 - hi};
   int phase[] = {0, 0, 90, 270, 180, 180, 270, 90};
 
   execute(steps, period, amplitude, offset, phase);
 }
 
-
-void Robot::pushUp(float steps, float T) {
-  if(getRestState()==true){
-        setRestState(false);
+void Robot::pushUp(float steps, float T)
+{
+  if (getRestState() == true)
+  {
+    setRestState(false);
   }
 
   int z_amp = 40;
@@ -364,32 +407,34 @@ void Robot::pushUp(float steps, float T) {
   execute(steps, period, amplitude, offset, phase);
 }
 
-void Robot::home() {
-
+void Robot::home()
+{
 
   int ap = 20;
   int hi = 0;
   int position[] = {90 + ap, 90 - ap, 90 - hi, 90 + hi, 90 - ap, 90 + ap, 90 + hi, 90 - hi};
-  for (int i = 0; i < 8; i++) {
-    if (position[i] + trim[i] <= 180 && position[i] + trim[i] > 0) {
+  for (int i = 0; i < 8; i++)
+  {
+    if (position[i] + trim[i] <= 180 && position[i] + trim[i] > 0)
+    {
       oscillator[i].stop();
       setServo(i, position[i] + trim[i]);
     }
-    isOttoResting=true;
+    isOttoResting = true;
   }
 }
 
-
-
-void Robot::waveHAND(float steps, float T) {
-  if(getRestState()==true){
-        setRestState(false);
+void Robot::waveHAND(float steps, float T)
+{
+  if (getRestState() == true)
+  {
+    setRestState(false);
   }
 
   int z_amp = 40;
   int x_amp = 65;
   int hi = 0;
- // (left front hip, right front hip, left front foot, right front foot,left rear hip, right rear hip, left rear foot, right rear foot)
+  // (left front hip, right front hip, left front foot, right front foot,left rear hip, right rear hip, left rear foot, right rear foot)
   float period[] = {T, T, T, T, T, T, T, T};
   int amplitude[] = {0, 0, -20, 0, 0, 0, 0, 0};
   int offset[] = {90, 90, 30, 60 + hi, 90 - x_amp, 110 + x_amp, 90 + hi, 90 - hi};
@@ -398,16 +443,18 @@ void Robot::waveHAND(float steps, float T) {
   execute(steps, period, amplitude, offset, phase);
 }
 
-void Robot::Hide(float steps, float T) {
-  if(getRestState()==true){
-        setRestState(false);
+void Robot::Hide(float steps, float T)
+{
+  if (getRestState() == true)
+  {
+    setRestState(false);
   }
 
   int z_amp = 40;
   int x_amp = 65;
   int hi = 0;
   // 0 - 90 mid pos - 180
- // (left front hip, right front hip, left front foot, right front foot,left rear hip, right rear hip, left rear foot, right rear foot)
+  // (left front hip, right front hip, left front foot, right front foot,left rear hip, right rear hip, left rear foot, right rear foot)
   float period[] = {T, T, T, T, T, T, T, T};
   int amplitude[] = {0, 0, 0, 0, 0, 0, 0, 0};
   int offset[] = {90, 90, 10, 170, 90, 90, 170, 10};
@@ -416,8 +463,8 @@ void Robot::Hide(float steps, float T) {
   execute(steps, period, amplitude, offset, phase);
 }
 
-
-void Robot::hello() {
+void Robot::hello()
+{
   float sentado[] = {90 + 15, 90 - 15, 90 - 65, 90 + 65, 90 + 20, 90 - 20, 90 + 10, 90 - 10};
   moveServos(150, sentado);
   pause(200);
@@ -428,11 +475,10 @@ void Robot::hello() {
   float period[] = {T, T, T, T, T, T, T, T};
   int amplitude[] = {0, 50, 0, 50, 0, 0, 0, 0};
   int offset[] = {
-    90 + 15, 40,
-    90 - 10, 90 + 10,
-    90 + 20, 90 - 20,
-    90 + 65, 90
-  };
+      90 + 15, 40,
+      90 - 10, 90 + 10,
+      90 + 20, 90 - 20,
+      90 + 65, 90};
 
   int phase[] = {0, 0, 0, 90, 0, 0, 0, 0};
 
@@ -441,135 +487,155 @@ void Robot::hello() {
   float goingUp[] = {160, 20, 90, 90, 90 - 20, 90 + 20, 90 + 10, 90 - 10};
   moveServos(500, goingUp);
   pause(200);
-
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void Robot::jump() {
+void Robot::jump()
+{
   float sentado[] = {90 + 15, 90 - 15, 30, 150, 90 + 20, 90 - 20, 150, 30};
-  
+
   int ap = 20;
   int hi = 35;
   float salto[] = {90 + ap, 90 - ap, 170, 10, 90 - ap * 3, 90 + ap * 3, 10, 170};
- // (left front hip, right front hip, left front foot, right front foot,left rear hip, right rear hip, left rear foot, right rear foot)
+  // (left front hip, right front hip, left front foot, right front foot,left rear hip, right rear hip, left rear foot, right rear foot)
   moveServos(10, sentado);
-  
+
   delay(1000);
-  
+
   moveServos(1, salto);
   delay(100);
-  
+
   home();
 }
-void Robot::scared() {
+void Robot::scared()
+{
   float sentado[] = {90 + 15, 90 - 15, 30, 150, 90 + 20, 90 - 20, 150, 30};
-  
+
   int ap = 20;
   int hi = 35;
   float salto[] = {90 + ap, 90 - ap, 170, 10, 90 - ap * 3, 90 + ap * 3, 10, 170};
   moveServos(10, salto);
-  
+
   delay(2000);
-  
+
   moveServos(1, sentado);
   delay(100);
-  
+
   home();
 }
 
-bool Robot::getRestState(){
+bool Robot::getRestState()
+{
 
-    return isOttoResting;
+  return isOttoResting;
 }
 
-void Robot::setRestState(bool state){
+void Robot::setRestState(bool state)
+{
 
-    isOttoResting = state;
+  isOttoResting = state;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////
-void Robot::moveServos(int time, float target[8]) {
-  if(getRestState()==true){
-        setRestState(false);
+void Robot::moveServos(int time, float target[8])
+{
+  if (getRestState() == true)
+  {
+    setRestState(false);
   }
-attachServo();
+  attachServo();
   float _increment[8];
   float _servo_position[8] = {90, 90, 90, 90, 90, 90, 90, 90};
   unsigned long _final_time;
   unsigned long _partial_time;
-  if (time > 10) {
-    for (int i = 0; i < 8; i++)  _increment[i] = (target[i] - (_servo_position[i] + trim[i])) / (time / 10.0);
-    _final_time =  millis() + time;
+  if (time > 10)
+  {
+    for (int i = 0; i < 8; i++)
+      _increment[i] = (target[i] - (_servo_position[i] + trim[i])) / (time / 10.0);
+    _final_time = millis() + time;
 
-    while (millis() < _final_time) {
+    while (millis() < _final_time)
+    {
       _partial_time = millis() + 10;
-      for (int i = 0; i < 8; i++) setServo(i, (_servo_position[i] + trim[i]) + _increment[i]);
-      //while (millis() < _partial_time); //pause
+      for (int i = 0; i < 8; i++)
+        setServo(i, (_servo_position[i] + trim[i]) + _increment[i]);
+      // while (millis() < _partial_time); //pause
       pause(_partial_time);
     }
   }
-  else {
-    for (int i = 0; i < 8; i++) setServo(i, target[i]);
+  else
+  {
+    for (int i = 0; i < 8; i++)
+      setServo(i, target[i]);
   }
-  for (int i = 0; i < 8; i++) _servo_position[i] = target[i];
+  for (int i = 0; i < 8; i++)
+    _servo_position[i] = target[i];
 }
 
-void Robot::setServo(int id, float target) {
+void Robot::setServo(int id, float target)
+{
   attachServo();
   // if (!reverse[id])
   // servo[id].write(target + trim[id]);
-    
+
   // else
   // servo[id].write(180 - (target + trim[id]));
-    
 }
 
-
-void Robot::execute(float steps, float period[8], int amplitude[8], int offset[8], int phase[8]) {
-  if(getRestState()==true){
-        setRestState(false);
+void Robot::execute(float steps, float period[8], int amplitude[8], int offset[8], int phase[8])
+{
+  if (getRestState() == true)
+  {
+    setRestState(false);
   }
-          attachServo();
-          for (int i = 0; i < 8; i++) {
-            oscillator[i].setPeriod(period[i]);
-            oscillator[i].setAmplitude(amplitude[i]);
-            oscillator[i].setPhase(phase[i]);
-            oscillator[i].setOffset(offset[i]);
-            oscillator[i].start();
-            oscillator[i].setTime(millis());
-       
-      }
+  attachServo();
+  for (int i = 0; i < 8; i++)
+  {
+    oscillator[i].setPeriod(period[i]);
+    oscillator[i].setAmplitude(amplitude[i]);
+    oscillator[i].setPhase(phase[i]);
+    oscillator[i].setOffset(offset[i]);
+    oscillator[i].start();
+    oscillator[i].setTime(millis());
+  }
 }
 
-void Robot::update() {
-  unsigned long currentTime = millis();
-  
+void Robot::update(unsigned long currentTime)
+{
+  this->currentTime = currentTime;
   // Update servos states
-  this->gestureController->update(currentTime);
-  
+  this->gestureController->update();
+
   // Update LED matrix
-  this->displayController->update(currentTime);
-
+  this->displayController->update();
   // Update sound controller
-  this->soundController->update(currentTime);
-
+  this->soundController->update();
 }
 
-void Robot::storeTrim() {
-  for (int i = 0; i < 8; i++) {
+unsigned long Robot::getCurrentTime() {
+    return currentTime;
+}
+
+void Robot::storeTrim()
+{
+  for (int i = 0; i < 8; i++)
+  {
     EEPROMWriteWord(i * 2 + EEPROM_OFFSET, trim[i]);
     delay(100);
   }
 }
 
 // load/send only trim of hip servo
-void Robot::loadTrim() {
-  //FRONT_LEFT/RIGHT_HIP
-  for (int i = 0; i < 4; i++) {
+void Robot::loadTrim()
+{
+  // FRONT_LEFT/RIGHT_HIP
+  for (int i = 0; i < 4; i++)
+  {
     Serial.write(EEPROM.read(i + EEPROM_OFFSET));
   }
 
-  //BACK_LEFT/RIGHT_HIP
-  for (int i = 8; i < 12; i++) {
+  // BACK_LEFT/RIGHT_HIP
+  for (int i = 8; i < 12; i++)
+  {
     Serial.write(EEPROM.read(i + EEPROM_OFFSET));
   }
 }
@@ -591,7 +657,6 @@ void Robot::EEPROMWriteWord(int p_address, int p_value)
   EEPROM.write(p_address + 1, highByte);
 }
 
-
 ///////////////////////////////////////////////////////////////////
 //-- SENSORS FUNCTIONS  -----------------------------------------//
 ///////////////////////////////////////////////////////////////////
@@ -599,224 +664,125 @@ void Robot::EEPROMWriteWord(int p_address, int p_value)
 //---------------------------------------------------------
 //-- Otto getDistance: return Otto's ultrasonic sensor measure
 //---------------------------------------------------------
-float Robot::getDistance(){
+float Robot::getDistance()
+{
 
   return us.read();
 }
 
-
 //---------------------------------------------------------
 //-- Otto getNoise: return Otto's noise sensor measure
 //---------------------------------------------------------
-int Robot::getNoise(){
+int Robot::getNoise()
+{
 
   int noiseLevel = 0;
   int noiseReadings = 0;
-  int numReadings = 2;  
+  int numReadings = 2;
 
-    noiseLevel = analogRead(pinNoiseSensor);
+  noiseLevel = analogRead(pinNoiseSensor);
 
-    for(int i=0; i<numReadings; i++){
-        noiseReadings += analogRead(pinNoiseSensor);
-        delay(4); // delay in between reads for stability
-    }
+  for (int i = 0; i < numReadings; i++)
+  {
+    noiseReadings += analogRead(pinNoiseSensor);
+    delay(4); // delay in between reads for stability
+  }
 
-    noiseLevel = noiseReadings / numReadings;
+  noiseLevel = noiseReadings / numReadings;
 
-    return noiseLevel;
+  return noiseLevel;
 }
 //---------------------------------------------------------
 //-- Otto getBatteryLevel: return battery voltage percent
 //---------------------------------------------------------
-double Robot::getBatteryLevel(){
+double Robot::getBatteryLevel()
+{
 
-  //The first read of the batery is often a wrong reading, so we will discard this value. 
-    double batteryLevel = battery.readBatPercent();
-    double batteryReadings = 0;
-    int numReadings = 10;
+  // The first read of the batery is often a wrong reading, so we will discard this value.
+  double batteryLevel = battery.readBatPercent();
+  double batteryReadings = 0;
+  int numReadings = 10;
 
-    for(int i=0; i<numReadings; i++){
-        batteryReadings += battery.readBatPercent();
-        delay(1); // delay in between reads for stability
-    }
+  for (int i = 0; i < numReadings; i++)
+  {
+    batteryReadings += battery.readBatPercent();
+    delay(1); // delay in between reads for stability
+  }
 
-    batteryLevel = batteryReadings / numReadings;
+  batteryLevel = batteryReadings / numReadings;
 
-    return batteryLevel;
+  return batteryLevel;
 }
 
+double Robot::getBatteryVoltage()
+{
 
-double Robot::getBatteryVoltage(){
+  // The first read of the batery is often a wrong reading, so we will discard this value.
+  double batteryLevel = battery.readBatVoltage();
+  double batteryReadings = 0;
+  int numReadings = 10;
 
-  //The first read of the batery is often a wrong reading, so we will discard this value. 
-    double batteryLevel = battery.readBatVoltage();
-    double batteryReadings = 0;
-    int numReadings = 10;
+  for (int i = 0; i < numReadings; i++)
+  {
+    batteryReadings += battery.readBatVoltage();
+    delay(1); // delay in between reads for stability
+  }
 
-    for(int i=0; i<numReadings; i++){
-        batteryReadings += battery.readBatVoltage();
-        delay(1); // delay in between reads for stability
-    }
+  batteryLevel = batteryReadings / numReadings;
 
-    batteryLevel = batteryReadings / numReadings;
-
-    return batteryLevel;
+  return batteryLevel;
 }
 
 ///////////////////////////////////////////////////////////////////
 //-- SOUNDS -----------------------------------------------------//
 ///////////////////////////////////////////////////////////////////
 
-void Robot::_tone (float noteFrequency, long noteDuration, int silentDuration){
+void Robot::_tone(float noteFrequency, long noteDuration, int silentDuration)
+{
 
-    // tone(10,261,500);
-    // delay(500);
+  // tone(10,261,500);
+  // delay(500);
 
-      if(silentDuration==0){silentDuration=1;}
-
-      TimerFreeTone(Robot::pinBuzzer, noteFrequency, noteDuration);
-      //delay(noteDuration);       //REMOVED FOR TimerFreeTone, PUT BACK for TONE       milliseconds to microseconds
-      //noTone(PIN_Buzzer);
-      
-      //delay(silentDuration);     //REMOVED FOR TimerFreeTone, PUT BACK for TONE
-}
-
-
-void Robot::bendTones (float initFrequency, float finalFrequency, float prop, long noteDuration, int silentDuration){
-
-  //Examples:
-  //  bendTones (880, 2093, 1.02, 18, 1);
-  //  bendTones (NOTE_A5, NOTE_C7, 1.02, 18, 0);
-
-  if(silentDuration==0){silentDuration=1;}
-
-  if(initFrequency < finalFrequency)
+  if (silentDuration == 0)
   {
-      for (int i=initFrequency; i<finalFrequency; i=i*prop) {
-          _tone(i, noteDuration, silentDuration);
-      }
-
-  } else{
-
-      for (int i=initFrequency; i>finalFrequency; i=i/prop) {
-          _tone(i, noteDuration, silentDuration);
-      }
+    silentDuration = 1;
   }
+
+  TimerFreeTone(Robot::pinBuzzer, noteFrequency, noteDuration);
+  // delay(noteDuration);       //REMOVED FOR TimerFreeTone, PUT BACK for TONE       milliseconds to microseconds
+  // noTone(PIN_Buzzer);
+
+  // delay(silentDuration);     //REMOVED FOR TimerFreeTone, PUT BACK for TONE
 }
 
+void Robot::bendTones(float initFrequency, float finalFrequency, float prop, long noteDuration, int silentDuration)
+{
 
-void Robot::sing(int songName){
-  switch(songName){
+  // Examples:
+  //   bendTones (880, 2093, 1.02, 18, 1);
+  //   bendTones (NOTE_A5, NOTE_C7, 1.02, 18, 0);
 
-    case S_connection:
-      _tone(Notes::NOTE_E5,50,30);
-      _tone(Notes::NOTE_E6,55,25);
-      _tone(Notes::NOTE_A6,60,10);
-    break;
+  if (silentDuration == 0)
+  {
+    silentDuration = 1;
+  }
 
-    case S_disconnection:
-      _tone(Notes::NOTE_E5,50,30);
-      _tone(Notes::NOTE_A6,55,25);
-      _tone(Notes::NOTE_E6,50,10);
-    break;
+  if (initFrequency < finalFrequency)
+  {
+    for (int i = initFrequency; i < finalFrequency; i = i * prop)
+    {
+      _tone(i, noteDuration, silentDuration);
+    }
+  }
+  else
+  {
 
-    case S_buttonPushed:
-      bendTones (Notes::NOTE_E6, Notes::NOTE_G6, 1.03, 20, 2);
-      delay(30);
-      bendTones (Notes::NOTE_E6, Notes::NOTE_D7, 1.04, 10, 2);
-    break;
-
-    case S_mode1:
-      bendTones (Notes::NOTE_E6, Notes::NOTE_A6, 1.02, 30, 10);  //1318.51 to 1760
-    break;
-
-    case S_mode2:
-      bendTones (Notes::NOTE_G6, Notes::NOTE_D7, 1.03, 30, 10);  //1567.98 to 2349.32
-    break;
-
-    case S_mode3:
-      _tone(Notes::NOTE_E6,50,100); //D6
-      _tone(Notes::NOTE_G6,50,80);  //E6
-      _tone(Notes::NOTE_D7,300,0);  //G6
-    break;
-
-    case S_surprise:
-      bendTones(800, 2150, 1.02, 10, 1);
-      bendTones(2149, 800, 1.03, 7, 1);
-    break;
-
-    case S_OhOoh:
-      bendTones(880, 2000, 1.04, 8, 3); //A5 = 880
-      delay(200);
-
-      for (int i=880; i<2000; i=i*1.04) {
-           _tone(Notes::NOTE_B5,5,10);
-      }
-    break;
-
-    case S_OhOoh2:
-      bendTones(1880, 3000, 1.03, 8, 3);
-      delay(200);
-
-      for (int i=1880; i<3000; i=i*1.03) {
-          _tone(Notes::NOTE_C6,10,10);
-      }
-    break;
-
-    case S_cuddly:
-      bendTones(700, 900, 1.03, 16, 4);
-      bendTones(899, 650, 1.01, 18, 7);
-    break;
-
-    case S_sleeping:
-      bendTones(100, 500, 1.04, 10, 10);
-      delay(500);
-      bendTones(400, 100, 1.04, 10, 1);
-    break;
-
-    case S_happy:
-      bendTones(1500, 2500, 1.05, 20, 8);
-      bendTones(2499, 1500, 1.05, 25, 8);
-    break;
-
-    case S_superHappy:
-      bendTones(2000, 6000, 1.05, 8, 3);
-      delay(50);
-      bendTones(5999, 2000, 1.05, 13, 2);
-    break;
-
-    case S_happy_short:
-      bendTones(1500, 2000, 1.05, 15, 8);
-      delay(100);
-      bendTones(1900, 2500, 1.05, 10, 8);
-    break;
-
-    case S_sad:
-      bendTones(880, 669, 1.02, 20, 200);
-    break;
-
-    case S_confused:
-      bendTones(1000, 1700, 1.03, 8, 2); 
-      bendTones(1699, 500, 1.04, 8, 3);
-      bendTones(1000, 1700, 1.05, 9, 10);
-    break;
-
-    case S_fart1:
-      bendTones(1600, 3000, 1.02, 2, 15);
-    break;
-
-    case S_fart2:
-      bendTones(2000, 6000, 1.02, 2, 20);
-    break;
-
-    case S_fart3:
-      bendTones(1600, 4000, 1.02, 2, 20);
-      bendTones(4000, 3000, 1.02, 2, 20);
-    break;
-
+    for (int i = initFrequency; i > finalFrequency; i = i / prop)
+    {
+      _tone(i, noteDuration, silentDuration);
+    }
   }
 }
-
 
 ///////////////////////////////////////////////////////////////////
 //-- GESTURES ---------------------------------------------------//
@@ -824,105 +790,91 @@ void Robot::sing(int songName){
 
 // void Robot::playGesture(int gesture){
 
- // int sadPos[4]=      {110, 70, 20, 160};
-  //int bedPos[4]=      {100, 80, 60, 120};
-  //int fartPos_1[4]=   {90, 90, 145, 122}; //rightBend
-  //int fartPos_2[4]=   {90, 90, 80, 122};
-  //int fartPos_3[4]=   {90, 90, 145, 80};
-  //int confusedPos[4]= {110, 70, 90, 90};
-  //int angryPos[4]=    {90, 90, 70, 110};
-  //int headLeft[4]=    {110, 110, 90, 90};
-  //int headRight[4]=   {70, 70, 90, 90};
-  //int fretfulPos[4]=  {90, 90, 90, 110};
-  //int bendPos_1[4]=   {90, 90, 70, 35};
-  //int bendPos_2[4]=   {90, 90, 55, 35};
-  //int bendPos_3[4]=   {90, 90, 42, 35};
-  //int bendPos_4[4]=   {90, 90, 34, 35};
-  
-  // switch(gesture){
+// int sadPos[4]=      {110, 70, 20, 160};
+// int bedPos[4]=      {100, 80, 60, 120};
+// int fartPos_1[4]=   {90, 90, 145, 122}; //rightBend
+// int fartPos_2[4]=   {90, 90, 80, 122};
+// int fartPos_3[4]=   {90, 90, 145, 80};
+// int confusedPos[4]= {110, 70, 90, 90};
+// int angryPos[4]=    {90, 90, 70, 110};
+// int headLeft[4]=    {110, 110, 90, 90};
+// int headRight[4]=   {70, 70, 90, 90};
+// int fretfulPos[4]=  {90, 90, 90, 110};
+// int bendPos_1[4]=   {90, 90, 70, 35};
+// int bendPos_2[4]=   {90, 90, 55, 35};
+// int bendPos_3[4]=   {90, 90, 42, 35};
+// int bendPos_4[4]=   {90, 90, 34, 35};
 
-  //   case OttoHappy: 
-  //       //_tone(NOTE_E5,50,30);
-  //       displayController->displayIcon(SMILE_ICON_INDEX);
-  //      // sing(S_happy_short);
-  //      // swing(1,800,20); 
-  //      // sing(S_happy_short);
+// switch(gesture){
 
-  //       home();
-  //       displayController->displayIcon(HAPPY_OPEN_ICON_INDEX);
-  //   break;
+//   case OttoHappy:
+//       //_tone(NOTE_E5,50,30);
+//       displayController->displayIcon(SMILE_ICON_INDEX);
+//      // sing(S_happy_short);
+//      // swing(1,800,20);
+//      // sing(S_happy_short);
 
+//       home();
+//       displayController->displayIcon(HAPPY_OPEN_ICON_INDEX);
+//   break;
 
-  //   case OttoSuperHappy:
-  //       displayController->displayIcon(HAPPY_OPEN_ICON_INDEX);
-  //       //sing(S_happy);
-  //       delay(500);
-  //       displayController->displayIcon(HAPPY_CLOSED_ICON_INDEX);
-  //      // tiptoeSwing(1,500,20);
-  //      delay(500);
-  //       displayController->displayIcon(HAPPY_OPEN_ICON_INDEX);
-  //      // sing(S_superHappy);
-  //      delay(500);
-  //       displayController->displayIcon(HAPPY_CLOSED_ICON_INDEX);
-  //      // tiptoeSwing(1,500,20); 
+//   case OttoSuperHappy:
+//       displayController->displayIcon(HAPPY_OPEN_ICON_INDEX);
+//       //sing(S_happy);
+//       delay(500);
+//       displayController->displayIcon(HAPPY_CLOSED_ICON_INDEX);
+//      // tiptoeSwing(1,500,20);
+//      delay(500);
+//       displayController->displayIcon(HAPPY_OPEN_ICON_INDEX);
+//      // sing(S_superHappy);
+//      delay(500);
+//       displayController->displayIcon(HAPPY_CLOSED_ICON_INDEX);
+//      // tiptoeSwing(1,500,20);
 
-  //       home();  
-  //       delay(1000);
-  //       displayController->displayIcon(HAPPY_OPEN_ICON_INDEX);
-  //   break;
+//       home();
+//       delay(1000);
+//       displayController->displayIcon(HAPPY_OPEN_ICON_INDEX);
+//   break;
 
+//   case OttoSad:
+//       displayController->displayIcon(SAD_ICON_INDEX);
+//      // _moveServos(700, sadPos);
+//      // bendTones(880, 830, 1.02, 20, 200);
+//       displayController->displayIcon(SAD_CLOSED_ICON_INDEX);
+//      // bendTones(830, 790, 1.02, 20, 200);
+//       displayController->displayIcon(SAD_OPEN_ICON_INDEX);
+//      // bendTones(790, 740, 1.02, 20, 200);
+//       displayController->displayIcon(SAD_CLOSED_ICON_INDEX);
+//      // bendTones(740, 700, 1.02, 20, 200);
+//       displayController->displayIcon(SAD_OPEN_ICON_INDEX);
+//       //bendTones(700, 669, 1.02, 20, 200);
+//       displayController->displayIcon(SAD_ICON_INDEX);
+//       delay(500);
 
-  //   case OttoSad: 
-  //       displayController->displayIcon(SAD_ICON_INDEX);
-  //      // _moveServos(700, sadPos);     
-  //      // bendTones(880, 830, 1.02, 20, 200);
-  //       displayController->displayIcon(SAD_CLOSED_ICON_INDEX);
-  //      // bendTones(830, 790, 1.02, 20, 200);  
-  //       displayController->displayIcon(SAD_OPEN_ICON_INDEX);
-  //      // bendTones(790, 740, 1.02, 20, 200);
-  //       displayController->displayIcon(SAD_CLOSED_ICON_INDEX);
-  //      // bendTones(740, 700, 1.02, 20, 200);
-  //       displayController->displayIcon(SAD_OPEN_ICON_INDEX);
-  //       //bendTones(700, 669, 1.02, 20, 200);
-  //       displayController->displayIcon(SAD_ICON_INDEX);
-  //       delay(500);
+//       home();
+//       delay(1000);
+//       displayController->displayIcon(HAPPY_OPEN_ICON_INDEX);
+//   break;
 
-  //       home();
-  //       delay(1000);
-  //       displayController->displayIcon(HAPPY_OPEN_ICON_INDEX);
-  //   break;
+//   case OttoLove:
+//       displayController->displayIcon(HEART_ICON_INDEX);
+//      // sing(S_cuddly);
+//       //crusaito(2,1500,15,1);
 
+//       home();
+//      // sing(S_happy_short);
+//      delay(500);
+//      displayController->displayIcon(HAPPY_OPEN_ICON_INDEX);
+//       delay(500);
+//        displayController->displayIcon(HEART_ICON_INDEX);
+//      // sing(S_cuddly);
+//       //crusaito(2,1500,15,1);
+//       home();
+//      // sing(S_happy_short);
+//       delay(1000);
 
+//       displayController->displayIcon(HAPPY_OPEN_ICON_INDEX);
+//   break;
 
-
-
-    
-  //   case OttoLove:
-  //       displayController->displayIcon(HEART_ICON_INDEX);
-  //      // sing(S_cuddly);
-  //       //crusaito(2,1500,15,1);
-
-  //       home(); 
-  //      // sing(S_happy_short);  
-  //      delay(500);
-  //      displayController->displayIcon(HAPPY_OPEN_ICON_INDEX);
-  //       delay(500);
-  //        displayController->displayIcon(HEART_ICON_INDEX);
-  //      // sing(S_cuddly);
-  //       //crusaito(2,1500,15,1);
-  //       home(); 
-  //      // sing(S_happy_short);  
-  //       delay(1000);
-    
-  //       displayController->displayIcon(HAPPY_OPEN_ICON_INDEX);
-  //   break;
-
-
-
-
-  // }
-// }    
-
-
-
-
+// }
+// }

@@ -1,5 +1,4 @@
-#ifndef ANIMATION_DISPLAY_MODE_H
-#define ANIMATION_DISPLAY_MODE_H
+#pragma once
 
 #include "Controllers/Display/DisplayTypes.h"
 #include "DisplayMode.h"
@@ -53,5 +52,3 @@ public:
      */
     bool isDone(unsigned long currentTime) override;
 };
-
-#endif // ANIMATION_DISPLAY_MODE_H

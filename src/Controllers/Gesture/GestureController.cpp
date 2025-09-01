@@ -4,22 +4,24 @@
 #define DEFAULT_OSCILLIATION_PERIOD 1000 // in milliseconds
 
 GestureController::GestureController(
-            PIN_NUMBER frontRightHipPin,
-        PIN_NUMBER frontLeftHipPin,
-        PIN_NUMBER frontRightLegPin,
-        PIN_NUMBER frontLeftLegPin,
-        PIN_NUMBER backRightHipPin,
-        PIN_NUMBER backLeftHipPin,
-        PIN_NUMBER backRightLegPin,
-        PIN_NUMBER backLeftLegPin) {
-    frontRightHip = new ServoController(frontRightHipPin);
-    frontLeftHip = new ServoController(frontLeftHipPin);
-    frontRightLeg = new ServoController(frontRightLegPin);
-    frontLeftLeg = new ServoController(frontLeftLegPin);
-    backRightHip = new ServoController(backRightHipPin);
-    backLeftHip = new ServoController(backLeftHipPin);
-    backRightLeg = new ServoController(backRightLegPin);
-    backLeftLeg = new ServoController(backLeftLegPin);
+    TimeProvider *timeProvider,
+    PIN_NUMBER frontRightHipPin,
+    PIN_NUMBER frontLeftHipPin,
+    PIN_NUMBER frontRightLegPin,
+    PIN_NUMBER frontLeftLegPin,
+    PIN_NUMBER backRightHipPin,
+    PIN_NUMBER backLeftHipPin,
+    PIN_NUMBER backRightLegPin,
+    PIN_NUMBER backLeftLegPin) : timeProvider(timeProvider)
+{
+    frontRightHip = new ServoController(timeProvider, frontRightHipPin);
+    frontLeftHip = new ServoController(timeProvider, frontLeftHipPin);
+    frontRightLeg = new ServoController(timeProvider, frontRightLegPin);
+    frontLeftLeg = new ServoController(timeProvider, frontLeftLegPin);
+    backRightHip = new ServoController(timeProvider, backRightHipPin);
+    backLeftHip = new ServoController(timeProvider, backLeftHipPin);
+    backRightLeg = new ServoController(timeProvider, backRightLegPin);
+    backLeftLeg = new ServoController(timeProvider, backLeftLegPin);
     all[0] = frontRightHip;
     all[1] = frontLeftHip;
     all[2] = frontRightLeg;
@@ -30,49 +32,51 @@ GestureController::GestureController(
     all[7] = backLeftLeg;
 }
 
-
-void GestureController::home() {
-  unsigned long currentTime = millis();
-  int testPosition = 90;
-  this->frontRightHip->rotateTo(currentTime, testPosition);
-  this->frontLeftHip->rotateTo(currentTime, testPosition);
-  this->frontRightLeg->rotateTo(currentTime, testPosition);
-  this->frontLeftLeg->rotateTo(currentTime, testPosition);
-  this->backRightHip->rotateTo(currentTime, testPosition);
-  this->backLeftHip->rotateTo(currentTime, testPosition);
-  this->backRightLeg->rotateTo(currentTime, testPosition);
-  this->backLeftLeg->rotateTo(currentTime, testPosition);
+void GestureController::home()
+{
+    unsigned long currentTime = millis();
+    int testPosition = 90;
+    this->frontRightHip->rotateTo(testPosition);
+    this->frontLeftHip->rotateTo(testPosition);
+    this->frontRightLeg->rotateTo(testPosition);
+    this->frontLeftLeg->rotateTo(testPosition);
+    this->backRightHip->rotateTo(testPosition);
+    this->backLeftHip->rotateTo(testPosition);
+    this->backRightLeg->rotateTo(testPosition);
+    this->backLeftLeg->rotateTo(testPosition);
 }
 
-void GestureController::walk() {
- int x_amp = 15;
-  int z_amp = 20;
-  int ap = 20;
-  int hi = -10;
-  unsigned long currentTime = millis();
-  this->frontRightHip->oscillate(currentTime, x_amp, DEFAULT_OSCILLIATION_PERIOD, 90 + ap, 270);
-  this->frontLeftHip->oscillate(currentTime, x_amp, DEFAULT_OSCILLIATION_PERIOD, 90 - ap, 270);
-  this->frontRightLeg->oscillate(currentTime, z_amp, DEFAULT_OSCILLIATION_PERIOD / 2, 90 - hi, 270);
-  this->frontLeftLeg->oscillate(currentTime, z_amp, DEFAULT_OSCILLIATION_PERIOD / 2, 90 + hi, 90);
-  this->backRightHip->oscillate(currentTime, x_amp, DEFAULT_OSCILLIATION_PERIOD, 90 - ap, 90);
-  this->backLeftHip->oscillate(currentTime, x_amp, DEFAULT_OSCILLIATION_PERIOD, 90 + ap, 90);
-  this->backRightLeg->oscillate(currentTime, z_amp, DEFAULT_OSCILLIATION_PERIOD / 2, 90 + hi, 90);
-  this->backLeftLeg->oscillate(currentTime, z_amp, DEFAULT_OSCILLIATION_PERIOD / 2, 90 - hi, 270);
+void GestureController::walk()
+{
+    int x_amp = 15;
+    int z_amp = 20;
+    int ap = 20;
+    int hi = -10;
+    unsigned long currentTime = millis();
+    this->frontRightHip->oscillate(x_amp, DEFAULT_OSCILLIATION_PERIOD, 90 + ap, 270);
+    this->frontLeftHip->oscillate(x_amp, DEFAULT_OSCILLIATION_PERIOD, 90 - ap, 270);
+    this->frontRightLeg->oscillate(z_amp, DEFAULT_OSCILLIATION_PERIOD / 2, 90 - hi, 270);
+    this->frontLeftLeg->oscillate(z_amp, DEFAULT_OSCILLIATION_PERIOD / 2, 90 + hi, 90);
+    this->backRightHip->oscillate(x_amp, DEFAULT_OSCILLIATION_PERIOD, 90 - ap, 90);
+    this->backLeftHip->oscillate(x_amp, DEFAULT_OSCILLIATION_PERIOD, 90 + ap, 90);
+    this->backRightLeg->oscillate(z_amp, DEFAULT_OSCILLIATION_PERIOD / 2, 90 + hi, 90);
+    this->backLeftLeg->oscillate(z_amp, DEFAULT_OSCILLIATION_PERIOD / 2, 90 - hi, 270);
 }
 
-
-
-
-
-void GestureController::update(unsigned long currentTime) {
-    for (int i = 0; i < 8; i++) {
-        all[i]->update(currentTime);
+void GestureController::update()
+{
+    for (int i = 0; i < 8; i++)
+    {
+        all[i]->update();
     }
 }
 
-bool GestureController::isDone(unsigned long currentTime) {
-    for (int i = 0; i < 8; i++) {
-        if (!all[i]->isDone(currentTime)) {
+bool GestureController::isDone()
+{
+    for (int i = 0; i < 8; i++)
+    {
+        if (!all[i]->isDone())
+        {
             return false;
         }
     }

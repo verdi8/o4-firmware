@@ -6,7 +6,7 @@
  * Default constructor for IconDisplayMode.
  * Initializes the display mode with default values.
  */
-IconDisplayMode::IconDisplayMode(const FrameSet* PROGMEM iconFrameSetPrgm) 
+IconDisplayMode::IconDisplayMode() 
     : startTime(0), currentIconIndex(-1), iconFrameSetPrgm(iconFrameSetPrgm) {}
 
 /**
@@ -16,10 +16,11 @@ IconDisplayMode::IconDisplayMode(const FrameSet* PROGMEM iconFrameSetPrgm)
  * @param iconIndex The index of the icon to be displayed.
  * @param duration The duration for which the icon should be displayed (in milliseconds).
  */
-IconDisplayMode* IconDisplayMode::displayIcon(unsigned long currentTime, unsigned int iconIndex, unsigned long duration) {
-    this->duration = duration;          // Set the duration for the display
+IconDisplayMode* IconDisplayMode::displayIcon(unsigned long currentTime, const FrameSet* PROGMEM iconFrameSetPrgm, unsigned int iconIndex, unsigned long duration) {
     this->startTime = currentTime;      // Record the start time
+    this->iconFrameSetPrgm = iconFrameSetPrgm; // Set the icon frame set
     this->currentIconIndex = iconIndex; // Set the current icon index
+    this->duration = duration;          // Set the duration for the display
     return this; // Return the current instance for chaining
 }
 

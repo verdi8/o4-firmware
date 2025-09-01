@@ -1,11 +1,10 @@
-#ifndef SOUND_CONTROLLER_H
-#define SOUND_CONTROLLER_H
+#pragma once
 
 #include <Arduino.h>
 #include "Hardware.h"
-#include "Controller.h" // Include the Controller interface
+#include "Controllers/Controller.h" // Include the Controller interface
 #include "SoundTypes.h" // Include the Melody and MelodyNote structs
-
+#include "Controllers/TimeProvider.h"
 
 constexpr unsigned int NO_SOUND_FREQUENCY = 0; // Constant to represent no frequency
 
@@ -15,8 +14,7 @@ constexpr unsigned int NO_SOUND_FREQUENCY = 0; // Constant to represent no frequ
  */
 class SoundController : public Controller {
 private:
-    
-
+    TimeProvider* timeProvider;            // Pointer to the TimeProvider for getting current time
     PIN_NUMBER buzzerPin;                      // Pin connected to the buzzer or speaker
     const Melody* PROGMEM currentMelodyPrgm;    // Pointer to the current melody being played, nullptr if no melody is playing
     unsigned int currentNoteIndex;      // Index of the current note being played
@@ -34,7 +32,7 @@ public:
      * 
      * @param buzzerPin The pin connected to the buzzer or speaker.
      */
-    SoundController(PIN_NUMBER buzzerPin);
+    SoundController(TimeProvider* timeProvider, PIN_NUMBER buzzerPin);
 
     /**
      * @brief Plays a melody consisting of a sequence of notes.
@@ -53,7 +51,7 @@ public:
      * 
      * @param currentTime The current time in milliseconds.
      */
-    void update(unsigned long currentTime) override;
+    void update() override;
 
     /**
      * @brief Checks if the current sound playback is complete.
@@ -61,8 +59,6 @@ public:
      * @param currentTime The current time in milliseconds.
      * @return true if the sound playback is complete, false otherwise.
      */
-    bool isDone(unsigned long currentTime) override;
+    bool isDone() override;
 };
 
-
-#endif // SOUND_CONTROLLER_H

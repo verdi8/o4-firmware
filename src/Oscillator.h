@@ -1,5 +1,4 @@
-#ifndef OSCILLATOR_H
-#define OSCILLATOR_H
+#pragma once
 #include <Arduino.h>
 #include <Servo.h>
 
@@ -42,4 +41,3 @@ class Oscillator{
         float _delta_time = 0;
 };
 
-#endif

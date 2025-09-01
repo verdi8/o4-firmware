@@ -1,7 +1,6 @@
-#ifndef OSCILLATINGANGLESTRATEGY_H
-#define OSCILLATINGANGLESTRATEGY_H
-
+#pragma once
 #include "AngleStrategy.h"
+#include "Controllers/TimeProvider.h"
 
 class OscillatingAngleStrategy : public AngleStrategy {
 private:
@@ -65,4 +64,3 @@ public:
 
 };
 
-#endif // OSCILLATINGANGLESTRATEGY_H

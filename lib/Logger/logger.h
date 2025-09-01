@@ -1,5 +1,4 @@
-#ifndef LOGGER_H
-#define LOGGER_H
+#pragma once
 #include <Arduino.h>
 
 // Logging macros
@@ -20,5 +19,3 @@
 
 #define INFO(x) Serial.print("[INFO] "); Serial.println(x)
 #define ERROR(x) Serial.print("[ERROR] "); Serial.println(x)
-
-#endif // LOGGER_H

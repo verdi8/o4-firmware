@@ -1,5 +1,4 @@
-#ifndef DISPLAY_CONTROLLER_H
-#define DISPLAY_CONTROLLER_H
+#pragma once
 
 #include <Arduino.h>
 #include <LedControl.h>
@@ -8,7 +7,8 @@
 #include "DisplayMode/DisplayMode.h"
 #include "DisplayMode/IconDisplayMode.h"
 #include "DisplayMode/AnimationDisplayMode.h"
-#include "Controller.h" // Include the Controller interface
+#include "Controllers/Controller.h" // Include the Controller interface
+#include "Controllers/TimeProvider.h"
 
 /**
  * @class DisplayController
@@ -23,6 +23,7 @@ class DisplayController : public Controller // Implement the Controller interfac
 {
   private:
     // Private member properties
+    TimeProvider* timeProvider; // Pointer to the TimeProvider for getting current time
     LedControl* ledControl; // The LedControl object from the LedControl library
     bool doFlipX; // Whether to flip the X axis    DisplayMode* iconDisplayModeInstance; // Instance for managing icon display mode
     IconDisplayMode* iconDisplayModeInstance; // Instance for managing icon display mode
@@ -43,13 +44,13 @@ class DisplayController : public Controller // Implement the Controller interfac
      * @param doFlipX Whether to flip the X axis
      * @param iconFrameset The frameset to use for displaying icons
      */
-    DisplayController(PIN_NUMBER dataPin, PIN_NUMBER clkPin, PIN_NUMBER csPin, bool doFlipX, const FrameSet* iconFrameset);
+    DisplayController(TimeProvider* timeProvider, PIN_NUMBER dataPin, PIN_NUMBER clkPin, PIN_NUMBER csPin, bool doFlipX);
 
     /**
      * Display an icon on the LED Matrix
      * @param index The index in the ICON_FRAMESET
      */
-    void displayIcon(unsigned long currentTime, unsigned int iconIndex, unsigned long duration);
+    void displayIcon(const FrameSet* PROGMEM iconFrameSetPrgm, unsigned int iconIndex, unsigned long duration);
 
     /**
      * Play an animation on the LED Matrix.
@@ -59,7 +60,7 @@ class DisplayController : public Controller // Implement the Controller interfac
      * @param frameDuration Duration for each frame in milliseconds.
      * @param repeat Number of times the animation should repeat. Use 0 for infinite looping.
      */
-    void playAnimation(unsigned long currentTime, FrameSet* frameset, unsigned long frameDuration, unsigned int repeat);
+    void playAnimation(FrameSet* frameset, unsigned long frameDuration, unsigned int repeat);
 
     /**
      * Clear the LED Matrix display and reset the current display mode.
@@ -69,7 +70,7 @@ class DisplayController : public Controller // Implement the Controller interfac
     /**
      * Update the display
      */
-    void update(unsigned long currentTime) override; // Override the update method from Controller
+    void update() override; // Override the update method from Controller
 
     /**
      * @brief Checks if the current operation is complete.
@@ -77,7 +78,5 @@ class DisplayController : public Controller // Implement the Controller interfac
      * @param currentTime The current time in milliseconds.
      * @return true if the operation is complete, false otherwise.
      */
-    bool isDone(unsigned long currentTime) override; // Override the isDone method from Controller
+    bool isDone() override; // Override the isDone method from Controller
 };
-
-#endif

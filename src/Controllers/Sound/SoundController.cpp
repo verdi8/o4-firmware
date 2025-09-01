@@ -2,10 +2,9 @@
 #include "logger.h"
 
 /**
- * @brief Constructs a SoundController with the specified buzzer pin.
+ * @brief Constructs a SoundController with the specified buzzer pin and time provider.
  */
-SoundController::SoundController(PIN_NUMBER buzzerPin)
-    : buzzerPin(buzzerPin), currentMelodyPrgm(nullptr), currentFrequency(NO_SOUND_FREQUENCY)
+SoundController::SoundController(TimeProvider *timeProvider, PIN_NUMBER buzzerPin) : timeProvider(timeProvider), buzzerPin(buzzerPin), currentMelodyPrgm(nullptr), currentFrequency(NO_SOUND_FREQUENCY)
 {
     pinMode(buzzerPin, OUTPUT);
     mute();
@@ -25,12 +24,14 @@ void SoundController::mute()
     stopPlayingMelodyNote();
 }
 
-void SoundController::update(unsigned long currentTime)
+void SoundController::update()
 {
+
     if (currentMelodyPrgm == nullptr)
     {
         return; // No melody is being played
     }
+    unsigned long currentTime = timeProvider->getCurrentTime();
     MelodyNote melodyNote = readPrgmMelodyNote(currentMelodyPrgm, currentNoteIndex);
     unsigned long elapsedTime = currentTime - currentNoteStartTime;
     if (elapsedTime < melodyNote.duration)
@@ -62,7 +63,7 @@ void SoundController::update(unsigned long currentTime)
     }
 }
 
-bool SoundController::isDone(unsigned long currentTime)
+bool SoundController::isDone()
 {
     return currentMelodyPrgm == nullptr;
 }
