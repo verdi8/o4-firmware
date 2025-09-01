@@ -38,14 +38,14 @@ public:
      */
     GestureController(
         TimeProvider* timeProvider,
-        PIN_NUMBER frontRightHipPin,
-        PIN_NUMBER frontLeftHipPin,
-        PIN_NUMBER frontRightLegPin,
-        PIN_NUMBER frontLeftLegPin,
-        PIN_NUMBER backRightHipPin,
-        PIN_NUMBER backLeftHipPin,
-        PIN_NUMBER backRightLegPin,
-        PIN_NUMBER backLeftLegPin
+        PinNumber frontRightHipPin,
+        PinNumber frontLeftHipPin,
+        PinNumber frontRightLegPin,
+        PinNumber frontLeftLegPin,
+        PinNumber backRightHipPin,
+        PinNumber backLeftHipPin,
+        PinNumber backRightLegPin,
+        PinNumber backLeftLegPin
     );
 
     /**

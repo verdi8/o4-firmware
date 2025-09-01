@@ -44,7 +44,7 @@ class DisplayController : public Controller // Implement the Controller interfac
      * @param doFlipX Whether to flip the X axis
      * @param iconFrameset The frameset to use for displaying icons
      */
-    DisplayController(TimeProvider* timeProvider, PIN_NUMBER dataPin, PIN_NUMBER clkPin, PIN_NUMBER csPin, bool doFlipX);
+    DisplayController(TimeProvider* timeProvider, PinNumber dataPin, PinNumber clkPin, PinNumber csPin, bool doFlipX);
 
     /**
      * Display an icon on the LED Matrix

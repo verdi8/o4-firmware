@@ -4,7 +4,7 @@
 /**
  * @brief Constructs a SoundController with the specified buzzer pin and time provider.
  */
-SoundController::SoundController(TimeProvider *timeProvider, PIN_NUMBER buzzerPin) : timeProvider(timeProvider), buzzerPin(buzzerPin), currentMelodyPrgm(nullptr), currentFrequency(NO_SOUND_FREQUENCY)
+SoundController::SoundController(TimeProvider *timeProvider, PinNumber buzzerPin) : timeProvider(timeProvider), buzzerPin(buzzerPin), currentMelodyPrgm(nullptr), currentFrequency(NO_SOUND_FREQUENCY)
 {
     pinMode(buzzerPin, OUTPUT);
     mute();

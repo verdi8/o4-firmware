@@ -3,8 +3,8 @@
 #ifndef HARDWARE_H
 #define HARDWARE_H
 
-// Rédefinition of PIN_NUMBER type
-typedef uint8_t PIN_NUMBER;
+// Rédefinition of PinNumber type
+typedef uint8_t PinNumber;
 
 
 //
@@ -19,7 +19,7 @@ typedef uint8_t PIN_NUMBER;
 //
 // Buzzer
 //
-constexpr PIN_NUMBER PIN_BUZZER = 13; // Pin connected to the buzzer
+constexpr PinNumber PIN_BUZZER = 13; // Pin connected to the buzzer
 
 //
 // Servo pins

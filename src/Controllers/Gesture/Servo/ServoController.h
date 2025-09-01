@@ -25,7 +25,7 @@ class ServoController : public Controller // Implement the Controller interface
          * The pin number to which the servo is connected.
          * This should be set in the constructor.
          */
-        PIN_NUMBER pin;
+        PinNumber pin;
 
         /** 
          * The Servo object that controls the servo motor.
@@ -59,7 +59,7 @@ class ServoController : public Controller // Implement the Controller interface
          * Constructor to initialize the pin number
          * @param pin The pin number to which the servo is connected
          */
-        ServoController(TimeProvider* timeProvider, PIN_NUMBER pin);
+        ServoController(TimeProvider* timeProvider, PinNumber pin);
 
         /**
          * Rotate the servo to a specified angle.

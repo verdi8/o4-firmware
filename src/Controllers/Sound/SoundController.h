@@ -15,7 +15,7 @@ constexpr unsigned int NO_SOUND_FREQUENCY = 0; // Constant to represent no frequ
 class SoundController : public Controller {
 private:
     TimeProvider* timeProvider;            // Pointer to the TimeProvider for getting current time
-    PIN_NUMBER buzzerPin;                      // Pin connected to the buzzer or speaker
+    PinNumber buzzerPin;                      // Pin connected to the buzzer or speaker
     const Melody* PROGMEM currentMelodyPrgm;    // Pointer to the current melody being played, nullptr if no melody is playing
     unsigned int currentNoteIndex;      // Index of the current note being played
     unsigned long currentNoteStartTime; // Start time of the current note
@@ -32,7 +32,7 @@ public:
      * 
      * @param buzzerPin The pin connected to the buzzer or speaker.
      */
-    SoundController(TimeProvider* timeProvider, PIN_NUMBER buzzerPin);
+    SoundController(TimeProvider* timeProvider, PinNumber buzzerPin);
 
     /**
      * @brief Plays a melody consisting of a sequence of notes.

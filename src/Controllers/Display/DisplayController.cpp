@@ -9,7 +9,7 @@
 
 constexpr int LED_MATRIX_INDEX = 0; // Define LED_MATRIX_INDEX as constexpr for better optimization and clarity
 
-DisplayController::DisplayController(TimeProvider* timeProvider, PIN_NUMBER dataPin, PIN_NUMBER clkPin, PIN_NUMBER csPin, bool doFlipX)
+DisplayController::DisplayController(TimeProvider* timeProvider, PinNumber dataPin, PinNumber clkPin, PinNumber csPin, bool doFlipX)
     : timeProvider(timeProvider),
       ledControl(new LedControl(dataPin, clkPin, csPin, 1)),
       doFlipX(doFlipX),
