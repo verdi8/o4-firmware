@@ -15,6 +15,6 @@ DisplayActions::DisplayActions(DisplayController* displayController) : displayCo
  * 
  * @param currentTime The current time in milliseconds.
  */
-void DisplayActions::playWaveAnimation(unsigned long currentTime) {
+void DisplayActions::playWaveAnimation() {
     displayController->playAnimation((FrameSet*)&WAVE_FRAMESET, 300, 0); // Play the wave animation with 100 ms frame duration and infinite repeat
 }

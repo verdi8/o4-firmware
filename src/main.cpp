@@ -77,7 +77,7 @@ volatile int MODE=4; //State of Otto in the principal state machine.
 
 void setup() {
   Serial.begin(9600); 
-  DEBUG(F("Starting")); 
+  DEBUG(F("Starting"));
 
 
   unsigned long currentTime = millis();
@@ -183,9 +183,10 @@ void setup() {
   // robot->sing(S_happy);
   // robot->displayController->displayIcon(millis(), SMILE_ICON_INDEX, 2000); //Display smile icon for 2 seconds
 
-  robot->getDisplayActions()->playWaveAnimation(currentTime); 
+  robot->getDisplayActions()->playWaveAnimation(); 
+  robot->getKinematicController()->walk();
 
-  robot->getSoundActions()->singHappyBirthday(currentTime); //Play a melody to indicate that Otto is ready
+  robot->getSoundActions()->playConnectJingle(currentTime); //Play a melody to indicate that Otto is ready
 
     //Setup callbacks for SerialCommand commands 
   // SerialCmd.addCommand("S", receiveStop);      //  sendAck & sendFinalAck

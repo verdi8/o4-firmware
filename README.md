@@ -41,3 +41,11 @@ This firmware is developed with PlatformIO. The recommanded way to build and ins
 
 ## Usage
 
+## Customization
+
+### Hardware configuration
+The hardware configuration of the O4 Robot can be customized in the `src/Hardware/Config.h` file. You can change the pin assignments.
+
+### Software guide
+
+

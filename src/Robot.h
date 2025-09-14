@@ -92,6 +92,10 @@ class Robot : public TimeProvider {
     
     DisplayActions* getDisplayActions();
     SoundActions* getSoundActions();
+
+    KinematicController* getKinematicController();
+    DisplayController* getDisplayController();
+    SoundController* getSoundController();
     
     void init(int Buzzer);
     void home();

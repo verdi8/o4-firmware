@@ -23,6 +23,6 @@ public:
      * 
      * @param currentTime The current time in milliseconds.
      */
-    void playWaveAnimation(unsigned long currentTime);
+    void playWaveAnimation();
 
 };
