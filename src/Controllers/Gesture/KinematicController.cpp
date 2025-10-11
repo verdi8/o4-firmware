@@ -4,6 +4,7 @@
 #define DEFAULT_OSCILLIATION_PERIOD 1000 // in milliseconds
 
 KinematicController::KinematicController(
+    HAL* hal,
     TimeProvider *timeProvider,
     PinNumber frontRightHipPin,
     PinNumber frontLeftHipPin,
@@ -14,14 +15,14 @@ KinematicController::KinematicController(
     PinNumber backRightLegPin,
     PinNumber backLeftLegPin) : timeProvider(timeProvider)
 {
-    frontRightHip = new ServoController(timeProvider, frontRightHipPin);
-    frontLeftHip = new ServoController(timeProvider, frontLeftHipPin);
-    frontRightLeg = new ServoController(timeProvider, frontRightLegPin);
-    frontLeftLeg = new ServoController(timeProvider, frontLeftLegPin);
-    backRightHip = new ServoController(timeProvider, backRightHipPin);
-    backLeftHip = new ServoController(timeProvider, backLeftHipPin);
-    backRightLeg = new ServoController(timeProvider, backRightLegPin);
-    backLeftLeg = new ServoController(timeProvider, backLeftLegPin);
+    frontRightHip = new ServoController(hal, timeProvider, frontRightHipPin);
+    frontLeftHip = new ServoController(hal, timeProvider, frontLeftHipPin);
+    frontRightLeg = new ServoController(hal, timeProvider, frontRightLegPin);
+    frontLeftLeg = new ServoController(hal, timeProvider, frontLeftLegPin);
+    backRightHip = new ServoController(hal, timeProvider, backRightHipPin);
+    backLeftHip = new ServoController(hal, timeProvider, backLeftHipPin);
+    backRightLeg = new ServoController(hal, timeProvider, backRightLegPin);
+    backLeftLeg = new ServoController(hal, timeProvider, backLeftLegPin);
     all[0] = frontRightHip;
     all[1] = frontLeftHip;
     all[2] = frontRightLeg;

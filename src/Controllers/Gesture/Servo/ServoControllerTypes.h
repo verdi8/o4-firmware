@@ -1,5 +1,0 @@
-#ifndef SERVO_CONTROLLER_TYPES_H
-#define SERVO_CONTROLLER_TYPES_H
-
-#endif
-

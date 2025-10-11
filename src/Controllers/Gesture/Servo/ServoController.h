@@ -4,7 +4,7 @@
 #include <Servo.h>
 #include <Arduino.h>
 #include "Hardware/Config.h"
-#include "ServoControllerTypes.h"
+#include "Hardware/HAL/HAL.h"
 #include "AngleStrategy/AngleStrategy.h"
 #include "AngleStrategy/LinearAngleStrategy.h"
 #include "AngleStrategy/OscillatingAngleStrategy.h"
@@ -59,7 +59,7 @@ class ServoController : public Controller // Implement the Controller interface
          * Constructor to initialize the pin number
          * @param pin The pin number to which the servo is connected
          */
-        ServoController(TimeProvider* timeProvider, PinNumber pin);
+        ServoController(HAL* hal, TimeProvider* timeProvider, PinNumber pin);
 
         /**
          * Rotate the servo to a specified angle.

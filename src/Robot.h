@@ -88,9 +88,9 @@ class Robot : public TimeProvider {
     unsigned long currentTime; // Variable to store the current time
 
   public:
-    Robot(unsigned long currentTime);
-    
-    DisplayActions* getDisplayActions();
+    Robot(HAL *hal, unsigned long currentTime);
+
+    DisplayActions *getDisplayActions();
     SoundActions* getSoundActions();
 
     KinematicController* getKinematicController();

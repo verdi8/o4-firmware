@@ -1,6 +1,7 @@
 //#include "US.h"
 #include "Robot.h"
 #include "Hardware/Config.h"
+#include "Hardware/HAL/Arduino/ArduinoHAL.h"
 #include "Controllers/Display/DisplayController.h"
 #include "logger.h"
 
@@ -81,7 +82,8 @@ void setup() {
 
 
   unsigned long currentTime = millis();
-  robot = new Robot(currentTime); //Create a new Robot object
+  HAL* hal = new ArduinoHAL(); //Create a new HAL for Arduino
+  robot = new Robot(hal, currentTime); //Create a new Robot object
 
 
 

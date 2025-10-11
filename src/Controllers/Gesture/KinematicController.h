@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Arduino.h>
+#include "Hardware/HAL/HAL.h"
 #include "Servo/ServoController.h"
 #include "Controllers/Controller.h" // Include the Controller interface
 #include "Controllers/TimeProvider.h"
@@ -36,6 +37,7 @@ public:
      * @param backLeftLegPin Pin for the back left leg servo.
      */
     KinematicController(
+        HAL* hal,
         TimeProvider* timeProvider,
         PinNumber frontRightHipPin,
         PinNumber frontLeftHipPin,

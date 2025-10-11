@@ -22,12 +22,14 @@
 #define EEPROM_MAGIC 0xabcd
 #define EEPROM_OFFSET 2 // eeprom starting offset to store trim[]
 
-Robot::Robot(unsigned long currentTime) : /* reverse{0, 0, 0, 0, 0, 0, 0, 0}, */
+Robot::Robot(HAL* hal, unsigned long currentTime) : /* reverse{0, 0, 0, 0, 0, 0, 0, 0}, */
   currentTime(currentTime)
 {
   this->displayController = new DisplayController(this, LED_MATRIX_DIN, LED_MATRIX_CLK, LED_MATRIX_CS, LED_MATRIX_FLIP_X);
   this->soundController = new SoundController(this, PIN_BUZZER);
-  this->kinematicController = new KinematicController(this,
+  this->kinematicController = new KinematicController(
+      hal,
+      this,
       FRONT_RIGHT_HIP_SERVO_PIN,
       FRONT_LEFT_HIP_SERVO_PIN,
       FRONT_RIGHT_LEG_SERVO_PIN,
