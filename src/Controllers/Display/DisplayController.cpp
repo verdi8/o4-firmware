@@ -1,6 +1,7 @@
 #include "DisplayController.h"
-#include <LedControl.h>
-#include "Hardware/Config.h"
+#include "Hardware/HAL/HALLedControl.h"
+#include "Hardware/HAL/HAL.h"
+#include "Config.h"
 #include "DisplayTypes.h"
 #include "DisplayMode/DisplayMode.h"
 #include "DisplayMode/StillImageDisplayMode.h"
@@ -9,9 +10,9 @@
 
 constexpr int LED_MATRIX_INDEX = 0; // Define LED_MATRIX_INDEX as constexpr for better optimization and clarity
 
-DisplayController::DisplayController(TimeProvider* timeProvider, PinNumber dataPin, PinNumber clkPin, PinNumber csPin, bool doFlipX)
+DisplayController::DisplayController(HAL* hal, TimeProvider* timeProvider, PinNumber dataPin, PinNumber clkPin, PinNumber csPin, bool doFlipX)
     : timeProvider(timeProvider),
-      ledControl(new LedControl(dataPin, clkPin, csPin, 1)),
+      ledControl(hal->newLedControl(dataPin, clkPin, csPin)),
       doFlipX(doFlipX),
       stillImageDisplayModeInstance(new StillImageDisplayMode()),
       animationDisplayModeInstance(new AnimationDisplayMode()),

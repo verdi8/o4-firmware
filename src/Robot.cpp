@@ -1,7 +1,7 @@
 #include <EEPROM.h>
 #include "Robot.h"
 #include "Controllers/Display/DisplayController.h"
-#include "Hardware/Config.h"
+#include "Config.h"
 #include "logger.h"
 
 /*
@@ -25,8 +25,11 @@
 Robot::Robot(HAL* hal, unsigned long currentTime) : /* reverse{0, 0, 0, 0, 0, 0, 0, 0}, */
   currentTime(currentTime)
 {
-  this->displayController = new DisplayController(this, LED_MATRIX_DIN, LED_MATRIX_CLK, LED_MATRIX_CS, LED_MATRIX_FLIP_X);
-  this->soundController = new SoundController(this, PIN_BUZZER);
+
+  this->displayController = new DisplayController(hal, this, LED_MATRIX_DIN, LED_MATRIX_CLK, LED_MATRIX_CS, LED_MATRIX_FLIP_X);
+      
+        this->soundController = new SoundController(this, PIN_BUZZER);
+
   this->kinematicController = new KinematicController(
       hal,
       this,
@@ -39,7 +42,9 @@ Robot::Robot(HAL* hal, unsigned long currentTime) : /* reverse{0, 0, 0, 0, 0, 0,
       BACK_RIGHT_LEG_SERVO_PIN,
       BACK_LEFT_LEG_SERVO_PIN);
 
+
   this->displayActions = new DisplayActions(displayController);
+
   this->soundActions = new SoundActions(soundController);
 }
 
@@ -129,7 +134,7 @@ void Robot::init(int Buzzer)
 #endif
   }
 
-  home();
+
   us.init(12, 11);
 }
 void Robot::attachServo()
@@ -311,71 +316,6 @@ void Robot::moonwalkL(float steps, float T)
   execute(steps, period, amplitude, offset, phase);
 }
 
-void Robot::walk(int dir, float steps, float T)
-{
-  if (getRestState() == true)
-  {
-    setRestState(false);
-  }
-
-  int x_amp = 15;
-  int z_amp = 20;
-  int ap = 20;
-  int hi = -10;
-  float period[] = {T, T, T / 2, T / 2, T, T, T / 2, T / 2};
-  int amplitude[] = {x_amp, x_amp, z_amp, z_amp, x_amp, x_amp, z_amp, z_amp};
-  int offset[] = {90 + ap,
-                  90 - ap,
-                  90 - hi,
-                  90 + hi,
-                  90 - ap,
-                  90 + ap,
-                  90 + hi,
-                  90 - hi};
-  int phase[] = {270, 270, 270, 90, 90, 90, 90, 270};
-  if (dir == 0)
-  { // backward
-    phase[0] = phase[1] = 90;
-    phase[4] = phase[5] = 270;
-  }
-  for (int i = 0; i < 8; i++)
-  {
-    oscillator[i].reset();
-    oscillator[i].setPeriod(period[i]);
-    oscillator[i].setAmplitude(amplitude[i]);
-    oscillator[i].setPhase(phase[i]);
-    oscillator[i].setOffset(offset[i]);
-    oscillator[i].start();
-  }
-  unsigned long _init_time = millis();
-  unsigned long _now_time = _init_time;
-  unsigned long _final_time = _init_time + period[0] * steps;
-  bool side;
-
-  while (_now_time < _final_time)
-  {
-    side = (int)((_now_time - _init_time) / (period[0] / 2)) % 2;
-
-    setServo(0, oscillator[0].update()); // FRONT_RIGHT_HIP
-    setServo(1, oscillator[1].update()); // FRONT_LEFT_HIP
-    setServo(4, oscillator[4].update()); // BACK_RIGHT_HIP
-    setServo(5, oscillator[5].update()); // BACK_LEFT_HIP
-
-    if (side == 0)
-    {
-      setServo(3, oscillator[3].update()); // FRONT_LEFT_LEG
-      setServo(6, oscillator[6].update()); // BACK_RIGHT_LEG
-    }
-    else
-    {
-      setServo(2, oscillator[2].update()); // FRONT_RIGHT_LEG
-      setServo(7, oscillator[7].update()); // BACK_LEFT_LEG
-    }
-    pause(1);
-    _now_time = millis();
-  }
-}
-
 void Robot::upDown(float steps, float T)
 {
   if (getRestState() == true)
@@ -422,22 +362,6 @@ void Robot::pushUp(float steps, float T)
   execute(steps, period, amplitude, offset, phase);
 }
 
-void Robot::home()
-{
-
-  int ap = 20;
-  int hi = 0;
-  int position[] = {90 + ap, 90 - ap, 90 - hi, 90 + hi, 90 - ap, 90 + ap, 90 + hi, 90 - hi};
-  for (int i = 0; i < 8; i++)
-  {
-    if (position[i] + trim[i] <= 180 && position[i] + trim[i] > 0)
-    {
-      oscillator[i].stop();
-      setServo(i, position[i] + trim[i]);
-    }
-    isOttoResting = true;
-  }
-}
 
 void Robot::waveHAND(float steps, float T)
 {
@@ -519,7 +443,6 @@ void Robot::jump()
   moveServos(1, salto);
   delay(100);
 
-  home();
 }
 void Robot::scared()
 {
@@ -535,7 +458,6 @@ void Robot::scared()
   moveServos(1, sentado);
   delay(100);
 
-  home();
 }
 
 bool Robot::getRestState()
@@ -598,20 +520,7 @@ void Robot::setServo(int id, float target)
 
 void Robot::execute(float steps, float period[8], int amplitude[8], int offset[8], int phase[8])
 {
-  if (getRestState() == true)
-  {
-    setRestState(false);
-  }
-  attachServo();
-  for (int i = 0; i < 8; i++)
-  {
-    oscillator[i].setPeriod(period[i]);
-    oscillator[i].setAmplitude(amplitude[i]);
-    oscillator[i].setPhase(phase[i]);
-    oscillator[i].setOffset(offset[i]);
-    oscillator[i].start();
-    oscillator[i].setTime(millis());
-  }
+
 }
 
 void Robot::update(unsigned long currentTime)
@@ -707,46 +616,8 @@ int Robot::getNoise()
 
   return noiseLevel;
 }
-//---------------------------------------------------------
-//-- Otto getBatteryLevel: return battery voltage percent
-//---------------------------------------------------------
-double Robot::getBatteryLevel()
-{
 
-  // The first read of the batery is often a wrong reading, so we will discard this value.
-  double batteryLevel = battery.readBatPercent();
-  double batteryReadings = 0;
-  int numReadings = 10;
 
-  for (int i = 0; i < numReadings; i++)
-  {
-    batteryReadings += battery.readBatPercent();
-    delay(1); // delay in between reads for stability
-  }
-
-  batteryLevel = batteryReadings / numReadings;
-
-  return batteryLevel;
-}
-
-double Robot::getBatteryVoltage()
-{
-
-  // The first read of the batery is often a wrong reading, so we will discard this value.
-  double batteryLevel = battery.readBatVoltage();
-  double batteryReadings = 0;
-  int numReadings = 10;
-
-  for (int i = 0; i < numReadings; i++)
-  {
-    batteryReadings += battery.readBatVoltage();
-    delay(1); // delay in between reads for stability
-  }
-
-  batteryLevel = batteryReadings / numReadings;
-
-  return batteryLevel;
-}
 
 ///////////////////////////////////////////////////////////////////
 //-- SOUNDS -----------------------------------------------------//

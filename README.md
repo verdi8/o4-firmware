@@ -48,4 +48,23 @@ The hardware configuration of the O4 Robot can be customized in the `src/Hardwar
 
 ### Software guide
 
+```mermaid
+C4Component
+title O4 Robot Component Diagram
+    Container_Boundary(o4system, "O4 Robot Firmware") {   
+        Component(hal, "HAL", "Hardware Abstraction Layer", "Provides an abstraction layer for hardware")
+    }
+```
 
+### Unit testing
+To run the unit tests locally, use the following command in the PlatformIO terminal:
+```
+pio test
+```
+
+A GCC toolchain must be available in your system PATH for the unit tests to run.
+
+By the way, unit tests are also automatically run on GitHub Actions for each pull request.
+
+## Contributing
+Contributions are welcome! Please read the [CONTRIBUTING.md](CONTRIBUTING.md) file for more information.

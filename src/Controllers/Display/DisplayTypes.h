@@ -1,7 +1,6 @@
-#ifndef DISPLAY_TYPES_H
-#define DISPLAY_TYPES_H
+#pragma once
 
-#include <Arduino.h>
+#include "Hardware/HAL/HAL.h"
 
 /** Frame typedef for an 8x8 LED matrix frame */
 typedef byte Frame[8];
@@ -15,5 +14,3 @@ struct FrameSet
     /** Array of 8x8 frames */
     Frame frames[];
 };
-
-#endif

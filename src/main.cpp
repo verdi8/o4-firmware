@@ -1,6 +1,6 @@
 //#include "US.h"
 #include "Robot.h"
-#include "Hardware/Config.h"
+#include "Config.h"
 #include "Hardware/HAL/Arduino/ArduinoHAL.h"
 #include "Controllers/Display/DisplayController.h"
 #include "logger.h"
@@ -50,8 +50,7 @@ bool stopSerial = false;
 unsigned long cur_time, prev_serial_data_time, perv_sensor_time;
 char cmd = 's';
 // static char prev_cmd = '.';
-const char programID[]="Otto_KAME7"; //Each program will have a ID
-int randomDance=0;
+
 //---------------------------------------------------------
 //-- Otto has 5 modes:
 //--    * MODE = 0: Otto is awaiting  
@@ -60,7 +59,6 @@ int randomDance=0;
 //--    * MODE = 3: Noise detector mode   
 //--    * MODE = 4: OttoPAD or any Teleoperation mode (listening SerialPort). 
 //---------------------------------------------------------
-volatile int MODE=4; //State of Otto in the principal state machine. 
 
 
 // void receiveStop();
@@ -83,6 +81,8 @@ void setup() {
 
   unsigned long currentTime = millis();
   HAL* hal = new ArduinoHAL(); //Create a new HAL for Arduino
+
+
   robot = new Robot(hal, currentTime); //Create a new Robot object
 
 

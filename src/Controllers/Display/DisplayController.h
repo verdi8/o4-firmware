@@ -1,14 +1,14 @@
 #pragma once
 
-#include <Arduino.h>
-#include <LedControl.h>
-#include "Hardware/Config.h"
+
+#include "Config.h"
 #include "DisplayTypes.h" 
 #include "DisplayMode/DisplayMode.h"
 #include "DisplayMode/StillImageDisplayMode.h"
 #include "DisplayMode/AnimationDisplayMode.h"
 #include "Controllers/Controller.h" // Include the Controller interface
 #include "Controllers/TimeProvider.h"
+#include "Hardware/HAL/HALLedControl.h"
 
 /**
  * @class DisplayController
@@ -24,7 +24,7 @@ class DisplayController : public Controller // Implement the Controller interfac
   private:
     // Private member properties
     TimeProvider* timeProvider; // Pointer to the TimeProvider for getting current time
-    LedControl* ledControl; // The LedControl object from the LedControl library
+    HALLedControl* ledControl; // The LedControl object from the LedControl library
     bool doFlipX; // Whether to flip the X axis
     StillImageDisplayMode* stillImageDisplayModeInstance; // Instance for managing still image display mode
     AnimationDisplayMode* animationDisplayModeInstance; // Instance for managing animation display mode
@@ -44,7 +44,7 @@ class DisplayController : public Controller // Implement the Controller interfac
      * @param doFlipX Whether to flip the X axis
      * @param iconFrameset The frameset to use for displaying icons
      */
-    DisplayController(TimeProvider* timeProvider, PinNumber dataPin, PinNumber clkPin, PinNumber csPin, bool doFlipX);
+    DisplayController(HAL* hal, TimeProvider* timeProvider, PinNumber dataPin, PinNumber clkPin, PinNumber csPin, bool doFlipX);
 
     /**
      * Display an icon on the LED Matrix

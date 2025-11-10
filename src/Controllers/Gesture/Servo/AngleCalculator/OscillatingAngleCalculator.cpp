@@ -1,4 +1,4 @@
-#include "OscillatingAngleStrategy.h"
+#include "OscillatingAngleCalculator.h"
 #include <math.h>
 
 /**
@@ -12,9 +12,9 @@ double inline deg2rad(int degrees) {
 
 
 /**
- * @brief Constructor to initialize the OscillatingAngleStrategy.
+ * @brief Constructor to initialize the OscillatingAngleCalculator.
  */
-OscillatingAngleStrategy::OscillatingAngleStrategy() {
+OscillatingAngleCalculator::OscillatingAngleCalculator() {
     startTime = 0; // Initialize start time to 0.
     amplitude = 0; // Initialize amplitude to 0.
     period = 0; // Initialize period to 0.
@@ -26,7 +26,7 @@ OscillatingAngleStrategy::OscillatingAngleStrategy() {
  * Sets the oscillation parameters for the servo.
  * This will make the servo oscillate between the specified parameters.
  */
-OscillatingAngleStrategy* OscillatingAngleStrategy::oscilliate(unsigned long currentTime, int amplitude, int period, int offset, int phase) {
+OscillatingAngleCalculator* OscillatingAngleCalculator::oscilliate(unsigned long currentTime, int amplitude, int period, int offset, int phase) {
     this->startTime = currentTime; // Set the start time of the oscillation.
     this->amplitude = amplitude;
     this->period = period;
@@ -41,7 +41,7 @@ OscillatingAngleStrategy* OscillatingAngleStrategy::oscilliate(unsigned long cur
  * @param currentAngle The current angle of the servo (not used in this strategy).
  * @return The target angle for the servo.
  */
-unsigned int OscillatingAngleStrategy::computeNextAngle(unsigned int currentAngle, unsigned long currentTime) {
+unsigned int OscillatingAngleCalculator::calculateNextAngle(unsigned int currentAngle, unsigned long currentTime) {
     unsigned long deltaTime = currentTime - startTime; // Calculate the elapsed time since the start of oscillation.
     double timeInRadians = (2 * M_PI * deltaTime / period) + deg2rad(phase); // Convert elapsed time to radians.
     return offset + amplitude * sin(timeInRadians);
@@ -50,7 +50,7 @@ unsigned int OscillatingAngleStrategy::computeNextAngle(unsigned int currentAngl
 /**
  * Checks if the mouvement is done.
  */
-bool OscillatingAngleStrategy::isDone(unsigned int currentAngle, unsigned long currentTime) {
+bool OscillatingAngleCalculator::isDone(unsigned int currentAngle, unsigned long currentTime) {
     // Oscillation is continuous, so it is never "done."
     return false;
 }

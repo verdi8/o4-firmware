@@ -65,8 +65,6 @@ class Robot : public TimeProvider {
     DisplayActions* displayActions;
     SoundActions* soundActions; 
 
-
-    Oscillator oscillator[8];
     // Servo servo[8];
     int board_pins[8];
     int trim[8]; //deviation servo offset
@@ -84,7 +82,7 @@ class Robot : public TimeProvider {
     US us;
     int pinBuzzer;
     int pinNoiseSensor;
-    BatReader battery;
+
     unsigned long currentTime; // Variable to store the current time
 
   public:

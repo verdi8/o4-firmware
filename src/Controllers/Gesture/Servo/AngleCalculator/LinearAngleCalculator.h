@@ -1,8 +1,8 @@
 #pragma once
 
-#include "AngleStrategy.h"
+#include "AngleCalculator.h"
 
-class LinearAngleStrategy : public AngleStrategy {
+class LinearAngleCalculator : public AngleCalculator {
 private:
     /**
      * The speed of the servo movement in degrees per second.
@@ -23,23 +23,23 @@ private:
 
 public:
     /**
-     * Constructor to initialize the LinearAngleStrategy.
+     * Constructor to initialize the LinearAngleCalculator.
      */
-    LinearAngleStrategy();
+    LinearAngleCalculator();
 
     /**
      * Sets the target angle for the servo.
      * @param angle The angle to which the servo will rotate (0 to 180 degrees).
-     * @return A pointer to the LinearAngleStrategy instance for method chaining.
+     * @return A pointer to the LinearAngleCalculator instance for method chaining.
      */
-    LinearAngleStrategy* rotateTo(unsigned int currentTime, unsigned int angle);
+    LinearAngleCalculator* rotateTo(unsigned int currentTime, unsigned int angle);
 
     /**
      * Computes the angle based on the current time.
      * @param currentTime The current time in milliseconds.
      * @return The target angle for the servo.
      */
-    unsigned int computeNextAngle(unsigned int currentAngle, unsigned long currentTime) override;
+    unsigned int calculateNextAngle(unsigned int currentAngle, unsigned long currentTime) override;
 
     /**
      * Checks if the servo has reached the target angle.

@@ -1,13 +1,11 @@
 #ifndef SERVOCONTROLLER_H
 #define SERVOCONTROLLER_H
 
-#include <Servo.h>
-#include <Arduino.h>
-#include "Hardware/Config.h"
+#include "Config.h"
 #include "Hardware/HAL/HAL.h"
-#include "AngleStrategy/AngleStrategy.h"
-#include "AngleStrategy/LinearAngleStrategy.h"
-#include "AngleStrategy/OscillatingAngleStrategy.h"
+#include "AngleCalculator/AngleCalculator.h"
+#include "AngleCalculator/LinearAngleCalculator.h"
+#include "AngleCalculator/OscillatingAngleCalculator.h"
 #include "Controllers/Controller.h" // Include the Controller interface
 #include "Controllers/TimeProvider.h"
 
@@ -31,22 +29,22 @@ class ServoController : public Controller // Implement the Controller interface
          * The Servo object that controls the servo motor.
          * This is initialized in the constructor.
          */
-        Servo* servo;
+        HALServo* servo;
 
         /**
          * The current strategy for controlling the angle of the servo.
          */
-        AngleStrategy* currentAngleStrategy = nullptr;
+        AngleCalculator* currentAngleCalculator = nullptr;
 
         /**
-         * An instance of LinearAngleStrategy to handle linear movements.
+         * An instance of LinearAngleCalculator to handle linear movements.
          */
-        LinearAngleStrategy* linearAngleStrategyInstance; 
+        LinearAngleCalculator* linearAngleCalculatorInstance; 
 
         /**
-         * An instance of OscillatingAngleStrategy to handle oscillating movements.
+         * An instance of OscillatingAngleCalculator to handle oscillating movements.
          */
-        OscillatingAngleStrategy* oscillatingAngleStrategyInstance;
+        OscillatingAngleCalculator* oscillatingAngleCalculatorInstance;
 
         /**
          * Th

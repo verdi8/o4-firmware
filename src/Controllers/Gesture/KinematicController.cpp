@@ -1,7 +1,8 @@
 #include "KinematicController.h"
+#include "logger.h"
 
 // Behaviour parameters
-#define DEFAULT_OSCILLIATION_PERIOD 1000 // in milliseconds
+#define DEFAULT_OSCILLIATION_PERIOD 2000 // in milliseconds
 
 KinematicController::KinematicController(
     HAL* hal,
@@ -15,6 +16,7 @@ KinematicController::KinematicController(
     PinNumber backRightLegPin,
     PinNumber backLeftLegPin) : timeProvider(timeProvider)
 {
+
     frontRightHip = new ServoController(hal, timeProvider, frontRightHipPin);
     frontLeftHip = new ServoController(hal, timeProvider, frontLeftHipPin);
     frontRightLeg = new ServoController(hal, timeProvider, frontRightLegPin);
@@ -23,6 +25,7 @@ KinematicController::KinematicController(
     backLeftHip = new ServoController(hal, timeProvider, backLeftHipPin);
     backRightLeg = new ServoController(hal, timeProvider, backRightLegPin);
     backLeftLeg = new ServoController(hal, timeProvider, backLeftLegPin);
+
     all[0] = frontRightHip;
     all[1] = frontLeftHip;
     all[2] = frontRightLeg;

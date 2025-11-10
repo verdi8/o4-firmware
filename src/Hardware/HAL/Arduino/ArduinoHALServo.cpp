@@ -1,25 +1,20 @@
 #include "ArduinoHALServo.h"
 #include <Servo.h>
 
-// Constructor
-ArduinoHALServo::ArduinoHALServo() {
-    servo = new Servo();
-}
-
 /**
  * @brief Attach the servo to a specific pin.
  * 
  * @param pin The pin number to which the servo is connected.
  */
-void ArduinoHALServo::attach(uint8_t pin) {
-    servo->attach(pin);
+void ArduinoHALServo::attach(PinNumber pin) {
+    servo.attach(pin);
 }
 
 /**
  * @brief Detach the servo, stopping its control.
  */
 void ArduinoHALServo::detach() {
-    servo->detach();
+    servo.detach();
 }
 
 /**
@@ -28,7 +23,7 @@ void ArduinoHALServo::detach() {
  * @param value The angle to set the servo to, in degrees (0-180).
  */
 void ArduinoHALServo::write(int value) {
-    servo->write(value);
+    servo.write(value);
 }
 
 /**
@@ -37,5 +32,5 @@ void ArduinoHALServo::write(int value) {
  * @return true if the servo is attached, false otherwise.
  */
 bool ArduinoHALServo::attached() {
-    return servo->attached();
+    return servo.attached();
 }

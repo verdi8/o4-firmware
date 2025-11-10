@@ -10,17 +10,13 @@
  */
 class ArduinoHALServo : public HALServo {
 public:
-    /**
-     * @brief Constructor for ArduinoHALServo.
-     */
-    ArduinoHALServo();
 
     /**
      * @brief Attach the servo to a specific pin.
      * 
      * @param pin The pin number to which the servo is connected.
      */
-    void attach(uint8_t pin) override;
+    void attach(PinNumber pin) override;
 
     /**
      * @brief Detach the servo, stopping its control.
@@ -42,5 +38,5 @@ public:
     bool attached() override;
 
 private:
-    Servo* servo; ///< Pointer to the Servo object.
+    Servo servo = Servo();
 };

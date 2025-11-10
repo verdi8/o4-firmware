@@ -1,8 +1,8 @@
 #pragma once
-#include "AngleStrategy.h"
+#include "AngleCalculator.h"
 #include "Controllers/TimeProvider.h"
 
-class OscillatingAngleStrategy : public AngleStrategy {
+class OscillatingAngleCalculator : public AngleCalculator {
 private:
     /**
      * The start time of the oscillation.
@@ -35,9 +35,9 @@ private:
 
 public:
     /**
-     * Constructor to initialize the OscillatingAngleStrategy.
+     * Constructor to initialize the OscillatingAngleCalculator.
      */
-    OscillatingAngleStrategy();
+    OscillatingAngleCalculator();
 
     /**
      * Sets the oscillation parameters for the servo.
@@ -47,15 +47,15 @@ public:
      * @param period The period of the oscillation in milliseconds.
      * @param offset The offset from the center angle.
      * @param phase The phase shift of the oscillation.
-     * @return A pointer to the OscillatingAngleStrategy instance for method chaining.
+     * @return A pointer to the OscillatingAngleCalculator instance for method chaining.
      */
-    OscillatingAngleStrategy* oscilliate(unsigned long currentTime, int amplitude, int period, int offset, int phase);
+    OscillatingAngleCalculator* oscilliate(unsigned long currentTime, int amplitude, int period, int offset, int phase);
     /**
      * Computes the angle based on the current time.
      * @param currentTime The current time in milliseconds.
      * @return The target angle for the servo.
      */
-    unsigned int computeNextAngle(unsigned int currentAngle, unsigned long currentTime) override;
+    unsigned int calculateNextAngle(unsigned int currentAngle, unsigned long currentTime) override;
 
     /**
      * Checks if the movement is done.

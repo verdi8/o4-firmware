@@ -8,11 +8,11 @@ ServoController::ServoController(HAL* hal, TimeProvider* timeProvider, PinNumber
 {
     this->timeProvider = timeProvider; // Set the time provider
     this->pin = pin;     // Set the pin number
-    servo = new Servo(); // Create a new Servo object
+    servo = hal->newServo(); // Create a new Servo object
 
-    oscillatingAngleStrategyInstance = new OscillatingAngleStrategy();  // Keep an instance of OscillatingAngleStrategy
-    linearAngleStrategyInstance = new LinearAngleStrategy();          // Keep an instance of LinearAngleStrategy
-    currentAngleStrategy = nullptr;                                     // Initialize the current angle strategy to nullptr
+    oscillatingAngleCalculatorInstance = new OscillatingAngleCalculator();  // Keep an instance of OscillatingAngleCalculator
+    linearAngleCalculatorInstance = new LinearAngleCalculator();          // Keep an instance of LinearAngleCalculator
+    currentAngleCalculator = nullptr;                                     // Initialize the current angle strategy to nullptr
 
     initPosition();                                                     // Initialize the servo to a default position
 }
@@ -20,24 +20,24 @@ ServoController::ServoController(HAL* hal, TimeProvider* timeProvider, PinNumber
 void ServoController::rotateTo(int angle)
 {
     unsigned long currentTime = timeProvider->getCurrentTime(); // Get the current time from the TimeProvider
-    this->currentAngleStrategy = this->linearAngleStrategyInstance->rotateTo(currentTime, angle); // Set the current angle strategy to oscillating
+    this->currentAngleCalculator = this->linearAngleCalculatorInstance->rotateTo(currentTime, angle); // Set the current angle strategy to oscillating
 }
 
 void ServoController::oscillate(int amplitude, int period, int offset, int phase)
 {
     unsigned long currentTime = timeProvider->getCurrentTime(); // Get the current time from the TimeProvider
-    this->currentAngleStrategy = this->oscillatingAngleStrategyInstance->oscilliate(currentTime, amplitude, period, offset, phase);
+    this->currentAngleCalculator = this->oscillatingAngleCalculatorInstance->oscilliate(currentTime, amplitude, period, offset, phase);
 }
 
 void ServoController::stop()
 {
     // servo->detach();                      // Detach the servo to stop it from moving
-    this->currentAngleStrategy = nullptr; // Clear the current angle strategy
+    this->currentAngleCalculator = nullptr; // Clear the current angle strategy
 }
 
 void ServoController::update()
 {
-    if (!this->currentAngleStrategy)
+    if (!this->currentAngleCalculator)
     {
         // If no strategy is set, do nothing
         return;
@@ -45,7 +45,7 @@ void ServoController::update()
     unsigned long currentTime = timeProvider->getCurrentTime();
 
     // Compute the angle based on the current time
-    unsigned int angle = this->currentAngleStrategy->computeNextAngle(this->currentAngle, currentTime);
+    unsigned int angle = this->currentAngleCalculator->calculateNextAngle(this->currentAngle, currentTime);
 
     // Ensure the angle is within valid bounds (0 to 180 degrees)
     if (angle < 0)
@@ -64,7 +64,7 @@ void ServoController::update()
         servo->attach(pin); // Attach the servo to the specified pin
     }    
 
-    // Rotate the servo to the computed angle
+    // Rotate the servo to the calulated angle
     if (currentAngle != angle)
     {
         // DEBUG_(pin, angle);
@@ -74,7 +74,7 @@ void ServoController::update()
    
 
     // Check if the movement is done
-    if (this->currentAngleStrategy->isDone(currentAngle, currentTime))
+    if (this->currentAngleCalculator->isDone(currentAngle, currentTime))
     {
         // If the movement is done, stop the servo
         stop();
@@ -85,7 +85,7 @@ void ServoController::update()
 bool ServoController::isDone()
 {
     // If no strategy is set, the servo is considered done
-    if (!this->currentAngleStrategy)
+    if (!this->currentAngleCalculator)
     {
         return true;
     }
@@ -93,7 +93,7 @@ bool ServoController::isDone()
     unsigned long currentTime = timeProvider->getCurrentTime();
 
     // Check if the current strategy reports that the movement is done
-    return this->currentAngleStrategy->isDone(this->currentAngle, currentTime);
+    return this->currentAngleCalculator->isDone(this->currentAngle, currentTime);
 }
 
 void ServoController::initPosition() {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Hardware/Config.h"
+#include "Config.h"
 
 /**
  * @brief HALServo is an abstract interface for controlling servo motors.

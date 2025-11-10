@@ -1,5 +1,5 @@
 #pragma once
-#include <Arduino.h>
+
 #include "Actions/Actions.h"
 #include "Controllers/Display/DisplayController.h"
 

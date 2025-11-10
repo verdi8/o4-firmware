@@ -1,6 +1,7 @@
 #include "Controllers/Display/DisplayTypes.h"
 #include "AnimationDisplayMode.h"
 #include "Logger.h"
+#include "Hardware/HAL/HAL.h"
 
 /**
  * Constructor for AnimationDisplayMode.
