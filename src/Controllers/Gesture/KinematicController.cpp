@@ -2,7 +2,7 @@
 #include "logger.h"
 
 // Behaviour parameters
-#define DEFAULT_OSCILLIATION_PERIOD 2000 // in milliseconds
+#define DEFAULT_OSCILLIATION_PERIOD 1000 // in milliseconds
 
 KinematicController::KinematicController(
     HAL* hal,
@@ -54,15 +54,15 @@ void KinematicController::walk()
     int x_amp = 15;
     int z_amp = 20;
     int ap = 20;
-    int hi = -10;
+    int hi = -0;
     this->frontRightHip->oscillate(x_amp, DEFAULT_OSCILLIATION_PERIOD, 90 + ap, 270);
     this->frontLeftHip->oscillate(x_amp, DEFAULT_OSCILLIATION_PERIOD, 90 - ap, 270);
-    this->frontRightLeg->oscillate(z_amp, DEFAULT_OSCILLIATION_PERIOD / 2, 90 - hi, 270);
-    this->frontLeftLeg->oscillate(z_amp, DEFAULT_OSCILLIATION_PERIOD / 2, 90 + hi, 90);
+    this->frontRightLeg->oscillate(z_amp, DEFAULT_OSCILLIATION_PERIOD, 90 - hi, 180);
+    this->frontLeftLeg->oscillate(z_amp, DEFAULT_OSCILLIATION_PERIOD, 90 + hi, 180);
     this->backRightHip->oscillate(x_amp, DEFAULT_OSCILLIATION_PERIOD, 90 - ap, 90);
     this->backLeftHip->oscillate(x_amp, DEFAULT_OSCILLIATION_PERIOD, 90 + ap, 90);
-    this->backRightLeg->oscillate(z_amp, DEFAULT_OSCILLIATION_PERIOD / 2, 90 + hi, 90);
-    this->backLeftLeg->oscillate(z_amp, DEFAULT_OSCILLIATION_PERIOD / 2, 90 - hi, 270);
+    this->backRightLeg->oscillate(z_amp, DEFAULT_OSCILLIATION_PERIOD, 90 + hi, 180);
+    this->backLeftLeg->oscillate(z_amp, DEFAULT_OSCILLIATION_PERIOD, 90 - hi, 180);
 }
 
 void KinematicController::update()
