@@ -1,6 +1,5 @@
 #pragma once
 
-#include <Arduino.h>
 #include "Hardware/HAL/HAL.h"
 #include "Servo/ServoController.h"
 #include "Controllers/Controller.h" // Include the Controller interface

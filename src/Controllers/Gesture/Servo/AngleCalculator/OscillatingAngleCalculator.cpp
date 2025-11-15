@@ -1,15 +1,5 @@
 #include "OscillatingAngleCalculator.h"
-#include <math.h>
-
-/**
- * Converts degrees to radians.
- * @param degrees The angle in degrees.
- * @return The angle in radians.
- */
-double inline deg2rad(int degrees) {
-    return ((double) degrees) * (M_PI / 180.0);
-}
-
+#include "Utils/MathUtils.h"
 
 /**
  * @brief Constructor to initialize the OscillatingAngleCalculator.
@@ -43,8 +33,8 @@ OscillatingAngleCalculator* OscillatingAngleCalculator::oscilliate(unsigned long
  */
 unsigned int OscillatingAngleCalculator::calculateNextAngle(unsigned int currentAngle, unsigned long currentTime) {
     unsigned long deltaTime = currentTime - startTime; // Calculate the elapsed time since the start of oscillation.
-    double timeInRadians = (2 * M_PI * deltaTime / period) + deg2rad(phase); // Convert elapsed time to radians.
-    return offset + amplitude * sin(timeInRadians);
+    double timeInRadians = (2 * MathUtils::PI * deltaTime / period) + MathUtils::deg2rad(phase); // Convert elapsed time to radians.
+    return offset + amplitude * MathUtils::sin(timeInRadians);
 }
 
 /**

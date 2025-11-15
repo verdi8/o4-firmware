@@ -8,6 +8,7 @@
  */
 class AnimationDisplayMode : public DisplayMode {
 private:
+    HALProgramSpaceHelper* programSpaceHelper;
     FrameSet* PROGMEM currentFrameSetPrgm;   // Pointer to the set of frames for the animation
     unsigned long frameDuration; // Duration for each frame in milliseconds
     unsigned long startTime;     // Start time of the animation
@@ -23,7 +24,7 @@ public:
      *
      * @param frameSet Pointer to the FrameSet containing the animation frames.
      */
-    AnimationDisplayMode();
+    AnimationDisplayMode(HALProgramSpaceHelper* halProgramSpaceHelper);
 
     /**
      * Starts playing the animation with the given FrameSet.

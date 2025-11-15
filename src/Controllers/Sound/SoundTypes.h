@@ -1,5 +1,4 @@
-#ifndef SOUND_TYPES_H
-#define SOUND_TYPES_H
+#pragma once
 
 // Notes found at: https://docs.arduino.cc/built-in-examples/digital/toneMelody/
 
@@ -20,4 +19,3 @@ struct Melody {
     MelodyNote melodyNotes[];
 };
 
-#endif // SOUND_TYPES_H

@@ -186,7 +186,7 @@ void setup() {
   // robot->displayController->displayIcon(millis(), SMILE_ICON_INDEX, 2000); //Display smile icon for 2 seconds
 
   robot->getDisplayActions()->playWaveAnimation(); 
-  robot->getKinematicController()->walk();
+  // robot->getKinematicController()->walk();
 
   robot->getSoundActions()->playConnectJingle(currentTime); //Play a melody to indicate that Otto is ready
 

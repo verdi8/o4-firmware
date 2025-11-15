@@ -1,11 +1,12 @@
 #pragma once
 
+#include "HALProgramSpaceHelper.h" // Include the header file for program space utilities
+#include "HALTypes.h" // Include the header file where PinNumber is defined
 #include "HALServo.h" // Include the header file where HALServo is defined
 #include "HALTone.h" // Include the header file where HALTone is defined
 #include "HALLedControl.h" // Include the header file where HALLedControl is defined
 
 
-typedef uint8_t byte;
 
 /**
  * The HAL (Hardware Abstraction Layer) interface provides an abstraction
@@ -25,7 +26,7 @@ public:
      * Creates a new HALTone instance.
      * @return A pointer to the newly created HALTone instance.
      */
-    virtual HALTone* newTone() = 0;
+    virtual HALTone* newTone(PinNumber buzzerPin) = 0;
 
     /**
      * Creates a new HALLedControl instance.
@@ -35,6 +36,12 @@ public:
      * @return A pointer to the newly created HALLedControl instance.
      */
     virtual HALLedControl* newLedControl(PinNumber dataPin, PinNumber clkPin, PinNumber csPin) = 0;
+
+    /**
+     * Creates a new HALProgramSpaceHelper instance.
+     * @return A pointer to the newly created HALProgramSpaceHelper instance.
+     */
+    virtual HALProgramSpaceHelper* newProgramSpaceHelper() = 0;
 
 };
 

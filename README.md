@@ -51,9 +51,20 @@ The hardware configuration of the O4 Robot can be customized in the `src/Hardwar
 ```mermaid
 C4Component
 title O4 Robot Component Diagram
-    Container_Boundary(o4system, "O4 Robot Firmware") {   
-        Component(hal, "HAL", "Hardware Abstraction Layer", "Provides an abstraction layer for hardware")
+    Boundary(hal, "Hardware Abstraction Layer (HAL)") {   
+        Component(halfactory, "HALFactory", "HAL", "Factory to create HAL components instances")
+        Component(halservo, "HALServo", "HAL", "An abstraction over the Arduino Servo library")
+        Component(haltone, "HALTone", "HAL", "An abstraction over the Arduino tone functions")
+        Component(halledcontrol, "HALTone", "HAL", "An abstraction over the Arduino LedControl library")
     }
+    Boundary(hal, "Hardware Abstraction Layer (HAL)") {   
+        Component(halfactory, "HALFactory", "HAL", "Factory to create HAL components instances")
+        Component(halservo, "HALServo", "HAL", "An abstraction over the Arduino Servo library")
+        Component(halservo, "HALTone", "HAL", "An abstraction over the Arduino tone functions")
+        Component(halledcontrol, "HALTone", "HAL", "An abstraction over the Arduino LedControl library")
+    }
+    
+
 ```
 
 ### Unit testing

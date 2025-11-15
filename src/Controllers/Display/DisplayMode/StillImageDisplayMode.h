@@ -10,6 +10,7 @@
  */
 class StillImageDisplayMode : public DisplayMode {
 private:
+    HALProgramSpaceHelper* programSpaceHelper;
     unsigned long duration;       // The duration for which the icon should be displayed
     unsigned long startTime;      // The time when the display started
     unsigned int currentIconIndex;         // The index of the current icon being displayed
@@ -20,7 +21,7 @@ public:
      * Default constructor for StillImageDisplayMode.
      * Initializes the display mode with default values.
      */
-    StillImageDisplayMode();
+    StillImageDisplayMode(HALProgramSpaceHelper* halProgramSpaceHelper);
 
     /**
      * Displays the specified icon for a given duration.

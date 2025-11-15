@@ -1,7 +1,4 @@
-#ifndef DISPLAYMODE_H
-#define DISPLAYMODE_H
-
-#include <Arduino.h>
+#pragma once
 #include "Controllers/Display/DisplayTypes.h"
 
 /**
@@ -21,6 +18,3 @@ public:
     virtual bool isDone(unsigned long currentTime) = 0;
 
 };
-
-
-#endif // DISPLAYMODE_H

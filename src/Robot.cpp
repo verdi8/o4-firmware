@@ -28,7 +28,7 @@ Robot::Robot(HAL* hal, unsigned long currentTime) : /* reverse{0, 0, 0, 0, 0, 0,
 
   this->displayController = new DisplayController(hal, this, LED_MATRIX_DIN, LED_MATRIX_CLK, LED_MATRIX_CS, LED_MATRIX_FLIP_X);
       
-        this->soundController = new SoundController(this, PIN_BUZZER);
+        this->soundController = new SoundController(hal, this, PIN_BUZZER);
 
   this->kinematicController = new KinematicController(
       hal,

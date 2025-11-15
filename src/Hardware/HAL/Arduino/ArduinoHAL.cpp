@@ -1,6 +1,7 @@
 #include "ArduinoHAL.h"
 #include "ArduinoHALTone.h"
 #include "ArduinoHALLedControl.h"
+#include "ArduinoHALProgramSpaceHelper.h"
 
 /**
  * @brief Creates a new ArduinoHALServo instance.
@@ -16,8 +17,8 @@ HALServo* ArduinoHAL::newServo() {
  * 
  * @return A pointer to the newly created HALTone instance.
  */
-HALTone* ArduinoHAL::newTone() {
-    return new ArduinoHALTone();
+HALTone* ArduinoHAL::newTone(PinNumber buzzerPin) {
+    return new ArduinoHALTone(buzzerPin);
 }
 
 /**
@@ -30,4 +31,13 @@ HALTone* ArduinoHAL::newTone() {
  */
 HALLedControl* ArduinoHAL::newLedControl(PinNumber dataPin, PinNumber clkPin, PinNumber csPin) {
     return new ArduinoHALLedControl(dataPin, clkPin, csPin);
+}
+
+/**
+ * @brief Creates a new ArduinoHALProgramSpaceHelper instance.
+ * 
+ * @return A pointer to the newly created HALProgramSpaceHelper instance.
+ */
+HALProgramSpaceHelper* ArduinoHAL::newProgramSpaceHelper() {
+    return new ArduinoHALProgramSpaceHelper();
 }

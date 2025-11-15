@@ -1,6 +1,5 @@
 #include "LinearAngleCalculator.h"
 #include "Utils/MathUtils.h"
-#include <Arduino.h>
 
 #define DEFAULT_SPEED 90 // Default speed in degrees per second
 

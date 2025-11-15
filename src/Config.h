@@ -1,11 +1,6 @@
-#include <Arduino.h>
+#pragma once
 
-#ifndef HARDWARE_H
-#define HARDWARE_H
-
-// Rédefinition of PinNumber type
-typedef uint8_t PinNumber;
-
+#include "Hardware/HAL/HAL.h"
 
 //
 // Led Matrix
@@ -33,5 +28,3 @@ constexpr PinNumber PIN_BUZZER = 13; // Pin connected to the buzzer
 #define BACK_RIGHT_LEG_SERVO_PIN      5
 #define BACK_LEFT_LEG_SERVO_PIN       8
 
-
-#endif

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Config.h>
+#include "HALTypes.h"
 
 /**
  * @brief Abstract interface for LED matrix control.

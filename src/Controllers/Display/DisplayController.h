@@ -23,8 +23,9 @@ class DisplayController : public Controller // Implement the Controller interfac
 {
   private:
     // Private member properties
-    TimeProvider* timeProvider; // Pointer to the TimeProvider for getting current time
     HALLedControl* ledControl; // The LedControl object from the LedControl library
+    HALProgramSpaceHelper* programSpaceHelper; // Pointer to HALProgramSpace for reading from program memory
+    TimeProvider* timeProvider; // Pointer to the TimeProvider for getting current time
     bool doFlipX; // Whether to flip the X axis
     StillImageDisplayMode* stillImageDisplayModeInstance; // Instance for managing still image display mode
     AnimationDisplayMode* animationDisplayModeInstance; // Instance for managing animation display mode

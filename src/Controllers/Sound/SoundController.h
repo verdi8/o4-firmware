@@ -1,10 +1,10 @@
 #pragma once
 
-#include <Arduino.h>
 #include "Config.h"
 #include "Controllers/Controller.h" // Include the Controller interface
 #include "SoundTypes.h" // Include the Melody and MelodyNote structs
 #include "Controllers/TimeProvider.h"
+#include "Hardware/HAL/HAL.h"
 
 constexpr unsigned int NO_SOUND_FREQUENCY = 0; // Constant to represent no frequency
 
@@ -14,6 +14,8 @@ constexpr unsigned int NO_SOUND_FREQUENCY = 0; // Constant to represent no frequ
  */
 class SoundController : public Controller {
 private:
+    HALTone* tone;                // Pointer to the HALTone for generating tones    
+    HALProgramSpaceHelper* programSpaceHelper; // Pointer to the HALProgramSpaceHelper for reading from program memory
     TimeProvider* timeProvider;            // Pointer to the TimeProvider for getting current time
     PinNumber buzzerPin;                      // Pin connected to the buzzer or speaker
     const Melody* PROGMEM currentMelodyPrgm;    // Pointer to the current melody being played, nullptr if no melody is playing
@@ -32,7 +34,7 @@ public:
      * 
      * @param buzzerPin The pin connected to the buzzer or speaker.
      */
-    SoundController(TimeProvider* timeProvider, PinNumber buzzerPin);
+    SoundController(HAL* hal, TimeProvider* timeProvider, PinNumber buzzerPin);
 
     /**
      * @brief Plays a melody consisting of a sequence of notes.

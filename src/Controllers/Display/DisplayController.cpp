@@ -11,11 +11,12 @@
 constexpr int LED_MATRIX_INDEX = 0; // Define LED_MATRIX_INDEX as constexpr for better optimization and clarity
 
 DisplayController::DisplayController(HAL* hal, TimeProvider* timeProvider, PinNumber dataPin, PinNumber clkPin, PinNumber csPin, bool doFlipX)
-    : timeProvider(timeProvider),
-      ledControl(hal->newLedControl(dataPin, clkPin, csPin)),
+    : ledControl(hal->newLedControl(dataPin, clkPin, csPin)),
+      programSpaceHelper(hal->newProgramSpaceHelper()),
+      timeProvider(timeProvider),
       doFlipX(doFlipX),
-      stillImageDisplayModeInstance(new StillImageDisplayMode()),
-      animationDisplayModeInstance(new AnimationDisplayMode()),
+      stillImageDisplayModeInstance(new StillImageDisplayMode(programSpaceHelper)),
+      animationDisplayModeInstance(new AnimationDisplayMode(programSpaceHelper)),
       currentDisplayMode(nullptr) // Initialize currentDisplayMode to nullptr
 {
     ledControl->shutdown(LED_MATRIX_INDEX, false);

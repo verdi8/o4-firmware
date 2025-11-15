@@ -7,8 +7,10 @@
  * Constructor for AnimationDisplayMode.
  * Initializes the animation display mode with default values.
  */
-AnimationDisplayMode::AnimationDisplayMode() 
-    : currentFrameSetPrgm(nullptr), startTime(0) {}
+AnimationDisplayMode::AnimationDisplayMode(HALProgramSpaceHelper* programSpaceHelper)
+    : programSpaceHelper(programSpaceHelper),
+    currentFrameSetPrgm(nullptr),
+    startTime(0) {}
 
 /**
  * Starts playing the animation with the given FrameSet.
@@ -71,5 +73,5 @@ inline unsigned int AnimationDisplayMode::computeCurrentFrameIndex(unsigned long
 }
 
 inline unsigned int AnimationDisplayMode::frameCount(FrameSet* PROGMEM frameSetPrgm) {
-    return pgm_read_word(&(frameSetPrgm->frameCount)); // Read the number of frames from the FrameSet in program memory
+    return programSpaceHelper->readWord(&(frameSetPrgm->frameCount)); // Read the number of frames from the FrameSet in program memory
 }

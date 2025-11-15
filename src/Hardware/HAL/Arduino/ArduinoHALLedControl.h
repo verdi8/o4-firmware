@@ -4,7 +4,7 @@
 
 class ArduinoHALLedControl : public HALLedControl {
 public:
-    ArduinoHALLedControl(uint8_t dataPin, uint8_t clkPin, uint8_t csPin)
+    ArduinoHALLedControl(PinNumber dataPin, PinNumber clkPin, PinNumber csPin)
     : ledControl(dataPin, clkPin, csPin, 1){
     }
 

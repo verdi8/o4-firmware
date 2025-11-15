@@ -23,7 +23,7 @@ public:
      * 
      * @return A pointer to the newly created HALTone instance.
      */
-    HALTone* newTone() override;
+    HALTone* newTone(PinNumber buzzerPin) override;
 
     /**
      * @brief Creates a new ArduinoHALLedControl instance.
@@ -34,4 +34,11 @@ public:
      * @return A pointer to the newly created HALLedControl instance.
      */
     HALLedControl* newLedControl(PinNumber dataPin, PinNumber clkPin, PinNumber csPin) override;
+
+    /**
+     * @brief Creates a new ArduinoHALProgramSpaceHelper instance.
+     * 
+     * @return A pointer to the newly created HALProgramSpaceHelper instance.
+     */
+    HALProgramSpaceHelper* newProgramSpaceHelper() override;
 };

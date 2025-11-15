@@ -1,12 +1,14 @@
 #include "SoundController.h"
 #include "logger.h"
+#include "Hardware/HAL/HAL.h"
 
 /**
  * @brief Constructs a SoundController with the specified buzzer pin and time provider.
  */
-SoundController::SoundController(TimeProvider *timeProvider, PinNumber buzzerPin) : timeProvider(timeProvider), buzzerPin(buzzerPin), currentMelodyPrgm(nullptr), currentFrequency(NO_SOUND_FREQUENCY)
+SoundController::SoundController(HAL* hal, TimeProvider *timeProvider, PinNumber buzzerPin) : timeProvider(timeProvider), buzzerPin(buzzerPin), currentMelodyPrgm(nullptr), currentFrequency(NO_SOUND_FREQUENCY)
 {
-    pinMode(buzzerPin, OUTPUT);
+    this->tone = hal->newTone(buzzerPin);
+    this->programSpaceHelper = hal->newProgramSpaceHelper();
     mute();
 }
 
@@ -70,7 +72,7 @@ bool SoundController::isDone()
 
 void SoundController::stopPlayingMelodyNote()
 {
-    noTone(buzzerPin);
+    tone->noTone();
     currentFrequency = NO_SOUND_FREQUENCY;
 }
 
@@ -83,11 +85,11 @@ void SoundController::playMelodyNote(MelodyNote melodyNote)
 
     if (melodyNote.frequency == NO_SOUND_FREQUENCY)
     {
-        noTone(buzzerPin);
+        tone->noTone();
     }
     else
     {
-        tone(buzzerPin, melodyNote.frequency, melodyNote.duration);
+        tone->tone(melodyNote.frequency, melodyNote.duration);
     }
     currentFrequency = melodyNote.frequency;
 }
@@ -101,5 +103,5 @@ inline MelodyNote SoundController::readPrgmMelodyNote(const Melody *PROGMEM melo
 
 inline unsigned int SoundController::melodyNoteCount(const Melody *PROGMEM melodyPrgm)
 {
-    return pgm_read_word(&(melodyPrgm->melodyNoteCount)); // Read the number of notes from the Melody in program memory
+    return programSpaceHelper->readWord(&(melodyPrgm->melodyNoteCount)); // Read the number of notes from the Melody in program memory
 }

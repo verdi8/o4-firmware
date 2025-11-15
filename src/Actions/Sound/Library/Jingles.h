@@ -1,7 +1,7 @@
 #pragma once
-#include <Arduino.h>
 #include "Controllers/Sound/SoundTypes.h"
 #include "Notes.h"
+
 
 const Melody CONNECT_MELODY PROGMEM = {
     4,
