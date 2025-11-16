@@ -50,36 +50,36 @@ The hardware configuration of the O4 Robot can be customized in the `src/Config.
 
 ```mermaid
 block
-columns 5
+columns 4
     behaviour_title["<b>Behaviour</b>\nDefines robot behaviors"]
-    block:behaviour_block:4
+    block:behaviour_block:3
         ab["<b>AutomaticBehaviour</b>\nHandles autonomous operations"]
     end
     actions_title["<b>Actions</b>\nSets of complex actions"] 
-    block:actions_block:4
+    block:actions_block:3
         da["<b>DisplayActions</b>\nA set of animations and still images that are applied to the DisplayController"]
         sa["<b>SoundActions</b>\nSongs and jingles sent to the SoundController"]
     end
     controllers_title["<b>Controllers</b>\nExposes simple methods to control the underlying hardware components"]
-    block:controllers_block:4
+    block:controllers_block:3
         columns 3
-        kc["<b>KinematicController</b>\nControls robot kinematics"]  space:2
-        tc["<b>ServoController (x8)</b>\"]  
+        kc["<b>KinematicController</b>\nAn overlay to the 8 ServoControllers of the robot"]
+        tc["<b>ServoController (x8)</b>\nMakes a servo oscilliate or move to a position"]
         sc["<b>SoundController</b>\nControls sound output"]
-        dc["<b>DisplayController</b>\nManages display output"]
+        dc["<b>DisplayController</b>\n"]
     end
 
-    hal_title["<b>HAL</b>\nHardware Abstraction Layer"]
-    block:hal_block:4
+    hal_title["<b>HAL</b>\nan Hardware Abstraction Layer over the Arduino platform, mainly for unit testing purposes"]
+    block:hal_block:3
         hs["<b>HALServo</b>\nAbstraction for servo motors"] 
         ht["<b>HALTone</b>\nAbstraction for tone generation"]
-        hl["<b>HALLedControl</b>\nAbstraction for LED control"]
-        hp["<b>HALProgramSpaceHelper</b>\nHelper for program space management"]
-        hy["<b>HALTypes</b>\nDefines HAL types"]
+        hl["<b>HALLedControl</b>\nAbstraction over the LedControl library"]
+        hp["<b>HALProgramSpaceHelper</b>\nHelper for program space memory access"]
+        hy["<b>HALTypes</b>\nRedefinitions of Arduino specific types"]
     end
 
     arduino_title["<b>Arduino</b>\nArduino-related components"]
-    block:arduino_block:4
+    block:arduino_block:3
         ar["<b>Arduino libraries</b>\nCore Arduino libraries"]
         lc["<b>LedControl library</b>\nLibrary for LED control"]
     end
