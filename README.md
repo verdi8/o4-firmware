@@ -44,27 +44,64 @@ This firmware is developed with PlatformIO. The recommanded way to build and ins
 ## Customization
 
 ### Hardware configuration
-The hardware configuration of the O4 Robot can be customized in the `src/Hardware/Config.h` file. You can change the pin assignments.
+The hardware configuration of the O4 Robot can be customized in the `src/Config.h` file. You can change the pin assignments according to your hardware setup.
 
 ### Software guide
 
 ```mermaid
-C4Component
-title O4 Robot Component Diagram
-    Boundary(hal, "Hardware Abstraction Layer (HAL)") {   
-        Component(halfactory, "HALFactory", "HAL", "Factory to create HAL components instances")
-        Component(halservo, "HALServo", "HAL", "An abstraction over the Arduino Servo library")
-        Component(haltone, "HALTone", "HAL", "An abstraction over the Arduino tone functions")
-        Component(halledcontrol, "HALTone", "HAL", "An abstraction over the Arduino LedControl library")
-    }
-    Boundary(hal, "Hardware Abstraction Layer (HAL)") {   
-        Component(halfactory, "HALFactory", "HAL", "Factory to create HAL components instances")
-        Component(halservo, "HALServo", "HAL", "An abstraction over the Arduino Servo library")
-        Component(halservo, "HALTone", "HAL", "An abstraction over the Arduino tone functions")
-        Component(halledcontrol, "HALTone", "HAL", "An abstraction over the Arduino LedControl library")
-    }
-    
+block
+columns 5
+    behaviour_title["<b>Behaviour</b>\nDefines robot behaviors"]
+    block:behaviour_block:4
+        ab["<b>AutomaticBehaviour</b>\nHandles autonomous operations"]
+    end
+    actions_title["<b>Actions</b>\nSets of complex actions"] 
+    block:actions_block:4
+        da["<b>DisplayActions</b>\nA set of animations and still images that are applied to the DisplayController"]
+        sa["<b>SoundActions</b>\nSongs and jingles sent to the SoundController"]
+    end
+    controllers_title["<b>Controllers</b>\nExposes simple methods to control the underlying hardware components"]
+    block:controllers_block:4
+        columns 3
+        kc["<b>KinematicController</b>\nControls robot kinematics"]  space:2
+        tc["<b>ServoController (x8)</b>\"]  
+        sc["<b>SoundController</b>\nControls sound output"]
+        dc["<b>DisplayController</b>\nManages display output"]
+    end
 
+    hal_title["<b>HAL</b>\nHardware Abstraction Layer"]
+    block:hal_block:4
+        hs["<b>HALServo</b>\nAbstraction for servo motors"] 
+        ht["<b>HALTone</b>\nAbstraction for tone generation"]
+        hl["<b>HALLedControl</b>\nAbstraction for LED control"]
+        hp["<b>HALProgramSpaceHelper</b>\nHelper for program space management"]
+        hy["<b>HALTypes</b>\nDefines HAL types"]
+    end
+
+    arduino_title["<b>Arduino</b>\nArduino-related components"]
+    block:arduino_block:4
+        ar["<b>Arduino libraries</b>\nCore Arduino libraries"]
+        lc["<b>LedControl library</b>\nLibrary for LED control"]
+    end
+
+    classDef layer fill:white,stroke:#333,stroke-width:2px,stroke-dasharray: 5 5;
+    class actions_block layer
+    class controllers_block layer   
+    class hal_block layer   
+    class behaviour_block layer   
+    class arduino_block layer
+
+   
+    classDef title fill:white,stroke:none;
+    class controllers_title title
+    class hal_title title
+    class actions_title title
+    class behaviour_title title
+    class arduino_title title
+
+    classDef external fill:#EEEEEE,stroke:none;
+    class ar external
+    class lc external
 ```
 
 ### Unit testing
