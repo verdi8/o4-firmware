@@ -14,7 +14,7 @@ The O4 Robot is forked from the [OTTO Quad robot](https://github.com/jarsoftelec
 `b-code` is a proposal of protocol to control tiny robots like the O4 robot. It is text-based and intended to be the equivalent of G-code for 3D printers and CNC machines.
 
 It is actually not only a protocol, but a set of related projects:
-- [b-code-spec](https://github.com/verdi8/b-code-spec/) : the specification of the protocol itself
+- [b-code](https://github.com/verdi8/b-code/) : the specification of the protocol itself
 - [b-code-desc](https://github.com/verdi8/b-code-desc/) : a JSON description format of the capabilities of a robot (possible actions, sensor list, id card) to make it easier to be controlled by generic and reusable remote controls, or even LLMs
 - [b-code-remote-control](https://github.com/verdi8/b-code-remote-control/) : a web-based remote control for robots supporting b-code and having a b-code description file
 - [b-code-arduino-interpreter](b-code-arduino-interpreter) : an Arduino library to interpret and execute b-code commands
@@ -63,7 +63,7 @@ columns 4
     controllers_title["<b>Controllers</b>\nExposes simple methods to control the underlying hardware components"]
     block:controllers_block:3
         columns 3
-        kc["<b>KinematicController</b>\nAn overlay to the 8 ServoControllers of the robot"]
+        kc["<b>BodyController</b>\nAn overlay to the 8 ServoControllers of the robot"]
         tc["<b>ServoController (x8)</b>\nMakes a servo oscilliate or move to a position"]
         sc["<b>SoundController</b>\nControls sound output"]
         dc["<b>DisplayController</b>\n"]

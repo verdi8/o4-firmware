@@ -5,11 +5,13 @@
 #include "US.h"
 #include <BatReader.h>
 #include "TimerFreeTone.h"
+#include <BCodeInterpreter.h>
 #include "Controllers/Display/DisplayController.h"
-#include "Controllers/Gesture/KinematicController.h"
+#include "Controllers/Body/BodyController.h"
 #include "Controllers/Sound/SoundController.h"
 #include "Actions/Display/DisplayActions.h"
 #include "Actions/Sound/SoundActions.h"
+#include "Actions/Movement/MovementActions.h"
 #include "Controllers/TimeProvider.h"
 
 // Servo indexes
@@ -59,11 +61,12 @@ class Robot : public TimeProvider {
     // Controllers of physical parts
     DisplayController* displayController;
     SoundController* soundController;
-    KinematicController* kinematicController;
+    BodyController* bodyController;
 
     // Sets of actions that 
     DisplayActions* displayActions;
     SoundActions* soundActions; 
+    MovementActions* movementActions;
 
     // Servo servo[8];
     int board_pins[8];
@@ -91,9 +94,10 @@ class Robot : public TimeProvider {
     DisplayActions *getDisplayActions();
     SoundActions* getSoundActions();
 
-    KinematicController* getKinematicController();
+    BodyController* getBodyController();
     DisplayController* getDisplayController();
     SoundController* getSoundController();
+    MovementActions* getMovementActions();
     
     void init(int Buzzer);
     void home();

@@ -4,7 +4,7 @@ class Controller {
 public:
 
     /**
-     * @brief Updates the state of the KinematicController.
+     * @brief Updates the state of the BodyController.
      * 
      * @param currentTime The current time in milliseconds.
      */

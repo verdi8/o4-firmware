@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "Controllers/Gesture/Servo/AngleCalculator/LinearAngleCalculator.h"
+#include "Controllers/Body/Servo/AngleCalculator/LinearAngleCalculator.h"
 
 
 TEST(LinearAngleCalculatorTest, BasicAssertions) {

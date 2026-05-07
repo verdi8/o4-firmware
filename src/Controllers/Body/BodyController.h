@@ -6,10 +6,10 @@
 #include "Controllers/TimeProvider.h"
 
 /**
- * @class KinematicController
+ * @class BodyController
  * @brief Controls the gestures of a robot using multiple ServoController instances.
  */
-class KinematicController : public Controller { // Implement the Controller interface
+class BodyController : public Controller { // Implement the Controller interface
 private:
     TimeProvider* timeProvider; // Pointer to the TimeProvider for getting current time
     ServoController* frontRightHip; // Servo controller for the front right hip joint.
@@ -24,7 +24,7 @@ private:
 
 public:
     /**
-     * @brief Constructs a KinematicController with the specified servo pins.
+     * @brief Constructs a BodyController with the specified servo pins.
      * 
      * @param frontRightHipPin Pin for the front right hip servo.
      * @param frontLeftHipPin Pin for the front left hip servo.
@@ -35,7 +35,7 @@ public:
      * @param backRightLegPin Pin for the back right leg servo.
      * @param backLeftLegPin Pin for the back left leg servo.
      */
-    KinematicController(
+    BodyController(
         HAL* hal,
         TimeProvider* timeProvider,
         PinNumber frontRightHipPin,
@@ -49,17 +49,63 @@ public:
     );
 
     /**
-     * @brief Moves the robot to its home position.
+     * @brief Gets the front right hip ServoController.
+     * 
+     * @return Pointer to the front right hip ServoController.
      */
-    void home();
+    ServoController* getFrontRightHip();
 
     /**
-     * @brief Makes the robot walk using the configured servo controllers.
+     * @brief Gets the front left hip ServoController.
+     * 
+     * @return Pointer to the front left hip ServoController.
      */
-    void walk();
+    ServoController* getFrontLeftHip();
 
     /**
-     * @brief Updates the state of the KinematicController.
+     * @brief Gets the front right leg ServoController.
+     * 
+     * @return Pointer to the front right leg ServoController.
+     */
+    ServoController* getFrontRightLeg();
+
+    /**
+     * @brief Gets the front left leg ServoController.
+     * 
+     * @return Pointer to the front left leg ServoController.
+     */
+    ServoController* getFrontLeftLeg();
+
+    /**
+     * @brief Gets the back right hip ServoController.
+     * 
+     * @return Pointer to the back right hip ServoController.
+     */
+    ServoController* getBackRightHip();
+
+    /**
+     * @brief Gets the back left hip ServoController.
+     * 
+     * @return Pointer to the back left hip ServoController.
+     */
+    ServoController* getBackLeftHip();
+
+    /**
+     * @brief Gets the back right leg ServoController.
+     * 
+     * @return Pointer to the back right leg ServoController.
+     */
+    ServoController* getBackRightLeg();
+
+    /**
+     * @brief Gets the back left leg ServoController.
+     * 
+     * @return Pointer to the back left leg ServoController.
+     */
+    ServoController* getBackLeftLeg();
+
+    /**
+     * @brief Updates the state of the BodyController.
      * 
      * @param currentTime The current time in milliseconds.
      */

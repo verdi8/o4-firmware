@@ -1,10 +1,10 @@
-#include "KinematicController.h"
+#include "BodyController.h"
 #include "logger.h"
 
 // Behaviour parameters
 #define DEFAULT_OSCILLIATION_PERIOD 1000 // in milliseconds
 
-KinematicController::KinematicController(
+BodyController::BodyController(
     HAL* hal,
     TimeProvider *timeProvider,
     PinNumber frontRightHipPin,
@@ -36,36 +36,46 @@ KinematicController::KinematicController(
     all[7] = backLeftLeg;
 }
 
-void KinematicController::home()
+ServoController* BodyController::getFrontRightHip()
 {
-    int testPosition = 90;
-    this->frontRightHip->rotateTo(testPosition);
-    this->frontLeftHip->rotateTo(testPosition);
-    this->frontRightLeg->rotateTo(testPosition);
-    this->frontLeftLeg->rotateTo(testPosition);
-    this->backRightHip->rotateTo(testPosition);
-    this->backLeftHip->rotateTo(testPosition);
-    this->backRightLeg->rotateTo(testPosition);
-    this->backLeftLeg->rotateTo(testPosition);
+    return frontRightHip;
 }
 
-void KinematicController::walk()
+ServoController* BodyController::getFrontLeftHip()
 {
-    int x_amp = 15;
-    int z_amp = 20;
-    int ap = 20;
-    int hi = -0;
-    this->frontRightHip->oscillate(x_amp, DEFAULT_OSCILLIATION_PERIOD, 90 + ap, 270);
-    this->frontLeftHip->oscillate(x_amp, DEFAULT_OSCILLIATION_PERIOD, 90 - ap, 270);
-    this->frontRightLeg->oscillate(z_amp, DEFAULT_OSCILLIATION_PERIOD, 90 - hi, 180);
-    this->frontLeftLeg->oscillate(z_amp, DEFAULT_OSCILLIATION_PERIOD, 90 + hi, 180);
-    this->backRightHip->oscillate(x_amp, DEFAULT_OSCILLIATION_PERIOD, 90 - ap, 90);
-    this->backLeftHip->oscillate(x_amp, DEFAULT_OSCILLIATION_PERIOD, 90 + ap, 90);
-    this->backRightLeg->oscillate(z_amp, DEFAULT_OSCILLIATION_PERIOD, 90 + hi, 180);
-    this->backLeftLeg->oscillate(z_amp, DEFAULT_OSCILLIATION_PERIOD, 90 - hi, 180);
+    return frontLeftHip;
 }
 
-void KinematicController::update()
+ServoController* BodyController::getFrontRightLeg()
+{
+    return frontRightLeg;
+}
+ServoController* BodyController::getFrontLeftLeg()
+{
+    return frontLeftLeg;
+}
+
+ServoController* BodyController::getBackRightHip()
+{
+    return backRightHip;
+}
+
+ServoController* BodyController::getBackLeftHip()
+{
+    return backLeftHip;
+}
+
+ServoController* BodyController::getBackRightLeg()
+{
+    return backRightLeg;
+}
+
+ServoController* BodyController::getBackLeftLeg()
+{
+    return backLeftLeg;
+}
+
+void BodyController::update()
 {
     for (int i = 0; i < 8; i++)
     {
@@ -73,7 +83,7 @@ void KinematicController::update()
     }
 }
 
-bool KinematicController::isDone()
+bool BodyController::isDone()
 {
     for (int i = 0; i < 8; i++)
     {

@@ -30,7 +30,7 @@ Robot::Robot(HAL* hal, unsigned long currentTime) : /* reverse{0, 0, 0, 0, 0, 0,
       
         this->soundController = new SoundController(hal, this, PIN_BUZZER);
 
-  this->kinematicController = new KinematicController(
+  this->bodyController = new BodyController(
       hal,
       this,
       FRONT_RIGHT_HIP_SERVO_PIN,
@@ -46,21 +46,14 @@ Robot::Robot(HAL* hal, unsigned long currentTime) : /* reverse{0, 0, 0, 0, 0, 0,
   this->displayActions = new DisplayActions(displayController);
 
   this->soundActions = new SoundActions(soundController);
+
+  this->movementActions = new MovementActions(bodyController);
 }
 
-DisplayActions *Robot::getDisplayActions()
-{
-  return displayActions;
-}
 
-SoundActions *Robot::getSoundActions()
+BodyController *Robot::getBodyController()
 {
-  return soundActions;
-}
-
-KinematicController *Robot::getKinematicController()
-{
-  return kinematicController;
+  return bodyController;
 }
 
 DisplayController *Robot::getDisplayController()
@@ -73,7 +66,20 @@ SoundController *Robot::getSoundController()
   return soundController;
 }
 
+DisplayActions *Robot::getDisplayActions()
+{
+  return displayActions;
+}
 
+SoundActions *Robot::getSoundActions()
+{
+  return soundActions;
+}
+
+MovementActions *Robot::getMovementActions()
+{
+  return movementActions;
+}
 
 void Robot::reverseServo(int id)
 {
@@ -527,7 +533,7 @@ void Robot::update(unsigned long currentTime)
 {
   this->currentTime = currentTime;
   // Update servos states
-  this->kinematicController->update();
+  this->bodyController->update();
 
   // Update LED matrix
   this->displayController->update();

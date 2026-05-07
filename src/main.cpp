@@ -5,11 +5,6 @@
 #include "Controllers/Display/DisplayController.h"
 #include "logger.h"
 
-//-- Library to manage serial commands
-#include <OttoSerialCommand.h>
-
-OttoSerialCommand SerialCmd;  //The SerialCommand object
-
 
 #define CAL_TRIGGER_PIN 10 // link this PIN 10 to +5V to enter set up mode
 
@@ -77,19 +72,25 @@ char cmd = 's';
 void setup() {
   Serial.begin(9600); 
   DEBUG(F("Starting"));
+  
 
 
   unsigned long currentTime = millis();
+
+    // Free memory
+  DEBUG__(F("Free memory: "), freeMemory(), F(" bytes"));
+  
+
   HAL* hal = new ArduinoHAL(); //Create a new HAL for Arduino
-
-
-  robot = new Robot(hal, currentTime); //Create a new Robot object
-
-
 
   // Free memory
   DEBUG__(F("Free memory: "), freeMemory(), F(" bytes"));
   
+
+  robot = new Robot(hal, currentTime); //Create a new Robot object
+
+  
+
 
   //Serial communication initialization
   // while (true)
@@ -120,8 +121,8 @@ void setup() {
   //
   robot->init(0);
 
-
-
+ 
+ 
   //MY servo 2 needed to be reversed so we do it here after the init 
   //robot->reverseServo(0);
   //robot->reverseServo(1);
@@ -186,8 +187,7 @@ void setup() {
   // robot->displayController->displayIcon(millis(), SMILE_ICON_INDEX, 2000); //Display smile icon for 2 seconds
 
   robot->getDisplayActions()->playWaveAnimation(); 
-  // robot->getKinematicController()->walk();
-
+  robot->getMovementActions()->walk();
   robot->getSoundActions()->playConnectJingle(currentTime); //Play a melody to indicate that Otto is ready
 
     //Setup callbacks for SerialCommand commands 
@@ -209,7 +209,7 @@ void setup() {
 ///////////////////////////////////////////////////////////////////
 void loop() {
   unsigned long currentTime = millis();
-  robot->update(currentTime); //Update the robot (servos, display, sound)
+  // robot->update(currentTime); //Update the robot (servos, display, sound)
 }
 //  if (Serial.available()>0 && MODE!=4){
 //     SerialCmd.readSerial();  

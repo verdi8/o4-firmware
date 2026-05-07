@@ -20,11 +20,11 @@ constexpr PinNumber PIN_BUZZER = 13; // Pin connected to the buzzer
 // Servo pins
 //
 #define FRONT_RIGHT_HIP_SERVO_PIN     2
-#define FRONT_LEFT_HIP_SERVO_PIN      6
+#define FRONT_LEFT_HIP_SERVO_PIN      4
 #define FRONT_RIGHT_LEG_SERVO_PIN     3
-#define FRONT_LEFT_LEG_SERVO_PIN      4
-#define BACK_RIGHT_HIP_SERVO_PIN      7
-#define BACK_LEFT_HIP_SERVO_PIN       9
-#define BACK_RIGHT_LEG_SERVO_PIN      5
-#define BACK_LEFT_LEG_SERVO_PIN       8
+#define FRONT_LEFT_LEG_SERVO_PIN      5
+#define BACK_RIGHT_HIP_SERVO_PIN      6
+#define BACK_LEFT_HIP_SERVO_PIN       8
+#define BACK_RIGHT_LEG_SERVO_PIN      7
+#define BACK_LEFT_LEG_SERVO_PIN       9
 
