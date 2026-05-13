@@ -9,6 +9,7 @@ ServoController::ServoController(HAL* hal, TimeProvider* timeProvider, PinNumber
     this->timeProvider = timeProvider; // Set the time provider
     this->pin = pin;     // Set the pin number
     servo = hal->newServo(); // Create a new Servo object
+    system = hal->newSystem(); // Create a new System object for time management    
 
     oscillatingAngleCalculatorInstance = new OscillatingAngleCalculator();  // Keep an instance of OscillatingAngleCalculator
     linearAngleCalculatorInstance = new LinearAngleCalculator();          // Keep an instance of LinearAngleCalculator
@@ -100,6 +101,6 @@ void ServoController::initPosition() {
     servo->write(INIT_ANGLE);     // Set the servo to the initial position
     servo->attach(pin);           // Attach the servo to the specified pin
     currentAngle = 90;            // Update the current angle to the initial position
-    delay(INIT_DELAY);            // Wait for the servo to reach the position (and not move all the servos at the same time, to reduce power consumption)
+    system->delay(INIT_DELAY);    // Wait for the servo to reach the position (and not move all the servos at the same time, to reduce power consumption)
     servo->detach();
 }

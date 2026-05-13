@@ -2,7 +2,10 @@
 
 #include <Arduino.h>
 #include "../HAL.h"
+#include "ArduinoHALSoftwareSerial.h"
 #include "ArduinoHALServo.h"
+#include "ArduinoHALSystem.h"
+#include "ArduinoTypes.h"
 
 /**
  * @brief Arduino-specific implementation of the HAL interface.
@@ -34,6 +37,22 @@ public:
      * @return A pointer to the newly created HALLedControl instance.
      */
     HALLedControl* newLedControl(PinNumber dataPin, PinNumber clkPin, PinNumber csPin) override;
+
+    /**
+     * @brief Creates a new ArduinoHALSystem instance.
+     *
+     * @return A pointer to the newly created HALSystem instance.
+     */
+    HALSystem* newSystem() override;
+
+    /**
+    * @brief Creates a new ArduinoHALSoftwareSerial instance.
+     *
+     * @param rxPin The receive pin number.
+     * @param txPin The transmit pin number.
+    * @return A pointer to the newly created HALSoftwareSerial instance.
+     */
+    HALSoftwareSerial* newSoftwareSerial(PinNumber rxPin, PinNumber txPin) override;
 
     /**
      * @brief Creates a new ArduinoHALProgramSpaceHelper instance.

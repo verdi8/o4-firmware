@@ -81,7 +81,7 @@ void DisplayController::displayFrame(const Frame *frame)
     for (int i = 0; i < 8; i++)
     {
         // Read the column data correctly
-        byte col = pgm_read_byte(((const byte *)frame) + i);
+        byte col = programSpaceHelper->readByte(((const byte *)frame) + i);
         if (this->doFlipX)
         {
             col = flipX(col);

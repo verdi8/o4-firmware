@@ -32,6 +32,12 @@ class ServoController : public Controller // Implement the Controller interface
         HALServo* servo;
 
         /**
+        * The current angle of the servo.
+        * This is used to track the last position of the servo.
+        */
+        HALSystem* system; 
+
+        /**
          * The current strategy for controlling the angle of the servo.
          */
         AngleCalculator* currentAngleCalculator = nullptr;

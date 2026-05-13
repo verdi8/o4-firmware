@@ -7,8 +7,8 @@
     #include <stdint.h>
     
     // Redefines Arduino types
-    typedef uint8_t  byte;
-    typedef unsigned int  word;
+    typedef uint8_t         byte;
+    typedef unsigned int    word;
 
     #define PROGMEM
 #endif

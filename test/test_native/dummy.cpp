@@ -13,7 +13,3 @@ int main(int argc, char **argv)
     return 0;
 }
 
-// Tests factorial of 0.
-TEST(FactorialTest, HandlesZeroInput) {
-  EXPECT_EQ(0, 1) << "Oh no!"; // Intentional error for demonstration
-}

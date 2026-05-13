@@ -1,5 +1,9 @@
-//#include "US.h"
+
+#if defined(ARDUINO)
+
+
 #include "Robot.h"
+#include "Hardware/HardwareConfig.h"
 #include "Config.h"
 #include "Hardware/HAL/Arduino/ArduinoHAL.h"
 #include "Controllers/Display/DisplayController.h"
@@ -87,7 +91,23 @@ void setup() {
   DEBUG__(F("Free memory: "), freeMemory(), F(" bytes"));
   
 
-  robot = new Robot(hal, currentTime); //Create a new Robot object
+  robot = new Robot(
+    hal,
+    currentTime,
+    LED_MATRIX_DIN,
+    LED_MATRIX_CLK,
+    LED_MATRIX_CS,
+    PIN_BUZZER,
+    BLUETOOTH_RX_PIN,
+    BLUETOOTH_TX_PIN,
+    FRONT_RIGHT_HIP_SERVO_PIN,
+    FRONT_LEFT_HIP_SERVO_PIN,
+    FRONT_RIGHT_LEG_SERVO_PIN,
+    FRONT_LEFT_LEG_SERVO_PIN,
+    BACK_RIGHT_HIP_SERVO_PIN,
+    BACK_LEFT_HIP_SERVO_PIN,
+    BACK_RIGHT_LEG_SERVO_PIN,
+    BACK_LEFT_LEG_SERVO_PIN); //Create a new Robot object
 
   
 
@@ -119,14 +139,10 @@ void setup() {
 
   randomSeed(analogRead(A6));
   //
-  robot->init(0);
-
- 
- 
-  //MY servo 2 needed to be reversed so we do it here after the init 
+  //MY servo 2 needed to be reversed during startup
   //robot->reverseServo(0);
   //robot->reverseServo(1);
-  robot->reverseServo(2);
+  //robot->reverseServo(2);
   //robot->reverseServo(3);
   //robot->reverseServo(4);
   //robot->reverseServo(5);
@@ -727,3 +743,4 @@ void loop() {
 //     sendFinalAck();
 // }
 
+#endif

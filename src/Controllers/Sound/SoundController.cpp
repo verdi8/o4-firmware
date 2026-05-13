@@ -97,7 +97,7 @@ void SoundController::playMelodyNote(MelodyNote melodyNote)
 inline MelodyNote SoundController::readPrgmMelodyNote(const Melody *PROGMEM melodyPrgm, unsigned int index)
 {
     MelodyNote note;
-    memcpy_P(&note, &(melodyPrgm->melodyNotes[index]), sizeof(MelodyNote));
+    programSpaceHelper->memcpy(&note, &(melodyPrgm->melodyNotes[index]), sizeof(MelodyNote));
     return note;
 }
 

@@ -22,5 +22,15 @@ public:
      * @return The word value read from the specified address.
      */
     word readWord(const void* address) const override;
+
+    /**
+     * @brief Copies a block of data from program memory into RAM.
+     * @param destination Pointer to the destination buffer in RAM.
+     * @param source Pointer to the source address in program memory.
+     * @param size Number of bytes to copy.
+     */
+    void memcpy(void* destination, const void* source, size_t size) const override;
+
+
 };
 

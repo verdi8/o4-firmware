@@ -1,10 +1,13 @@
 #pragma once
 
-#include "HALProgramSpaceHelper.h" // Include the header file for program space utilities
+#include "HALMacros.h" 
 #include "HALTypes.h" // Include the header file where PinNumber is defined
+#include "HALProgramSpaceHelper.h" // Include the header file for program space utilities
 #include "HALServo.h" // Include the header file where HALServo is defined
 #include "HALTone.h" // Include the header file where HALTone is defined
 #include "HALLedControl.h" // Include the header file where HALLedControl is defined
+#include "HALSoftwareSerial.h" // Include the header file where HALSoftwareSerial is defined
+#include "HALSystem.h" // Include the header file where HALSystem is defined
 
 
 
@@ -36,6 +39,20 @@ public:
      * @return A pointer to the newly created HALLedControl instance.
      */
     virtual HALLedControl* newLedControl(PinNumber dataPin, PinNumber clkPin, PinNumber csPin) = 0;
+
+    /**
+     * Creates a new HALSystem instance.
+     * @return A pointer to the newly created HALSystem instance.
+     */
+    virtual HALSystem* newSystem() = 0;
+
+    /**
+    * Creates a new HALSoftwareSerial instance.
+     * @param rxPin The receive pin number.
+     * @param txPin The transmit pin number.
+    * @return A pointer to the newly created HALSoftwareSerial instance.
+     */
+    virtual HALSoftwareSerial* newSoftwareSerial(PinNumber rxPin, PinNumber txPin) = 0;
 
     /**
      * Creates a new HALProgramSpaceHelper instance.

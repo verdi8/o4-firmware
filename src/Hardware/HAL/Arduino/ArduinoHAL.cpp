@@ -1,7 +1,9 @@
 #include "ArduinoHAL.h"
+#include "ArduinoHALSoftwareSerial.h"
 #include "ArduinoHALTone.h"
 #include "ArduinoHALLedControl.h"
 #include "ArduinoHALProgramSpaceHelper.h"
+#include "ArduinoHALSystem.h"
 
 /**
  * @brief Creates a new ArduinoHALServo instance.
@@ -31,6 +33,26 @@ HALTone* ArduinoHAL::newTone(PinNumber buzzerPin) {
  */
 HALLedControl* ArduinoHAL::newLedControl(PinNumber dataPin, PinNumber clkPin, PinNumber csPin) {
     return new ArduinoHALLedControl(dataPin, clkPin, csPin);
+}
+
+/**
+ * @brief Creates a new ArduinoHALSystem instance.
+ *
+ * @return A pointer to the newly created HALSystem instance.
+ */
+HALSystem* ArduinoHAL::newSystem() {
+    return new ArduinoHALSystem();
+}
+
+/**
+ * @brief Creates a new ArduinoHALSoftwareSerial instance.
+ *
+ * @param rxPin The receive pin number.
+ * @param txPin The transmit pin number.
+ * @return A pointer to the newly created HALSoftwareSerial instance.
+ */
+HALSoftwareSerial* ArduinoHAL::newSoftwareSerial(PinNumber rxPin, PinNumber txPin) {
+    return new ArduinoHALSoftwareSerial(rxPin, txPin);
 }
 
 /**

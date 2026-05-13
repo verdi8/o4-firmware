@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Hardware/HAL/HAL.h"
 #include "Actions/Actions.h"
 #include "Controllers/Body/BodyController.h"
 

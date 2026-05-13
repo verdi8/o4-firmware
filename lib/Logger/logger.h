@@ -27,4 +27,12 @@
 #endif
 
 #define INFO(x) PRINT("[INFO] "); PRINTLN(x)
+#define INFO_(x,y) PRINT("[INFO] "); PRINT(x); PRINTLN(y)
+#define INFO__(x,y,z) PRINT("[INFO] "); PRINT(x); PRINT(y); PRINTLN(z)
+#define INFO___(x,y,z,w) PRINT("[INFO] "); PRINT(x); PRINT(y); PRINT(z); PRINTLN(w)
+
+
 #define ERROR(x) PRINT("[ERROR] "); PRINTLN(x)
+#define ERROR_(x,y) PRINT("[ERROR] "); PRINT(x); PRINTLN(y)
+#define ERROR__(x,y,z) PRINT("[ERROR] "); PRINT(x); PRINT(y); PRINTLN(z)
+#define ERROR___(x,y,z,w) PRINT("[ERROR] "); PRINT(x); PRINT(y); PRINT(z); PRINTLN(w)
